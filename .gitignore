@@ -1,0 +1,6 @@
+*.ipr
+.idea
+out
+target
+*.iml
+tmp
