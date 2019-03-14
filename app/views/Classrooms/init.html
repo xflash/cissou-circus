@@ -1,0 +1,11 @@
+#{extends 'main.html' /}
+#{set title:'Initialize' /}
+
+
+<h1>Initialize Classrooms</h1>
+
+#{form @uploadData(), enctype:'multipart/form-data'}
+    <input type="text" name="title"/>
+    <input type="file" id="photo" name="excel"/>
+    <input type="submit" value="Send it..."/>
+#{/}

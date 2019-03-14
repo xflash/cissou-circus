@@ -1,0 +1,18 @@
+#{extends 'main.html' /}
+#{set title:'Classroms' /}
+
+
+<h1>Classrooms</h1>
+
+
+<ul>
+#{list items:classrooms, as:'classroom'}
+    <li>
+        <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
+    </li>
+#{/list}
+</ul>
+
+
+
+
