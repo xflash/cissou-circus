@@ -26,7 +26,8 @@ public class Classrooms extends Controller {
 
     public static void list() {
         List<Classroom> classrooms = Classroom.findAll();
-        render(classrooms);
+        List<Long> selected = Classroom.find("select c.id from Classroom c where c.name like 'GRANDE%'").fetch();
+        render(classrooms, selected);
     }
 
     public static void init() {
@@ -38,9 +39,9 @@ public class Classrooms extends Controller {
 
         List<Student> students =
                 Student.find("select s from Student s where classroom.id = ?1 order by name, firstname", classroom.id)
-                .fetch();
+                        .fetch();
 
-        render(classroom);
+        render(classroom, students);
 
     }
 

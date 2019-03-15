@@ -4,26 +4,5 @@
 
 <h1>Classroom ${classroom.name}</h1>
 
-<table class="table table-striped table-hover table-sm">
-
-    <thead>
-    <tr>
-        <th>Identifiant</th>
-        <th>Firtsname</th>
-        <th>Name</th>
-    </tr>
-    </thead>
-    <tbody>
-
-    #{list items:classroom.students, as:'student'}
-    <tr>
-        <td>${student.identifiant}</td>
-        <td>${student.firstname}</td>
-        <td>${student.name}</td>
-    </tr>
-    #{/list}
-
-    </tbody>
-
-</table>
+#{users students:students /}
 

@@ -5,13 +5,23 @@
 <h1>Classrooms</h1>
 
 
+
+#{form @Groups.createGroups()}
+
 <ul>
 #{list items:classrooms, as:'classroom'}
     <li>
+        <input type="checkbox" name="classrooms" value="${classroom.id}"
+               #{if selected.contains(classroom.id)}
+               checked
+                #{/if}
+        >
         <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
     </li>
 #{/list}
 </ul>
+<input type="submit" value="Create groups"/>
+#{/}
 
 
 
