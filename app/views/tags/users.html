@@ -1,6 +1,7 @@
 *{ Display a list if students a table }*
 #{set students:_students /}
 #{set extended:_extended /}
+#{set withId:_withId /}
 
 
 
@@ -10,9 +11,11 @@
 
     <thead>
     <tr>
+    #{if withId}
         <th>Identifiant</th>
-        <th>Firtsname</th>
+    #{/if}
         <th>Name</th>
+        <th>Firstname</th>
     #{if extended}
         <th>ClassRoom</th>
     #{/if}
@@ -22,9 +25,14 @@
 
     #{list items:students, as:'student'}
     <tr>
-        <td>${student.identifiant}</td>
-        <td>${student.firstname}</td>
+    #{if withId}
+        <td>
+
+            <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
+        </td>
+    #{/if}
         <td>${student.name}</td>
+        <td>${student.firstname}</td>
         #{if extended}
             <td>
                 <a href="@{Classrooms.openDetail(student.classroom.id)}">${student.classroom.name}</a>
