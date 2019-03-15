@@ -11,26 +11,28 @@
 
     <thead>
     <tr>
-    #{if withId}
-        <th>Identifiant</th>
-    #{/if}
-        <th>Name</th>
-        <th>Firstname</th>
-    #{if extended}
+        #{if withId}
+        <th scope="col">Identifiant</th>
+        #{/if}
+        <th scope="col">Sibling</th>
+        <th scope="col">Name</th>
+        <th scope="col">Firstname</th>
+        #{if extended}
         <th>ClassRoom</th>
-    #{/if}
+        #{/if}
     </tr>
     </thead>
+
     <tbody>
 
     #{list items:students, as:'student'}
     <tr>
     #{if withId}
-        <td>
-
+        <td scope="row">
             <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
         </td>
     #{/if}
+        <td>${student.sibling?'X':''}</td>
         <td>${student.name}</td>
         <td>${student.firstname}</td>
         #{if extended}

@@ -1,5 +1,6 @@
 package controllers;
 
+import models.SiblingStudent;
 import models.Student;
 import play.mvc.Controller;
 
@@ -18,42 +19,33 @@ public class Groups extends Controller {
                         .bind("classrooms", classrooms)
                         .fetch();
 
-        List<Student> groupA = new ArrayList<>();
-        List<Student> groupB = new ArrayList<>();
+        List<Student> studentGroupA = new ArrayList<>();
+        List<Student> studentGroupB = new ArrayList<>();
 
-        Map<String, Set<Student>> fraties = new HashMap<>();
-
-        Student laststudent = null;
-        for (Student student : students) {
-            if (laststudent != null) {
-                if (laststudent.name.equals(student.name)) {
-                    Set<Student> fra = fraties.computeIfAbsent(student.name, k -> new TreeSet<>(Comparator.comparing((Student o) -> o.firstname)));
-                    fra.add(student);
-                    fra.add(laststudent);
-                }
-            }
-            laststudent = student;
-        }
+        Map<String, Set<Student>> fraties = Student.buildFratries(students);
 
         List<Student> target;
-        target = groupA;
+        target = studentGroupA;
         for (Map.Entry<String, Set<Student>> fratrie : fraties.entrySet()) {
             target.addAll(fratrie.getValue());
             students.removeAll(fratrie.getValue());
-            if (target.equals(groupA)) target = groupB;
-            else if (target.equals(groupB)) target = groupA;
+            if (target.equals(studentGroupA)) target = studentGroupB;
+            else if (target.equals(studentGroupB)) target = studentGroupA;
         }
 
         Collections.shuffle(students);
-        target = groupA;
+        target = studentGroupA;
         for (Student student : students) {
             target.add(student);
-            if (target.equals(groupA)) target = groupB;
-            else if (target.equals(groupB)) target = groupA;
+            if (target.equals(studentGroupA)) target = studentGroupB;
+            else if (target.equals(studentGroupB)) target = studentGroupA;
         }
 
-        Collections.sort(groupA, Comparator.comparing((Student o) -> o.name));
-        Collections.sort(groupB, Comparator.comparing((Student o) -> o.name));
+        Collections.sort(studentGroupA, Comparator.comparing((Student o) -> o.name));
+        Collections.sort(studentGroupB, Comparator.comparing((Student o) -> o.name));
+
+        List<SiblingStudent> groupA = SiblingStudent.wrapSiblings(studentGroupA);
+        List<SiblingStudent> groupB = SiblingStudent.wrapSiblings(studentGroupB);
 
         render( groupA, groupB, students);
     }

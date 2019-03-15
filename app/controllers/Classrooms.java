@@ -2,23 +2,12 @@ package controllers;
 
 import models.ClassRoomKind;
 import models.Classroom;
+import models.SiblingStudent;
 import models.Student;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import play.Logger;
 import play.mvc.Controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.*;
 
@@ -48,14 +37,13 @@ public class Classrooms extends Controller {
     public static void openDetail(long id) {
         Classroom classroom = Classroom.findById(id);
 
-        List<Student> students =
+        List<SiblingStudent> students = SiblingStudent.wrapSiblings(
                 Student.find("select s from Student s where classroom.id = ?1 order by name, firstname", classroom.id)
-                        .fetch();
+                .fetch());
 
         render(classroom, students);
 
     }
-
 
 
 }

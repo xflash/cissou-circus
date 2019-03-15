@@ -7,6 +7,7 @@ import play.db.jpa.Model;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.util.*;
 
 /**
  * @author rcoqueugniot
@@ -24,6 +25,23 @@ public class Student extends Model {
     @ManyToOne()
     public  Classroom classroom;
 
+    public static Map<String, Set<Student>> buildFratries(List<Student> students) {
+        Map<String, Set<Student>> fraties = new HashMap<>();
+
+        Student laststudent = null;
+        for (Student student : students) {
+            if (laststudent != null) {
+                if (laststudent.name.equals(student.name)) {
+                    Set<Student> fra = fraties.computeIfAbsent(student.name, k -> new TreeSet<>(Comparator.comparing((Student o) -> o.firstname)));
+                    fra.add(student);
+                    fra.add(laststudent);
+                }
+            }
+            laststudent = student;
+        }
+        return fraties;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
@@ -31,5 +49,9 @@ public class Student extends Model {
                 .append("firstname", firstname)
                 .append("name", name)
                 .toString();
+    }
+
+    public boolean isSiblingWith(Student student) {
+        return name.equals(student.name);
     }
 }
