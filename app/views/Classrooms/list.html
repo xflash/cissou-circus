@@ -1,32 +1,51 @@
 #{extends 'main.html' /}
-#{set title:'Classroms' /}
+#{set title:'Classrooms' /}
 
 
-<h1>Classrooms</h1>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 >Classrooms</h1>
+        <p>List all classroms and allow to edit them</p>
+    </div>
+</div>
 
 
-#{if classrooms}
+<div class="container">
+    <div class="row">
+    #{if classrooms}
 
-    #{form @Groups.createGroups()}
+        <table class="table table-striped table-hover table-sm">
 
-    <ul>
-        #{list items:classrooms, as:'classroom'}
-            <li>
-                <input type="checkbox" name="classrooms" value="${classroom.id}"
-                    #{if selected.contains(classroom.id)}
-                       checked
-                    #{/if}
-                >
-                <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
-            </li>
-        #{/list}
-    </ul>
-    <input type="submit" value="Create groups"/>
-    #{/}
-#{/if}
-#{else }
-<p>No classes</p>
-#{/else}
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Level</th>
+                <th scope="col">nb</th>
+            </tr>
+            </thead>
 
+            <tbody>
 
+                #{list items:classrooms, as:'classroom'}
+                <tr>
+                    <th scope="row">
+                        <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
+                    </th>
+                    <td>${classroom.kind}</td>
+                    <td></td>
+                </tr>
+                #{/list}
+
+            </tbody>
+
+        </table>
+
+    #{/if}
+    #{else }
+        <p>No classes</p>
+    #{/else}
+
+    </div>
+</div>
 

@@ -2,19 +2,32 @@
 #{set title:'Student' /}
 
 
-<h1>Student ${student.name}</h1>
 
-<dl >
-    <dt>Firstname</dt>
-    <dd>${student.firstname}</dd>
 
-    <dt>Name</dt>
-    <dd>${student.name}</dd>
+<div class="jumbotron">
+    <div class="container">
+        <h1 >Student show</h1>
+        <p>Allow to show a single student</p>
+    </div>
+</div>
 
-    <dt>Classroom</dt>
-    <dd>${student.classroom.name}</dd>
+<div class="container">
+    <div class="row">
 
-</dl>
 
+        <dl>
+            <dt>Firstname</dt>
+            <dd>${student.firstname}</dd>
+
+            <dt>Name</dt>
+            <dd>${student.name}</dd>
+
+            <dt>Classroom</dt>
+            <dd>${student.classroom.name}</dd>
+
+        </dl>
+
+    </div>
+</div>
 
 

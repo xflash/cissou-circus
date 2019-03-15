@@ -24,14 +24,7 @@ public class Classrooms extends Controller {
         if (classrooms.isEmpty())
             Application.init();
 
-        List<Long> selected =
-                Classroom.find("select c.id from Classroom c where c.kind in :kinds ")
-                        .bind("kinds",
-                                stream(ClassRoomKind.values())
-                                        .filter(value -> value.ordinal() >= ClassRoomKind.GRANDE_MOYENNE_SECTION.ordinal())
-                                        .collect(Collectors.toList()))
-                        .fetch();
-        render(classrooms, selected);
+        render(classrooms);
     }
 
     public static void openDetail(long id) {

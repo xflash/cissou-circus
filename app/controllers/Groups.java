@@ -1,18 +1,37 @@
 package controllers;
 
+import models.ClassRoomKind;
+import models.Classroom;
 import models.SiblingStudent;
 import models.Student;
+import play.Logger;
 import play.mvc.Controller;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 /**
  */
 public class Groups extends Controller {
 
 
-    public static void createGroups(List<Long> classrooms) {
-        System.out.println("classrooms = " + classrooms);
+    public static void init() {
+        List<Classroom> classrooms = Classroom.findAll();
+
+        List<Long> selected =
+                Classroom.find("select c.id from Classroom c where c.kind in :kinds ")
+                        .bind("kinds",
+                                stream(ClassRoomKind.values())
+                                        .filter(value -> value.ordinal() >= ClassRoomKind.GRANDE_MOYENNE_SECTION.ordinal())
+                                        .collect(Collectors.toList()))
+                        .fetch();
+        render(classrooms, selected);
+    }
+
+    public static void dispatch(List<Long> classrooms) {
+        Logger.info("classrooms = " + classrooms);
 
         List<Student> students =
                 Student.find("select s from Student s where s.classroom.id in :classrooms order by s.name")

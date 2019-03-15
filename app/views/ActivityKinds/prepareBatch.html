@@ -2,8 +2,13 @@
 #{set title:'ActivityKind' /}
 
 
-<h1>Prepare a ${batchAction}</h1>
 
+<div class="jumbotron">
+    <div class="container">
+        <h1>Activite batch operations</h1>
+        <p>Allow to ${batchAction} <span class="badge">${activityKindSummaries.size()}</span> activities</p>
+    </div>
+</div>
 <nav class="nav">
     <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
 *{<a class="nav-link" href="#">Link</a>}*
@@ -11,27 +16,32 @@
 </nav>
 
 <div class="container">
+    <div class="row">
 
-#{form @batchAction()}
 
-    <div class="form-group">
-        <h4>Select which activity have to be ${batchAction}-ed</h4>
-        #{list items:activityKindSummaries, as:'activityKindSummary'}
-            <div class="custom-control custom-radio">
-                <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="custom-control-input" value="${activityKindSummary.id}">
-                <label class="custom-control-label"
-                       for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
-            </div>
 
-            <input type="hidden" name="selection" value="${activityKindSummary.id}" >
-        #{/list}
+    #{form @batchAction()}
+
+        <fieldset>
+            <legen>Select which activity have to be ${batchAction}d into :</legen>
+            #{list items:activityKindSummaries, as:'activityKindSummary'}
+                <div class="form-check">
+                    <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="form-check-input"
+                           value="${activityKindSummary.id}">
+                    <label class="form-check-label" for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
+                </div>
+
+                <input type="hidden" name="selection" value="${activityKindSummary.id}">
+            #{/list}
+        </fieldset>
+        <fieldset>
+
+            <button type="submit" name="batchAction" value="${batchAction}" class="btn btn-info">Merge</button>
+        </fieldset>
+
+
+    #{/form}
+
+
     </div>
-
-    <button type="submit" name="batchAction" value="${batchAction}" class="btn btn-info">Merge</button>
-
-
-#{/form}
-
-
-
 </div>

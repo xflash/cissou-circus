@@ -2,29 +2,40 @@
 #{set title:'Initialize' /}
 
 
-
-<div class="container">
-    <h1>Initialization</h1>
-    <p class="lead">Provide me an Excel spreadsheet to initialize the whole DB</p>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Initialization</h1>
+        <p>This form helps you to initalize a full database from a given Excel spreadsheet</p>
+    *{<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>}*
+    </div>
 </div>
 
 <div class="container">
+    <div class="row">
+        *{<div class="col-md-2 col-xl-8">}*
+
+        #{form @uploadData(), enctype:'multipart/form-data'}
+            <fieldset>
+                <legend>Upload </legend>
+                <div class="form-group">
+                    <label for="excelFile1">File to upload</label>
+                    <input type="file" class="form-control-file" id="excelFile1" name="excel"
+                           aria-describedby="excelFileHelp">
+                    <small id="excelFileHelp" class="form-text text-muted">This excel spreadheet will be uploaded and
+                        parsed.
+                    </small>
+
+                </div>
+            </fieldset>
+            <fieldset>
+                <button type="submit" class="btn btn-primary">Send it</button>
+            </fieldset>
+
+        #{/form}
 
 
-#{form @uploadData(), enctype:'multipart/form-data'}
 
-    <div class="form-group row">
-        <label for="excelFile1" class="col-sm-2 col-form-label">Excel file</label>
-        <div class="col-sm-10">
-        *{<input type="email" class="form-control" id="inputEmail3" placeholder="Email">}*
-            <input type="file" class="form-control-file" id="excelFile1" name="excel">
-        </div>
+
+        *{</div>}*
     </div>
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Send it</button>
-        </div>
-    </div>
-
-#{/}
 </div>

@@ -1,0 +1,37 @@
+#{extends 'main.html' /}
+#{set title:'Groups' /}
+
+
+
+<div class="jumbotron mt-3">
+    <h1>Group preparation</h1>
+    <p class="lead">Here you may prepare what classrooms are concerned for the wanted groups</p>
+    *{<a class="btn btn-lg btn-primary" href="/docs/4.3/components/navbar/" role="button">View navbar docs »</a>}*
+</div>
+
+<div class="mt-3">
+#{if classrooms}
+
+    #{form @Groups.dispatch()}
+        <input type="submit" value="Dispatch students"/>
+
+    <ul>
+        #{list items:classrooms, as:'classroom'}
+            <li>
+                <input type="checkbox" name="classrooms" value="${classroom.id}"
+                    #{if selected.contains(classroom.id)}
+                       checked
+                    #{/if}
+                >
+                <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
+            </li>
+        #{/list}
+    </ul>
+    #{/}
+#{/if}
+#{else }
+<p>No classes</p>
+#{/else}
+
+</div>
+

@@ -1,50 +1,67 @@
 #{extends 'main.html' /}
-#{set title:'ActivityKinds' /}
+#{set title:'Activities' /}
 
 
-<h1>ActivityKinds</h1>
 
+<div class="jumbotron">
+    <div class="container">
+        <h1>Activities list</h1>
+        <p>Allow to show all acticities present and operate some oprations on multiple of them</p>
+    </div>
+</div>
 
-#{if activityKindSummaries}
+<div class="container">
+    <div class="row">
+    #{if activityKindSummaries}
 
-#{form @prepareBatch()}
+        #{form @prepareBatch(), class:'container'}
 
-<button type="submit" name="batchAction" value="merge" class="btn btn-info">Merge</button>
-<button type="submit" name="batchAction" value="deletion" class="btn btn-warning">Delete</button>
+            <fieldset>
+                <legend>Actions</legend>
+                <button type="submit" name="batchAction" value="merge" class="btn btn-info">Merge</button>
+                <button type="submit" name="batchAction" value="deletion" class="btn btn-warning">Delete</button>
+            </fieldset>
 
-<table class="table table-striped table-hover table-sm">
-    <thead>
-    <tr>
-        <th scope="col" colspan="2">Activity</th>
-        <th scope="col">Choice 1</th>
-        <th scope="col">Choice 2</th>
-        <th scope="col">Choice 3</th>
-        <th scope="col">Choice 4</th>
-    </tr>
-    </thead>
-    <tbody>
-        #{list items:activityKindSummaries, as:'activityKindSummary'}
-        <tr>
-            <td>
-                <label>
-                    Sel. <input type="checkbox" name="selection" value="${activityKindSummary.activityKind.id}"/>
-                </label>
-            </td>
-            <th scope="row"><a href="@{ActivityKinds.detail(activityKindSummary.activityKind.id)}">${activityKindSummary.activityKind.name}</a></th>
-            <td><span class="badge">${activityKindSummary.choice1}</span></td>
-            <td><span class="badge">${activityKindSummary.choice2}</span></td>
-            <td><span class="badge">${activityKindSummary.choice3}</span></td>
-            <td><span class="badge">${activityKindSummary.choice4}</span></td>
-        </tr>
-        #{/list}
-    </tbody>
-</table>
-#{/form}
+        <fieldset>
+            <legend>Activities list</legend>
+            <table class="table table-striped table-hover table-sm">
+                <thead>
+                <tr>
+                    <th scope="col" colspan="2">Activity</th>
+                    <th scope="col">Choice 1</th>
+                    <th scope="col">Choice 2</th>
+                    <th scope="col">Choice 3</th>
+                    <th scope="col">Choice 4</th>
+                </tr>
+                </thead>
+                <tbody>
+                    #{list items:activityKindSummaries, as:'activityKindSummary'}
+                    <tr>
+                        <td>
+                            <label>
+                                Sel. <input type="checkbox" name="selection"
+                                            value="${activityKindSummary.activityKind.id}"/>
+                            </label>
+                        </td>
+                        <th scope="row"><a
+                                href="@{ActivityKinds.detail(activityKindSummary.activityKind.id)}">${activityKindSummary.activityKind.name}</a>
+                        </th>
+                        <td><span class="badge badge-light">${activityKindSummary.choice1}</span></td>
+                        <td><span class="badge badge-light">${activityKindSummary.choice2}</span></td>
+                        <td><span class="badge badge-light">${activityKindSummary.choice3}</span></td>
+                        <td><span class="badge badge-light">${activityKindSummary.choice4}</span></td>
+                    </tr>
+                    #{/list}
+                </tbody>
+            </table>
+        #{/form}
 
-#{/if}
-#{else }
-<p>No activityKinds</p>
-#{/else}
-
+    #{/if}
+    #{else }
+        <p>No activityKinds</p>
+    #{/else}
+    </fieldset>
+    </div>
+</div>
 
 

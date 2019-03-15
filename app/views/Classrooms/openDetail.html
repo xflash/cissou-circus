@@ -1,9 +1,27 @@
 #{extends 'main.html' /}
-#{set title:'Classrom' /}
+#{set title:'Classroom' /}
 
 
-<h1>Classroom ${classroom.name}</h1>
-<h4>${classroom.kind}</h4>
 
-#{users students:students, withId:true /}
+<div class="jumbotron">
+    <div class="container">
+        <h1>Classroom</h1>
+        <p>Allow to show a single classroom list</p>
+    </div>
+</div>
 
+
+<div class="container">
+    <div class="row">
+
+        <dl>
+            <dt>Classroom name</dt>
+            <dd>${classroom.name}</dd>
+            <dt>Type</dt>
+            <dd>${classroom.kind}</dd>
+        </dl>
+
+    #{users students:students, withId:true /}
+
+    </div>
+</div>
