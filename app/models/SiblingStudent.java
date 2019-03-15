@@ -38,6 +38,9 @@ public class SiblingStudent {
         this.sibling = sibling;
     }
 
+    public Long getId() {
+        return student.id;
+    }
     public String getIdentifiant() {
         return student.identifiant;
     }
