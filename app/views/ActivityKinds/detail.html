@@ -4,6 +4,11 @@
 
 <h1>Activity ${activityKind.name}</h1>
 
+<nav class="nav">
+    <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
+    *{<a class="nav-link" href="#">Link</a>}*
+    *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
+</nav>
 
 <div class="container">
 
@@ -29,20 +34,16 @@
 
     <div class="tab-content">
         <div class="tab-pane active" id="choice1" role="tabpanel" aria-labelledby="choice1-tab">
-            <h2>Choice 1</h2>
-            #{users students:choice1Students, extended:true/}
+            #{users students:choice1Students, withClassroom:true/}
         </div>
         <div class="tab-pane " id="choice2" role="tabpanel" aria-labelledby="choice2-tab">
-            <h2>Choice 2</h2>
-            #{users students:choice2Students, extended:true/}
+            #{users students:choice2Students, withClassroom:true/}
         </div>
         <div class="tab-pane " id="choice3" role="tabpanel" aria-labelledby="choice3-tab">
-            <h2>Choice 3</h2>
-            #{users students:choice3Students, extended:true/}
+            #{users students:choice3Students, withClassroom:true/}
         </div>
         <div class="tab-pane " id="choice4" role="tabpanel" aria-labelledby="choice4-tab">
-            <h2>Choice 4</h2>
-            #{users students:choice4Students, extended:true/}
+            #{users students:choice4Students, withClassroom:true/}
         </div>
     </div>
 

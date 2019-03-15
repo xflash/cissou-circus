@@ -11,6 +11,7 @@ import java.util.List;
 public class ActivityKind extends Model {
 
     @Column(unique = true)
+    public
     String name;
 
     public static ActivityKind findByName(String name) {
