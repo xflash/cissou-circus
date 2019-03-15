@@ -5,7 +5,6 @@ import models.Classroom;
 import models.Student;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import play.Logger;
@@ -13,8 +12,9 @@ import play.mvc.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -67,46 +67,44 @@ public class Classrooms extends Controller {
         Student.deleteAll();
         Classroom.deleteAll();
 
+        Pattern pattern = Pattern.compile("(.*)-[0-9]{2}");
+
         workbook.forEach(sheet -> {
             String sheetName = sheet.getSheetName();
             if (Stream.of(ClassRoomKind.values()).anyMatch(k -> sheetName.contains(k.name()))) {
-                Logger.info("Creating classroom %s", sheetName);
-                sheet.forEach(row -> {
-                    if (row.getRowNum() > 0) {
-                        int cellnum = 0;
-                        String identifiant = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                        String classe = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                        String nom = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                        String prenom = dataFormatter.formatCellValue(row.getCell(cellnum++));
+                Matcher matcher = pattern.matcher(sheetName);
+                if (!matcher.matches())
+                    Logger.error("Bad classroom sheetname %s", sheetName);
+                {
+                    ClassRoomKind classRoomKind = ClassRoomKind.valueOf(matcher.group(1));
+                    Logger.info("Creating classroom %s - %s", sheetName, classRoomKind.name());
+                    sheet.forEach(row -> {
+                        if (row.getRowNum() > 0) {
+                            int cellnum = 0;
+                            String identifiant = dataFormatter.formatCellValue(row.getCell(cellnum++));
+                            String classe = dataFormatter.formatCellValue(row.getCell(cellnum++));
+                            String nom = dataFormatter.formatCellValue(row.getCell(cellnum++));
+                            String prenom = dataFormatter.formatCellValue(row.getCell(cellnum++));
 
-                        Student student = new Student();
-                        student.firstname = prenom;
-                        student.name = nom;
-                        student.identifiant = identifiant;
-                        Classroom classroom = Classroom.find("byName", classe).first();
-                        if (classroom == null) {
-                            classroom = new Classroom();
-                            classroom.name = classe;
-                            classroom.save();
+                            Student student = new Student();
+                            student.firstname = prenom;
+                            student.name = nom;
+                            student.identifiant = identifiant;
+                            Classroom classroom = Classroom.find("byName", classe).first();
+                            if (classroom == null) {
+                                classroom = Classroom.createClassroom(classe, classRoomKind);
+                            }
+                            student.classroom = classroom;
+
+                            student.save();
                         }
-                        student.classroom = classroom;
 
-                        student.save();
-                    }
-
-                });
+                    });
+                }
             }
         });
 
-
-        // 1. You can obtain a sheetIterator and iterate over it
-        Iterator<Sheet> sheetIterator = workbook.sheetIterator();
-        System.out.println("Retrieving Sheets using Iterator");
-//        while (sheetIterator.hasNext()) {
-        Sheet sheet = sheetIterator.next();
-        System.out.println("=> " + sheet.getSheetName());
-
-
         list();
     }
+
 }
