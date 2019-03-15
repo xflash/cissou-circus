@@ -33,7 +33,7 @@ public class Groups extends Controller {
             else if (target.equals(studentGroupB)) target = studentGroupA;
         }
 
-        Collections.shuffle(students);
+        //Collections.shuffle(students);
         target = studentGroupA;
         for (Student student : students) {
             target.add(student);
