@@ -38,6 +38,14 @@ public class Classrooms extends Controller {
         render();
     }
 
+    public static void resetAll() {
+
+        Student.deleteAll();
+        Classroom.deleteAll();
+
+        init();
+    }
+
     public static void openDetail(long id) {
         Classroom classroom = Classroom.findById(id);
 
