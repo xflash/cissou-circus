@@ -1,5 +1,6 @@
 package controllers;
 
+import models.ClassRoomKind;
 import models.Classroom;
 import models.Student;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author rcoqueugniot
@@ -27,7 +29,7 @@ public class Classrooms extends Controller {
     public static void list() {
         List<Classroom> classrooms = Classroom.findAll();
 
-        if(classrooms.isEmpty())
+        if (classrooms.isEmpty())
             init();
 
         List<Long> selected = Classroom.find("select c.id from Classroom c where c.name like 'GRANDE%'").fetch();
@@ -67,8 +69,8 @@ public class Classrooms extends Controller {
 
         workbook.forEach(sheet -> {
             String sheetName = sheet.getSheetName();
-            if (sheetName.contains("SECTION")) {
-                System.out.println("=> " + sheetName);
+            if (Stream.of(ClassRoomKind.values()).anyMatch(k -> sheetName.contains(k.name()))) {
+                Logger.info("Creating classroom %s", sheetName);
                 sheet.forEach(row -> {
                     if (row.getRowNum() > 0) {
                         int cellnum = 0;
