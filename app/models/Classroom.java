@@ -2,10 +2,7 @@ package models;
 
 import play.db.jpa.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -14,7 +11,9 @@ import java.util.List;
  */
 @Entity
 public class Classroom extends Model {
-    public String name;
+
+    @Column(unique = true)
+    String name;
 
     @Enumerated(EnumType.STRING)
     public ClassRoomKind kind;
@@ -28,5 +27,17 @@ public class Classroom extends Model {
         classroom.name = classe;
         classroom.kind = kind;
         return classroom.save();
+    }
+
+    public static Classroom findByName(String classe) {
+        return find("byName", classe).first();
+    }
+
+    public static Classroom findOrCreate(ClassRoomKind classRoomKind, String classe) {
+        Classroom classroom = findByName(classe);
+        if (classroom == null) {
+            classroom = createClassroom(classe, classRoomKind);
+        }
+        return classroom;
     }
 }

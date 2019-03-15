@@ -1,20 +1,18 @@
 package controllers;
 
+import models.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import play.*;
-import play.mvc.*;
+import play.Logger;
+import play.mvc.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import models.*;
 
 public class Application extends Controller {
 
@@ -60,23 +58,33 @@ public class Application extends Controller {
                     ClassRoomKind classRoomKind = ClassRoomKind.valueOf(matcher.group(1));
                     Logger.info("Creating classroom %s - %s", sheetName, classRoomKind.name());
                     sheet.forEach(row -> {
+                        boolean involvedClassroom = false;
+                        if (row.getRowNum() == 0) {
+                            String choix1 = dataFormatter.formatCellValue(row.getCell(4));
+                            if (choix1.equals("choix1")) involvedClassroom = true;
+//                            String choix2 = dataFormatter.formatCellValue(row.getCell(5));
+//                            String choix3 = dataFormatter.formatCellValue(row.getCell(6));
+//                            String choix4 = dataFormatter.formatCellValue(row.getCell(7));
+
+                        }
                         if (row.getRowNum() > 0) {
-                            int cellnum = 0;
-                            String identifiant = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                            String classe = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                            String nom = dataFormatter.formatCellValue(row.getCell(cellnum++));
-                            String prenom = dataFormatter.formatCellValue(row.getCell(cellnum++));
+                            String identifiant = dataFormatter.formatCellValue(row.getCell(0));
+                            String classe = dataFormatter.formatCellValue(row.getCell(1));
+                            String nom = dataFormatter.formatCellValue(row.getCell(2));
+                            String prenom = dataFormatter.formatCellValue(row.getCell(3));
 
                             Student student = new Student();
                             student.firstname = prenom;
                             student.name = nom;
                             student.identifiant = identifiant;
-                            Classroom classroom = Classroom.find("byName", classe).first();
-                            if (classroom == null) {
-                                classroom = Classroom.createClassroom(classe, classRoomKind);
-                            }
-                            student.classroom = classroom;
+                            student.classroom = Classroom.findOrCreate(classRoomKind, classe);
+                            student.save();
 
+                            student.choices = StudentChoices.createStudentChoices(student,
+                                    dataFormatter.formatCellValue(row.getCell(4)),
+                                    dataFormatter.formatCellValue(row.getCell(5)),
+                                    dataFormatter.formatCellValue(row.getCell(6)),
+                                    dataFormatter.formatCellValue(row.getCell(7)));
                             student.save();
                         }
 

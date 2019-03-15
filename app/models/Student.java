@@ -7,6 +7,7 @@ import play.db.jpa.Model;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.*;
 
 /**
@@ -16,14 +17,17 @@ import java.util.*;
 @Entity
 public class Student extends Model {
 
-   public  String identifiant;
+    public String identifiant;
 
-    public  String name;
+    public String name;
 
-    public  String firstname;
+    public String firstname;
 
     @ManyToOne()
-    public  Classroom classroom;
+    public Classroom classroom;
+
+    @OneToOne
+    public StudentChoices choices;
 
     public static Map<String, Set<Student>> buildFratries(List<Student> students) {
         Map<String, Set<Student>> fraties = new HashMap<>();
