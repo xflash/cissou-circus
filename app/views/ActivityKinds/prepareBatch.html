@@ -1,0 +1,37 @@
+#{extends 'main.html' /}
+#{set title:'ActivityKind' /}
+
+
+<h1>Prepare a ${batchAction}</h1>
+
+<nav class="nav">
+    <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
+*{<a class="nav-link" href="#">Link</a>}*
+*{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
+</nav>
+
+<div class="container">
+
+#{form @batchAction()}
+
+    <div class="form-group">
+        <h4>Select which activity have to be ${batchAction}-ed</h4>
+        #{list items:activityKindSummaries, as:'activityKindSummary'}
+            <div class="custom-control custom-radio">
+                <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="custom-control-input" value="${activityKindSummary.id}">
+                <label class="custom-control-label"
+                       for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
+            </div>
+
+            <input type="hidden" name="selection" value="${activityKindSummary.id}" >
+        #{/list}
+    </div>
+
+    <button type="submit" name="batchAction" value="${batchAction}" class="btn btn-info">Merge</button>
+
+
+#{/form}
+
+
+
+</div>

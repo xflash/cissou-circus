@@ -7,15 +7,10 @@
 
 #{if activityKindSummaries}
 
-#{form @batchAction()}
+#{form @prepareBatch()}
 
-<input type="submit" name="action" value="merge" />
-
-
-*{<input type="submit" value="Create groups"/>}*
-
-<button type="submit" name="action" value="merge" class="btn btn-info">Merge</button>
-<button type="submit" name="action" value="deletion" class="btn btn-warning">Delete</button>
+<button type="submit" name="batchAction" value="merge" class="btn btn-info">Merge</button>
+<button type="submit" name="batchAction" value="deletion" class="btn btn-warning">Delete</button>
 
 <table class="table table-striped table-hover table-sm">
     <thead>

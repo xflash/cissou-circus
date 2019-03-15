@@ -3,12 +3,9 @@ package controllers;
 import models.*;
 import play.Logger;
 import play.mvc.Controller;
-import play.mvc.Scope;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.stream;
 
 /**
  * @author rcoqueugniot
@@ -18,29 +15,38 @@ public class ActivityKinds extends Controller {
 
     public static void list() {
         Logger.info("Listing ActivityKindSummary");
-        List<ActivityKindSummary> activityKindSummaries = new ArrayList<>();
-        for (ActivityKind activityKind : ActivityKind.listAllOrdered()) {
-            activityKindSummaries.add(new ActivityKindSummary(activityKind,
-                    StudentChoices.findAllChoice1(activityKind).size(),
-                    StudentChoices.findAllChoice2(activityKind).size(),
-                    StudentChoices.findAllChoice3(activityKind).size(),
-                    StudentChoices.findAllChoice4(activityKind).size()
-            ));
-        }
+
+        List<ActivityKindSummary> activityKindSummaries =
+                ActivityKindSummary.computeSummaries(ActivityKind.listAllOrdered());
 
         render(activityKindSummaries);
     }
 
-    public static void batchAction(List<Long> selection) {
-        Logger.info("params", Scope.Params.current());
+    public static void prepareBatch(String batchAction, List<Long> selection) {
+        Logger.info("Preparing batch %s on %s ", batchAction, selection);
 
-        String action="";
-        Logger.info("Running batch %s on %s ", action, selection);
-        if (action == null) error(400, "Bad batch action");
+        if (batchAction.equals("merge")) {
+            List<ActivityKindSummary> activityKindSummaries =
+                    ActivityKindSummary.computeSummaries(ActivityKind.listOrdered(selection));
+            render(batchAction, activityKindSummaries);
+        }
+        else if (batchAction.equals("deletion")) {
+            ActivityKind.deleteAll(selection);
 
-        if (action.equals("merge")) ActivityKind.mergeAll(selection);
-        else if (action.equals("deletion")) ActivityKind.deleteAll(selection);
-        else error(400, "Bad batch action : " + action);
+            list();
+        }
+
+        error(400, "Unknown batch action : " + batchAction);
+    }
+
+
+    public static void batchAction(String batchAction, long root, List<Long> selection) {
+
+        Logger.info("Running batch %s on %s with root %d", batchAction, selection, root);
+
+        if (batchAction.equals("merge")) ActivityKind.mergeAll(root, selection);
+        else if (batchAction.equals("deletion")) ActivityKind.deleteAll(selection);
+        else error(400, "Bad batch action : " + batchAction);
         list();
     }
 
@@ -49,46 +55,12 @@ public class ActivityKinds extends Controller {
 
         ActivityKind activityKind = ActivityKind.findById(id);
 
-        List<SiblingStudent> choice1Students = SiblingStudent.wrapSiblings(StudentChoices.findAllChoice1(activityKind));
-        List<SiblingStudent> choice2Students = SiblingStudent.wrapSiblings(StudentChoices.findAllChoice2(activityKind));
-        List<SiblingStudent> choice3Students = SiblingStudent.wrapSiblings(StudentChoices.findAllChoice3(activityKind));
-        List<SiblingStudent> choice4Students = SiblingStudent.wrapSiblings(StudentChoices.findAllChoice4(activityKind));
+        List<SiblingStudent> choice1Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice1(activityKind)));
+        List<SiblingStudent> choice2Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice2(activityKind)));
+        List<SiblingStudent> choice3Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice3(activityKind)));
+        List<SiblingStudent> choice4Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice4(activityKind)));
 
         render(activityKind, choice1Students, choice2Students, choice3Students, choice4Students);
-    }
-
-
-    private static class ActivityKindSummary {
-        private final ActivityKind activityKind;
-        private final int choice1;
-        private final int choice2;
-        private final int choice3;
-        private final int choice4;
-
-        public ActivityKindSummary(ActivityKind activityKind, int choice1, int choice2, int choice3, int choice4) {
-            this.activityKind = activityKind;
-            this.choice1 = choice1;
-            this.choice2 = choice2;
-            this.choice3 = choice3;
-            this.choice4 = choice4;
-        }
-
-
-        public int getChoice1() {
-            return choice1;
-        }
-
-        public int getChoice2() {
-            return choice2;
-        }
-
-        public int getChoice3() {
-            return choice3;
-        }
-
-        public int getChoice4() {
-            return choice4;
-        }
     }
 
 

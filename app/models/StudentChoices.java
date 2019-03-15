@@ -2,28 +2,30 @@ package models;
 
 import play.db.jpa.Model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class StudentChoices extends Model {
 
-    @OneToOne(mappedBy = "choices")
-    public
-    Student student;
-
     @ManyToOne
+    public Student student;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice1;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice2;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice3;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice4;
 
@@ -38,22 +40,30 @@ public class StudentChoices extends Model {
         return choices.save();
     }
 
-    public static List<Student> findAllChoice1(ActivityKind activityKind) {
+    public static List<StudentChoices> findAllChoice1(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice1");
     }
-    public static List<Student> findAllChoice2(ActivityKind activityKind) {
+    public static List<StudentChoices> findAllChoice2(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice2");
     }
-    public static List<Student> findAllChoice3(ActivityKind activityKind) {
+    public static List<StudentChoices> findAllChoice3(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice3");
     }
-    public static List<Student> findAllChoice4(ActivityKind activityKind) {
+    public static List<StudentChoices> findAllChoice4(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice4");
     }
 
-    private static List<Student> findAllChoice(ActivityKind activityKind, String s) {
-        return StudentChoices.find("select sc.student from StudentChoices sc where sc."+ s +" = :choice")
+    private static List<StudentChoices> findAllChoice(ActivityKind activityKind, String s) {
+        return StudentChoices.find("select sc from StudentChoices sc where sc."+ s +" = :choice")
                 .bind("choice", activityKind)
                 .fetch();
+    }
+
+    public static List<Student> getStudents(List<StudentChoices> studentChoices) {
+        ArrayList<Student> students = new ArrayList<>();
+        for (StudentChoices studentChoice : studentChoices) {
+            students.add(studentChoice.student);
+        }
+        return students;
     }
 }

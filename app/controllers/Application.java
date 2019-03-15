@@ -28,8 +28,7 @@ public class Application extends Controller {
 
     public static void resetAll() {
 
-        Student.deleteAll();
-        Classroom.deleteAll();
+        deleteAllEntities();
 
         init();
     }
@@ -43,8 +42,7 @@ public class Application extends Controller {
 
         Workbook workbook = WorkbookFactory.create(excel);
 
-        Student.deleteAll();
-        Classroom.deleteAll();
+        deleteAllEntities();
 
         Pattern pattern = Pattern.compile("(.*)-[0-9]{2}");
 
@@ -80,12 +78,12 @@ public class Application extends Controller {
                             student.classroom = Classroom.findOrCreate(classRoomKind, classe);
                             student.save();
 
-                            student.choices = StudentChoices.createStudentChoices(student,
+                            StudentChoices.createStudentChoices(student,
                                     dataFormatter.formatCellValue(row.getCell(4)),
                                     dataFormatter.formatCellValue(row.getCell(5)),
                                     dataFormatter.formatCellValue(row.getCell(6)),
-                                    dataFormatter.formatCellValue(row.getCell(7)));
-                            student.save();
+                                    dataFormatter.formatCellValue(row.getCell(7)))
+                                    .save();
                         }
 
                     });
@@ -94,6 +92,13 @@ public class Application extends Controller {
         });
 
         Classrooms.list();
+    }
+
+    private static void deleteAllEntities() {
+        StudentChoices.deleteAll();
+        Student.deleteAll();
+        ActivityKind.deleteAll();
+        Classroom.deleteAll();
     }
 
 }
