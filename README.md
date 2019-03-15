@@ -11,7 +11,3 @@ NE PAS PRENDRE EN COMPTE les listes de petite section et de moyenne section.
 
 - Chaque enfant doit être dans au moins 1 atelier de son choix 
 
-
-Un immense merci pour ton aide... 
-Si tu relèves ce défi tu seras dans le discours de présentation et de remerciements de la direction! 
-Gros bisous 😘
