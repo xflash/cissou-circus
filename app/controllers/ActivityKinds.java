@@ -1,9 +1,9 @@
 package controllers;
 
-import com.mysql.jdbc.jmx.LoadBalanceConnectionGroupManager;
 import models.*;
 import play.Logger;
 import play.mvc.Controller;
+import play.mvc.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,10 @@ import static java.util.Arrays.stream;
  */
 public class ActivityKinds extends Controller {
 
-
     public static void list() {
         Logger.info("Listing ActivityKindSummary");
         List<ActivityKindSummary> activityKindSummaries = new ArrayList<>();
         for (ActivityKind activityKind : ActivityKind.listAllOrdered()) {
-            Logger.info("Summarizing activityKind %s", activityKind.name);
             activityKindSummaries.add(new ActivityKindSummary(activityKind,
                     StudentChoices.findAllChoice1(activityKind).size(),
                     StudentChoices.findAllChoice2(activityKind).size(),
@@ -32,6 +30,20 @@ public class ActivityKinds extends Controller {
 
         render(activityKindSummaries);
     }
+
+    public static void batchAction(List<Long> selection) {
+        Logger.info("params", Scope.Params.current());
+
+        String action="";
+        Logger.info("Running batch %s on %s ", action, selection);
+        if (action == null) error(400, "Bad batch action");
+
+        if (action.equals("merge")) ActivityKind.mergeAll(selection);
+        else if (action.equals("deletion")) ActivityKind.deleteAll(selection);
+        else error(400, "Bad batch action : " + action);
+        list();
+    }
+
 
     public static void detail(long id) {
 
@@ -78,4 +90,6 @@ public class ActivityKinds extends Controller {
             return choice4;
         }
     }
+
+
 }
