@@ -26,6 +26,10 @@ public class Classrooms extends Controller {
 
     public static void list() {
         List<Classroom> classrooms = Classroom.findAll();
+
+        if(classrooms.isEmpty())
+            init();
+
         List<Long> selected = Classroom.find("select c.id from Classroom c where c.name like 'GRANDE%'").fetch();
         render(classrooms, selected);
     }
