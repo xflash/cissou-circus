@@ -5,13 +5,9 @@ import play.db.jpa.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import java.util.List;
 
 @Entity
-//@Table(uniqueConstraints = {
-//        @UniqueConstraint(columnNames = "name")
-//})
 public class ActivityKind extends Model {
 
     @Column(unique = true)
@@ -29,9 +25,14 @@ public class ActivityKind extends Model {
 
     static ActivityKind findOrCreate(String choix) {
         if (StringUtils.isNotBlank(choix)) {
+            choix = StringUtils.trim(choix);
             ActivityKind activityKind = findByName(choix);
             return activityKind == null ? create(choix) : activityKind;
         } else
             return null;
+    }
+
+    public static List<ActivityKind> listAllOrdered() {
+        return find("select ak from ActivityKind ak order by ak.name").fetch();
     }
 }

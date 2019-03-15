@@ -1,11 +1,11 @@
 package models;
 
-import play.Logger;
 import play.db.jpa.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import java.util.List;
 
 @Entity
 public class StudentChoices extends Model {
@@ -38,4 +38,22 @@ public class StudentChoices extends Model {
         return choices.save();
     }
 
+    public static List<Student> findAllChoice1(ActivityKind activityKind) {
+        return findAllChoice(activityKind, "choice1");
+    }
+    public static List<Student> findAllChoice2(ActivityKind activityKind) {
+        return findAllChoice(activityKind, "choice2");
+    }
+    public static List<Student> findAllChoice3(ActivityKind activityKind) {
+        return findAllChoice(activityKind, "choice3");
+    }
+    public static List<Student> findAllChoice4(ActivityKind activityKind) {
+        return findAllChoice(activityKind, "choice4");
+    }
+
+    private static List<Student> findAllChoice(ActivityKind activityKind, String s) {
+        return StudentChoices.find("select sc.student from StudentChoices sc where sc."+ s +" = :choice")
+                .bind("choice", activityKind)
+                .fetch();
+    }
 }

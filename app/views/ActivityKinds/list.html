@@ -1,0 +1,23 @@
+#{extends 'main.html' /}
+#{set title:'ActivityKinds' /}
+
+
+<h1>ActivityKinds</h1>
+
+
+#{if activityKinds}
+
+<ul>
+    #{list items:activityKinds, as:'activityKind'}
+        <li>
+            <a href="@{ActivityKinds.detail(activityKind.id)}">${activityKind.name}</a>
+        </li>
+    #{/list}
+</ul>
+#{/if}
+#{else }
+<p>No activityKinds</p>
+#{/else}
+
+
+
