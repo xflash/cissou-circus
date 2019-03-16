@@ -10,51 +10,52 @@
     </div>
 </div>
 
-<nav class="nav">
-    <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
-*{<a class="nav-link" href="#">Link</a>}*
-*{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
-</nav>
 
 <div class="container">
     <div class="row">
+        <div class="col-sm">
 
-        <ul class="nav nav-tabs" id="groupsTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="choice1-tab" data-toggle="tab" href="#choice1" role="tab"
-                   aria-controls="choice1" aria-selected="true">Choice 1</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="choice2-tab" data-toggle="tab" href="#choice2" role="tab"
-                   aria-controls="choice2"
-                   aria-selected="false">Choice 2</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="choice3-tab" data-toggle="tab" href="#choice3" role="tab"
-                   aria-controls="choice3"
-                   aria-selected="false">Choice 3</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="choice4-tab" data-toggle="tab" href="#choice4" role="tab"
-                   aria-controls="choice4"
-                   aria-selected="false">Choice 4</a>
-            </li>
-        </ul>
+            <nav class="nav">
+                <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
+            *{<a class="nav-link" href="#">Link</a>}*
+            *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
+            </nav>
+            <ul class="nav nav-tabs" id="groupsTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="choice1-tab" data-toggle="tab" href="#choice1" role="tab"
+                       aria-controls="choice1" aria-selected="true">Choice 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="choice2-tab" data-toggle="tab" href="#choice2" role="tab"
+                       aria-controls="choice2"
+                       aria-selected="false">Choice 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="choice3-tab" data-toggle="tab" href="#choice3" role="tab"
+                       aria-controls="choice3"
+                       aria-selected="false">Choice 3</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="choice4-tab" data-toggle="tab" href="#choice4" role="tab"
+                       aria-controls="choice4"
+                       aria-selected="false">Choice 4</a>
+                </li>
+            </ul>
 
 
-        <div class="tab-content">
-            <div class="tab-pane active" id="choice1" role="tabpanel" aria-labelledby="choice1-tab">
-            #{users students:choice1Students, withClassroom:true/}
-            </div>
-            <div class="tab-pane " id="choice2" role="tabpanel" aria-labelledby="choice2-tab">
-            #{users students:choice2Students, withClassroom:true/}
-            </div>
-            <div class="tab-pane " id="choice3" role="tabpanel" aria-labelledby="choice3-tab">
-            #{users students:choice3Students, withClassroom:true/}
-            </div>
-            <div class="tab-pane " id="choice4" role="tabpanel" aria-labelledby="choice4-tab">
-            #{users students:choice4Students, withClassroom:true/}
+            <div class="tab-content">
+                <div class="tab-pane active" id="choice1" role="tabpanel" aria-labelledby="choice1-tab">
+                #{users students:choice1Students, withClassroom:true/}
+                </div>
+                <div class="tab-pane " id="choice2" role="tabpanel" aria-labelledby="choice2-tab">
+                #{users students:choice2Students, withClassroom:true/}
+                </div>
+                <div class="tab-pane " id="choice3" role="tabpanel" aria-labelledby="choice3-tab">
+                #{users students:choice3Students, withClassroom:true/}
+                </div>
+                <div class="tab-pane " id="choice4" role="tabpanel" aria-labelledby="choice4-tab">
+                #{users students:choice4Students, withClassroom:true/}
+                </div>
             </div>
         </div>
     </div>
-</div>

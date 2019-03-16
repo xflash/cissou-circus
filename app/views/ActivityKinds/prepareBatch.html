@@ -9,39 +9,44 @@
         <p>Allow to ${batchAction} <span class="badge">${activityKindSummaries.size()}</span> activities</p>
     </div>
 </div>
-<nav class="nav">
-    <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
-*{<a class="nav-link" href="#">Link</a>}*
-*{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
-</nav>
+
 
 <div class="container">
     <div class="row">
+        <div class="col-sm">
+
+            <nav class="nav">
+                <a class="nav-link" href="@{ActivityKinds.list()}">&leftarrow; Back to list</a>
+            *{<a class="nav-link" href="#">Link</a>}*
+            *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
+            </nav>
+
+        #{form @batchAction()}
+
+            <fieldset>
+                <legen>Select which activity have to be ${batchAction}d into :</legen>
+                #{list items:activityKindSummaries, as:'activityKindSummary'}
+
+                    <div class="form-check">
+                        <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="form-check-input"
+                               value="${activityKindSummary.id}">
+                        <label class="form-check-label"
+                               for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
+                    </div>
+
+                    <input type="hidden" name="selection" value="${activityKindSummary.id}">
+                #{/list}
+            </fieldset>
+        <hr/>
+            <fieldset>
+
+                <button type="submit" name="batchAction" value="${batchAction}" class="btn btn-info">Merge</button>
+            </fieldset>
 
 
-
-    #{form @batchAction()}
-
-        <fieldset>
-            <legen>Select which activity have to be ${batchAction}d into :</legen>
-            #{list items:activityKindSummaries, as:'activityKindSummary'}
-                <div class="form-check">
-                    <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="form-check-input"
-                           value="${activityKindSummary.id}">
-                    <label class="form-check-label" for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
-                </div>
-
-                <input type="hidden" name="selection" value="${activityKindSummary.id}">
-            #{/list}
-        </fieldset>
-        <fieldset>
-
-            <button type="submit" name="batchAction" value="${batchAction}" class="btn btn-info">Merge</button>
-        </fieldset>
+        #{/form}
 
 
-    #{/form}
-
-
+        </div>
     </div>
 </div>
