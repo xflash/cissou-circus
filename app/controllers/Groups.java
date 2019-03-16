@@ -35,33 +35,29 @@ public class Groups extends Controller {
                         .bind("classrooms", classrooms)
                         .fetch();
 
-        List<Student> studentGroupA = new ArrayList<>();
-        List<Student> studentGroupB = new ArrayList<>();
+        List<Student> groupA = new ArrayList<>();
+        List<Student> groupB = new ArrayList<>();
 
-        Map<String, Set<Student>> fraties = Student.buildFratries(students);
+        Map<String, Set<Student>> siblings = Student.buildSiblings(students);
 
-        List<Student> target;
-        target = studentGroupA;
-        for (Map.Entry<String, Set<Student>> fratrie : fraties.entrySet()) {
+        List<Student> target = groupA;
+        for (Map.Entry<String, Set<Student>> fratrie : siblings.entrySet()) {
             target.addAll(fratrie.getValue());
             students.removeAll(fratrie.getValue());
-            if (target.equals(studentGroupA)) target = studentGroupB;
-            else if (target.equals(studentGroupB)) target = studentGroupA;
+            if (target.equals(groupA)) target = groupB;
+            else if (target.equals(groupB)) target = groupA;
         }
 
         //Collections.shuffle(students);
-        target = studentGroupA;
+        target = groupA;
         for (Student student : students) {
             target.add(student);
-            if (target.equals(studentGroupA)) target = studentGroupB;
-            else if (target.equals(studentGroupB)) target = studentGroupA;
+            if (target.equals(groupA)) target = groupB;
+            else if (target.equals(groupB)) target = groupA;
         }
 
-        Collections.sort(studentGroupA, Comparator.comparing((Student o) -> o.name));
-        Collections.sort(studentGroupB, Comparator.comparing((Student o) -> o.name));
-
-        List<SiblingStudent> groupA = SiblingStudent.wrapSiblings(studentGroupA);
-        List<SiblingStudent> groupB = SiblingStudent.wrapSiblings(studentGroupB);
+        Collections.sort(groupA, Comparator.comparing((Student o) -> o.name));
+        Collections.sort(groupB, Comparator.comparing((Student o) -> o.name));
 
         render( groupA, groupB, students);
     }

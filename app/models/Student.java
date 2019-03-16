@@ -26,7 +26,7 @@ public class Student extends Model {
     @ManyToOne()
     public Classroom classroom;
 
-    public static Map<String, Set<Student>> buildFratries(List<Student> students) {
+    public static Map<String, Set<Student>> buildSiblings(List<Student> students) {
         Map<String, Set<Student>> fraties = new HashMap<>();
 
         Student laststudent = null;
