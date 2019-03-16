@@ -11,7 +11,7 @@ import static java.util.Arrays.stream;
 
 /**
  */
-public class Groups extends Controller {
+public class GroupsDispatchs extends Controller {
 
 
     public static void init() {
@@ -26,7 +26,7 @@ public class Groups extends Controller {
                         .fetch();
 
         List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
-        render(classrooms, selected,schoolEvents);
+        render(classrooms, selected, schoolEvents);
     }
 
     public static void dispatch(int groupNumber, long schoolEventId, List<Long> classrooms) {
@@ -63,5 +63,15 @@ public class Groups extends Controller {
         render(groupA, groupB, students);
     }
 
+    public static void saveDispatch(long schoolEventId) {
+        Logger.info("Save group dispatch in school event %d", schoolEventId);
 
+        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
+
+//        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEvent, "Group A").save();
+//        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEvent, "Group B").save();
+
+        badRequest();
+
+    }
 }

@@ -49,11 +49,11 @@
                             <td>
                                 <label>
                                     Sel. <input type="checkbox" name="selection"
-                                                value="${activityKindSummary.activityKind.id}"/>
+                                                value="${activityKindSummary.schoolEventActivity.id}"/>
                                 </label>
                             </td>
                             <th scope="row"><a
-                                    href="@{ActivityKinds.detail(activityKindSummary.activityKind.id)}">${activityKindSummary.activityKind.name}</a>
+                                    href="@{SchoolEventActivities.detail(activityKindSummary.schoolEventActivity.id)}">${activityKindSummary.schoolEventActivity.name}</a>
                             </th>
                             <td><span class="badge badge-light">${activityKindSummary.choice1}</span></td>
                             <td><span class="badge badge-light">${activityKindSummary.choice2}</span></td>
@@ -67,7 +67,7 @@
 
         #{/if}
         #{else }
-            <p>No activityKinds</p>
+            <p>No schoolEventActivities</p>
         #{/else}
         </fieldset>
         </div>

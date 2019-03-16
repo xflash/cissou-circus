@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.wrapper.ActivityKindSummary;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -55,10 +56,10 @@ public class ActivityKinds extends Controller {
 
         ActivityKind activityKind = ActivityKind.findById(id);
 
-        List<SiblingStudent> choice1Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice1(activityKind)));
-        List<SiblingStudent> choice2Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice2(activityKind)));
-        List<SiblingStudent> choice3Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice3(activityKind)));
-        List<SiblingStudent> choice4Students = SiblingStudent.wrapSiblings(StudentChoices.getStudents(StudentChoices.findAllChoice4(activityKind)));
+        List<Student> choice1Students = StudentChoices.getStudents(StudentChoices.findAllChoice1(activityKind));
+        List<Student> choice2Students = StudentChoices.getStudents(StudentChoices.findAllChoice2(activityKind));
+        List<Student> choice3Students = StudentChoices.getStudents(StudentChoices.findAllChoice3(activityKind));
+        List<Student> choice4Students = StudentChoices.getStudents(StudentChoices.findAllChoice4(activityKind));
 
         render(activityKind, choice1Students, choice2Students, choice3Students, choice4Students);
     }
