@@ -21,6 +21,14 @@
     </div>
 #{/}
 #{else }
+    <ul>
+        #{list schoolEventProposals, as:'schoolEventProposal'}
+        <li>
+            #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id)}${schoolEventProposal.id}#{/a}
+            #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id)}delete#{/a}
+        </li>
+        #{/list}
+    </ul>
 
 #{/else}
 

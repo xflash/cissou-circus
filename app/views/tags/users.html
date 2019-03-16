@@ -2,49 +2,51 @@
 #{set students:_students /}
 #{set withClassroom:_withClassroom /}
 #{set withId:_withId /}
+#{set tableId:_tableId /}
 
 
 
 <div class="container">
     <div class="row">
+        <div class="col-sm">
 
-        <h3>Students count <span class="badge badge-secondary">${students.size}</span></h3>
-        <table class="table  table-hover table-sm">
+            <table class="table  table-hover table-sm" id="${tableId}">
 
-            <thead>
-            <tr>
-            #{if withId}
-                <th scope="col">Identifiant</th>
-            #{/if}
-                <th scope="col">Name</th>
-                <th scope="col">Firstname</th>
-            #{if extended}
-                <th>ClassRoom</th>
-            #{/if}
-            </tr>
-            </thead>
-
-            <tbody>
-
-            #{list items:students, as:'student'}
-            <tr class="">
+                <thead>
+                <tr>
                 #{if withId}
-                    <th scope="row">
-                        <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
-                    </th>
+                    <th scope="col">Identifiant</th>
                 #{/if}
-                <td>${student.name}</td>
-                <td>${student.firstname}</td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Firstname</th>
                 #{if extended}
-                    <td>
-                        <a href="@{Classrooms.openDetail(student.classroom.id)}">${student.classroom.name}</a>
-                    </td>
-                #{/}
-            </tr>
-            #{/list}
+                    <th>ClassRoom</th>
+                #{/if}
+                </tr>
+                </thead>
 
-            </tbody>
+                <tbody>
 
-        </table>
+                #{list items:students, as:'student'}
+                <tr class="">
+                    #{if withId}
+                        <th scope="row">
+                            <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
+                        </th>
+                    #{/if}
+                    <td>${student.name}</td>
+                    <td>${student.firstname}</td>
+                    #{if extended}
+                        <td>
+                            <a href="@{Classrooms.openDetail(student.classroom.id)}">${student.classroom.name}</a>
+                        </td>
+                    #{/}
+                </tr>
+                #{/list}
+
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>

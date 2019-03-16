@@ -4,6 +4,7 @@ import play.db.jpa.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.List;
 
 /**
  */
@@ -18,5 +19,9 @@ public class SchoolEventGroup extends Model {
     public SchoolEventGroup(SchoolEventProposal schoolEventProposal, String name) {
         this.name = name;
         this.schoolEventProposal = schoolEventProposal;
+    }
+
+    public static List<SchoolEventGroup> list4Proposal(SchoolEventProposal schoolEventProposal) {
+        return find("schoolEventProposal", schoolEventProposal).fetch();
     }
 }

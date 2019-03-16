@@ -21,13 +21,23 @@ public class GroupsDispatchs extends Controller {
         render(schoolEventProposals);
     }
 
+    public static void delete(long id) {
+        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
+        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
+            for (SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment : SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup)) {
+                schoolEventGroupStudentAssignment.delete();
+            }
+            schoolEventGroup.delete();
+        }
+        schoolEventProposal.delete();
+
+        list();
+    }
     public static void edit(long id) {
         SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
-        List<SchoolEventGroup> schoolEventGroups =
-                SchoolEventGroup.find("schoolEventProposal", schoolEventProposal).fetch();
-        for (SchoolEventGroup schoolEventGroup : schoolEventGroups) {
+        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
             List<SchoolEventGroupStudentAssignment> schoolEventGroupStudentAssignments =
-                    SchoolEventGroupStudentAssignment.find("schoolEventGroup", schoolEventGroup).fetch();
+                    SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup);
         }
         render(schoolEventProposal);
     }

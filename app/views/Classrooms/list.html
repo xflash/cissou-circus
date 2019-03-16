@@ -16,7 +16,7 @@
         <div class="col-sm">
         #{if classrooms}
 
-            <table class="table table-striped table-hover table-sm">
+            <table class="table table-striped table-hover table-sm" id="classroomsTable">
 
                 <thead>
                 <tr>
@@ -50,4 +50,14 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#classroomsTable').DataTable({
+            "paging": true
+        });
+        // $('.dataTables_length').addClass('bs-select');
+    });
+</script>
 

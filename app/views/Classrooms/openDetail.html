@@ -22,8 +22,20 @@
                 <dd>${classroom.kind}</dd>
             </dl>
 
-        #{users students:students, withId:true /}
+        #{users students:students, withId:true, tableId:'studentsTable'/}
 
         </div>
     </div>
 </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#studentsTable').DataTable({
+            "paging": true
+        });
+        // $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
