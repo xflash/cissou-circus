@@ -30,18 +30,15 @@ public class Groups extends Controller {
     public static void dispatch(List<Long> classrooms) {
         Logger.info("classrooms = " + classrooms);
 
-        List<Student> students =
-                Student.find("select s from Student s where s.classroom.id in :classrooms order by s.name")
-                        .bind("classrooms", classrooms)
-                        .fetch();
+        List<StudentChoices> students = listStudentsChoicesInClassrooms(classrooms);
 
-        List<Student> groupA = new ArrayList<>();
-        List<Student> groupB = new ArrayList<>();
+        List<StudentChoices> groupA = new ArrayList<>();
+        List<StudentChoices> groupB = new ArrayList<>();
 
-        Map<String, Set<Student>> siblings = Student.buildSiblings(students);
+        Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
 
-        List<Student> target = groupA;
-        for (Map.Entry<String, Set<Student>> fratrie : siblings.entrySet()) {
+        List<StudentChoices> target = groupA;
+        for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
             target.addAll(fratrie.getValue());
             students.removeAll(fratrie.getValue());
             if (target.equals(groupA)) target = groupB;
@@ -50,16 +47,28 @@ public class Groups extends Controller {
 
         //Collections.shuffle(students);
         target = groupA;
-        for (Student student : students) {
-            target.add(student);
+        for (StudentChoices studentChoice : students) {
+            target.add(studentChoice);
             if (target.equals(groupA)) target = groupB;
             else if (target.equals(groupB)) target = groupA;
         }
 
-        Collections.sort(groupA, Comparator.comparing((Student o) -> o.name));
-        Collections.sort(groupB, Comparator.comparing((Student o) -> o.name));
+        Collections.sort(groupA, Comparator.comparing((StudentChoices o) -> o.student.name));
+        Collections.sort(groupB, Comparator.comparing((StudentChoices o) -> o.student.name));
 
-        render( groupA, groupB, students);
+        render(groupA, groupB, students);
+    }
+
+    private static List<StudentChoices> listStudentsChoicesInClassrooms(List<Long> classrooms) {
+        return StudentChoices.find(
+                        "select sc " +
+                        "from StudentChoices as sc inner join sc.student as s inner join s.classroom as cr " +
+                        "where cr.id in :classrooms " +
+                        "and sc.choice1 is not null " +
+                        "and sc.choice2 is not null " +
+                        "order by s.name")
+                .bind("classrooms", classrooms)
+                .fetch();
     }
 
 

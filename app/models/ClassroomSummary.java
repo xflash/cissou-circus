@@ -31,6 +31,9 @@ public class ClassroomSummary {
     public String getName() {
         return classroom.name;
     }
+    public ClassRoomKind getKind() {
+        return classroom.kind;
+    }
 
     public long getNb() {
         return nb;

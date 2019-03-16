@@ -1,9 +1,6 @@
 package controllers;
 
-import models.ClassRoomKind;
-import models.Classroom;
-import models.SiblingStudent;
-import models.Student;
+import models.*;
 import play.mvc.Controller;
 
 import java.util.List;
@@ -19,7 +16,7 @@ public class Classrooms extends Controller {
 
 
     public static void list() {
-        List<Classroom> classrooms = Classroom.findAll();
+        List<ClassroomSummary> classrooms = ClassroomSummary.wrap(Classroom.findAll());
 
         if (classrooms.isEmpty())
             Application.init();

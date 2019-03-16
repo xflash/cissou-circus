@@ -31,11 +31,12 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="groupA" role="tabpanel" aria-labelledby="groupA-tab">
                     <h2>Group A</h2>
-                    #{users students:groupA, withClassroom:true/}
+                #{studentChoices studentChoices:groupA, tableId:'groupATable'/}
                 </div>
                 <div class="tab-pane" id="groupB" role="tabpanel" aria-labelledby="groupB-tab">
                     <h2>Group B</h2>
-                #{users students:groupB, withClassroom:true/}
+                #{studentChoices studentChoices:groupB, tableId:'groupBTable'/}
+
                 </div>
             </div>
         </div>
@@ -46,7 +47,12 @@
 
 
 <script>
+
     $(function () {
-        $('#groupsTab li:first-child a').tab('show')
+        $('#groupsTab li:first-child a').tab('show');
+
+        // $('#groupATable').DataTable();
+        // $('#groupBTable').DataTable();
+        $('.dataTables_length').addClass('bs-select');
     })
 </script>

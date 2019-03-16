@@ -6,8 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -43,18 +42,21 @@ public class StudentChoices extends Model {
     public static List<StudentChoices> findAllChoice1(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice1");
     }
+
     public static List<StudentChoices> findAllChoice2(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice2");
     }
+
     public static List<StudentChoices> findAllChoice3(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice3");
     }
+
     public static List<StudentChoices> findAllChoice4(ActivityKind activityKind) {
         return findAllChoice(activityKind, "choice4");
     }
 
     private static List<StudentChoices> findAllChoice(ActivityKind activityKind, String s) {
-        return StudentChoices.find("select sc from StudentChoices sc where sc."+ s +" = :choice")
+        return StudentChoices.find("select sc from StudentChoices sc where sc." + s + " = :choice")
                 .bind("choice", activityKind)
                 .fetch();
     }
@@ -66,4 +68,24 @@ public class StudentChoices extends Model {
         }
         return students;
     }
+
+    public static Map<String, Set<StudentChoices>> buildSiblings(List<StudentChoices> studentChoicesList) {
+        HashMap<String, Set<StudentChoices>> siblings = new HashMap<>();
+
+        StudentChoices laststudentChoice = null;
+        for (StudentChoices studentChoice : studentChoicesList) {
+            if (laststudentChoice != null) {
+                if (laststudentChoice.student.name.equals(studentChoice.student.name)) {
+                    Set<StudentChoices> fra = siblings.computeIfAbsent(studentChoice.student.name, k -> new TreeSet<>(Comparator.comparing((StudentChoices o) -> o.student.firstname)
+                    ));
+                    fra.add(studentChoice);
+                    fra.add(laststudentChoice);
+                }
+            }
+            laststudentChoice = studentChoice;
+        }
+        return siblings;
+    }
+
+
 }
