@@ -8,18 +8,18 @@
 
 <div class="container">
     <div class="row">
-        <p>Students count <span class="badge badge-secondary">${students.size}</span></p>
 
-        <table class="table table-striped table-hover table-sm">
+        <h3>Students count <span class="badge badge-secondary">${students.size}</span></h3>
+        <table class="table ${!withSibling?'table-striped':''} table-hover table-sm">
 
             <thead>
             <tr>
             #{if withId}
                 <th scope="col">Identifiant</th>
             #{/if}
-            #{if withSibling}
-                <th scope="col">Sibling</th>
-            #{/if}
+            *{#{if withSibling}}*
+                *{<th scope="col">Sibling</th>}*
+            *{#{/if}}*
                 <th scope="col">Name</th>
                 <th scope="col">Firstname</th>
             #{if extended}
@@ -31,15 +31,15 @@
             <tbody>
 
             #{list items:students, as:'student'}
-            <tr>
+            <tr class="${withSibling&&student.sibling?'table-info':''}">
                 #{if withId}
                     <td scope="row">
                         <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
                     </td>
                 #{/if}
-                #{if withSibling}
-                    <td>${student.sibling?'X':''}</td>
-                #{/if}
+                *{#{if withSibling}}*
+                    *{<td>${student.sibling?'X':''}</td>}*
+                *{#{/if}}*
                 <td>${student.name}</td>
                 <td>${student.firstname}</td>
                 #{if extended}

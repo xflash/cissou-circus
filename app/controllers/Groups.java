@@ -1,9 +1,6 @@
 package controllers;
 
-import models.ClassRoomKind;
-import models.Classroom;
-import models.SiblingStudent;
-import models.Student;
+import models.*;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -18,7 +15,7 @@ public class Groups extends Controller {
 
 
     public static void init() {
-        List<Classroom> classrooms = Classroom.findAll();
+        List<ClassroomSummary> classrooms = ClassroomSummary.wrap(Classroom.findAll());
 
         List<Long> selected =
                 Classroom.find("select c.id from Classroom c where c.kind in :kinds ")

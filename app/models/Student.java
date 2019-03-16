@@ -43,6 +43,10 @@ public class Student extends Model {
         return fraties;
     }
 
+    static long countByClassroom(Classroom classroom) {
+        return count("classroom.id", classroom.id);
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)

@@ -13,15 +13,17 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-sm">
 
-        <dl>
-            <dt>Classroom name</dt>
-            <dd>${classroom.name}</dd>
-            <dt>Type</dt>
-            <dd>${classroom.kind}</dd>
-        </dl>
+            <dl>
+                <dt>Classroom name</dt>
+                <dd>${classroom.name}</dd>
+                <dt>Type</dt>
+                <dd>${classroom.kind}</dd>
+            </dl>
 
-    #{users students:students, withId:true /}
+        #{users students:students, withId:true /}
 
+        </div>
     </div>
 </div>
