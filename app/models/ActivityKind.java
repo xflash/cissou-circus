@@ -2,40 +2,40 @@ package models;
 
 import org.apache.commons.lang.StringUtils;
 import play.Logger;
-import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class ActivityKind extends Model {
 
-    @Column(unique = true)
+
+    @ManyToOne
+    SchoolEvent schoolEvent;
+
     public
     String name;
+
+    public ActivityKind(SchoolEvent schoolEvent, String name) {
+        this.schoolEvent = schoolEvent;
+        this.name = name;
+    }
 
     public static ActivityKind findByName(String name) {
         return ActivityKind.find("byName", name).first();
     }
 
-    public static ActivityKind create(String name) {
-        ActivityKind activityKind = new ActivityKind();
-        activityKind.name = name;
-        return activityKind.save();
+    public static ActivityKind create(SchoolEvent schoolEvent, String name) {
+        return new ActivityKind(schoolEvent, name).save();
     }
 
-    static ActivityKind findOrCreate(String choix) {
-        choix = StringUtils.trim(choix);
-        if (StringUtils.isNotBlank(choix)&&!choix.equals("n")) {
-            ActivityKind activityKind = findByName(choix);
-            return activityKind == null ? create(choix) : activityKind;
+    static ActivityKind findOrCreate(String name, SchoolEvent schoolEvent) {
+        name = StringUtils.trim(name);
+        if (StringUtils.isNotBlank(name)&&!name.equals("n")) {
+            ActivityKind activityKind = findByName(name);
+            return activityKind == null ? create(schoolEvent, name) : activityKind;
         } else
             return null;
     }

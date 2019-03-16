@@ -40,6 +40,8 @@ public class Application extends Controller {
     public static void uploadData(String title, File excel) throws IOException, InvalidFormatException {
         Logger.info("Uploading file %s", excel);
 
+        SchoolEvent schoolEvent = new SchoolEvent("Circus").save();
+
         Workbook workbook = WorkbookFactory.create(excel);
 
         deleteAllEntities();
@@ -78,11 +80,12 @@ public class Application extends Controller {
                             student.classroom = Classroom.findOrCreate(classRoomKind, classe);
                             student.save();
 
+
                             StudentChoices.createStudentChoices(student,
                                     dataFormatter.formatCellValue(row.getCell(4)),
                                     dataFormatter.formatCellValue(row.getCell(5)),
                                     dataFormatter.formatCellValue(row.getCell(6)),
-                                    dataFormatter.formatCellValue(row.getCell(7)))
+                                    dataFormatter.formatCellValue(row.getCell(7)), schoolEvent)
                                     .save();
                         }
 

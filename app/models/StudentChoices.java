@@ -5,16 +5,13 @@ import play.db.jpa.Model;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class StudentChoices extends Model {
 
     @ManyToOne
     public Student student;
-
     @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice1;
@@ -27,15 +24,21 @@ public class StudentChoices extends Model {
     @ManyToOne(cascade = CascadeType.ALL)
     public
     ActivityKind choice4;
+    @ManyToOne
+    SchoolEvent schoolEvent;
 
-    public static StudentChoices createStudentChoices(Student student, String choix1, String choix2, String choix3, String choix4) {
+    public StudentChoices(Student student, SchoolEvent schoolEvent) {
+        this.student = student;
+        this.schoolEvent = schoolEvent;
+    }
+
+    public static StudentChoices createStudentChoices(Student student, String choix1, String choix2, String choix3, String choix4, SchoolEvent schoolEvent) {
 //        Logger.info("Creating student choices for %s", student.identifiant);
-        StudentChoices choices = new StudentChoices();
-        choices.student = student;
-        choices.choice1 = ActivityKind.findOrCreate(choix1);
-        choices.choice2 = ActivityKind.findOrCreate(choix2);
-        choices.choice3 = ActivityKind.findOrCreate(choix3);
-        choices.choice4 = ActivityKind.findOrCreate(choix4);
+        StudentChoices choices = new StudentChoices(student, schoolEvent);
+        choices.choice1 = ActivityKind.findOrCreate(choix1, schoolEvent);
+        choices.choice2 = ActivityKind.findOrCreate(choix2, schoolEvent);
+        choices.choice3 = ActivityKind.findOrCreate(choix3, schoolEvent);
+        choices.choice4 = ActivityKind.findOrCreate(choix4, schoolEvent);
         return choices.save();
     }
 
@@ -88,4 +91,21 @@ public class StudentChoices extends Model {
     }
 
 
+    public static List<StudentChoices> listStudentsChoicesInClassrooms(SchoolEvent schoolEvent, List<Long> classrooms) {
+        return find(
+                "select sc " +
+                        "from StudentChoices as sc " +
+                        "inner join sc.schoolEvent as se " +
+                        "inner join sc.student as s " +
+                        "inner join s.classroom as cr " +
+                        "where 1=1 " +
+                        "and se.id in :schoolEvent " +
+                        "and cr.id in :classrooms " +
+                        "and sc.choice1 is not null " +
+                        "and sc.choice2 is not null " +
+                        "order by s.name")
+                .bind("schoolEvent", schoolEvent.id)
+                .bind("classrooms", classrooms)
+                .fetch();
+    }
 }

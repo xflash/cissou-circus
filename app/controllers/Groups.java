@@ -24,13 +24,17 @@ public class Groups extends Controller {
                                         .filter(value -> value.ordinal() >= ClassRoomKind.GRANDE_MOYENNE_SECTION.ordinal())
                                         .collect(Collectors.toList()))
                         .fetch();
-        render(classrooms, selected);
+
+        List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
+        render(classrooms, selected,schoolEvents);
     }
 
-    public static void dispatch(List<Long> classrooms) {
-        Logger.info("classrooms = " + classrooms);
+    public static void dispatch(int groupNumber, long schoolEventId, List<Long> classrooms) {
+        Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classroms %s", schoolEventId, groupNumber, classrooms);
 
-        List<StudentChoices> students = listStudentsChoicesInClassrooms(classrooms);
+        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
+
+        List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
 
         List<StudentChoices> groupA = new ArrayList<>();
         List<StudentChoices> groupB = new ArrayList<>();
@@ -57,18 +61,6 @@ public class Groups extends Controller {
         Collections.sort(groupB, Comparator.comparing((StudentChoices o) -> o.student.name));
 
         render(groupA, groupB, students);
-    }
-
-    private static List<StudentChoices> listStudentsChoicesInClassrooms(List<Long> classrooms) {
-        return StudentChoices.find(
-                        "select sc " +
-                        "from StudentChoices as sc inner join sc.student as s inner join s.classroom as cr " +
-                        "where cr.id in :classrooms " +
-                        "and sc.choice1 is not null " +
-                        "and sc.choice2 is not null " +
-                        "order by s.name")
-                .bind("classrooms", classrooms)
-                .fetch();
     }
 
 
