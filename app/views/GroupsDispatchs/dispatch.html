@@ -4,46 +4,61 @@
 
 
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>Group dispatch</h1>
-        <p>Here is the result of the dispatch</p>
-    </div>
-</div>
+*{<div class="jumbotron">}*
+*{<div class="container">}*
+*{<h1>Group dispatch</h1>}*
+*{<p>Here is the result of the dispatch</p>}*
+*{</div>}*
+*{</div>}*
+
+#{form @saveDispatch()}
+<input type="hidden" name="schoolEventId" value="${schoolEvent.id}"/>
 
 <div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Groups result dispatch</h2>
 
+            <div class="btn-toolbar" role="toolbar" >
+                <div class="btn-group mr-2" role="group" >
+                    <button type="submit" value="save" class="btn btn-info">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr/>
     <div class="row">
         <div class="col-sm">
 
             <ul class="nav nav-tabs" id="groupsTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="groupA-tab" data-toggle="tab" href="#groupA" role="tab"
-                       aria-controls="groupA" aria-selected="true">Group A</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="groupB-tab" data-toggle="tab" href="#groupB" role="tab"
-                       aria-controls="groupB"
-                       aria-selected="false">Group B</a>
-                </li>
+                #{list groups, as:'group'}
+                    <li class="nav-item">
+                        <a class="nav-link" id="groupTab-${group_index}" data-toggle="tab" href="#group${group_index}"
+                           role="tab"
+                           aria-controls="group${group_index}" aria-selected="true">Group ${group_index}</a>
+                    </li>
+                #{/list}
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane active" id="groupA" role="tabpanel" aria-labelledby="groupA-tab">
-                    <h2>Group A</h2>
-                #{studentChoices studentChoices:groupA, tableId:'groupATable'/}
-                </div>
-                <div class="tab-pane" id="groupB" role="tabpanel" aria-labelledby="groupB-tab">
-                    <h2>Group B</h2>
-                #{studentChoices studentChoices:groupB, tableId:'groupBTable'/}
 
-                </div>
+                #{list groups, as:'group'}
+
+                    <div class="tab-pane" id="group${group_index}" role="tabpanel"
+                         aria-labelledby="group${group_index}-tab">
+                        <br/>
+                        #{studentChoices studentChoices:group, tableId:'group'+group_index+'Table'}
+                            <h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>
+                        #{/studentChoices}
+                    </div>
+                #{/list}
+
             </div>
         </div>
     </div>
-
-
 </div>
+#{/form}
 
 
 <script>

@@ -40,11 +40,12 @@ public class Application extends Controller {
     public static void uploadData(String title, File excel) throws IOException, InvalidFormatException {
         Logger.info("Uploading file %s", excel);
 
-        SchoolEvent schoolEvent = new SchoolEvent("Circus").save();
 
         Workbook workbook = WorkbookFactory.create(excel);
 
         deleteAllEntities();
+
+        SchoolEvent schoolEvent = new SchoolEvent("Circus").save();
 
         Pattern pattern = Pattern.compile("(.*)-[0-9]{2}");
 
@@ -98,10 +99,16 @@ public class Application extends Controller {
     }
 
     private static void deleteAllEntities() {
+        SchoolEventGroupStudentAssignment.deleteAll();
+        SchoolEventProposal.deleteAll();
+        SchoolEventActivity.deleteAll();
+        SchoolEventGroup.deleteAll();
+
         StudentChoices.deleteAll();
+
         Student.deleteAll();
-        ActivityKind.deleteAll();
         Classroom.deleteAll();
+        SchoolEvent.deleteAll();
     }
 
 }

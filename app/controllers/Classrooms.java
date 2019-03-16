@@ -1,12 +1,10 @@
 package controllers;
 
 import models.*;
+import models.wrapper.ClassroomSummary;
 import play.mvc.Controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.*;
 
 /**
  * @author rcoqueugniot
@@ -27,9 +25,7 @@ public class Classrooms extends Controller {
     public static void openDetail(long id) {
         Classroom classroom = Classroom.findById(id);
 
-        List<SiblingStudent> students = SiblingStudent.wrapSiblings(
-                Student.find("select s from Student s where classroom.id = ?1 order by name, firstname", classroom.id)
-                .fetch());
+        List<Student> students = Student.findByClassroomOrdered(classroom);
 
         render(classroom, students);
 

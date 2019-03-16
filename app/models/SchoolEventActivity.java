@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class ActivityKind extends Model {
+public class SchoolEventActivity extends Model {
 
 
     @ManyToOne
@@ -18,44 +18,46 @@ public class ActivityKind extends Model {
     public
     String name;
 
-    public ActivityKind(SchoolEvent schoolEvent, String name) {
+    public SchoolEventActivity(SchoolEvent schoolEvent, String name) {
         this.schoolEvent = schoolEvent;
         this.name = name;
     }
 
-    public static ActivityKind findByName(String name) {
-        return ActivityKind.find("byName", name).first();
+    public static SchoolEventActivity findByName(String name) {
+        return SchoolEventActivity.find("byName", name).first();
     }
 
-    public static ActivityKind create(SchoolEvent schoolEvent, String name) {
-        return new ActivityKind(schoolEvent, name).save();
+    public static SchoolEventActivity create(SchoolEvent schoolEvent, String name) {
+        return new SchoolEventActivity(schoolEvent, name).save();
     }
 
-    static ActivityKind findOrCreate(String name, SchoolEvent schoolEvent) {
+    static SchoolEventActivity findOrCreate(String name, SchoolEvent schoolEvent) {
         name = StringUtils.trim(name);
         if (StringUtils.isNotBlank(name)&&!name.equals("n")) {
-            ActivityKind activityKind = findByName(name);
-            return activityKind == null ? create(schoolEvent, name) : activityKind;
+            SchoolEventActivity schoolEventActivity = findByName(name);
+            return schoolEventActivity == null ? create(schoolEvent, name) : schoolEventActivity;
         } else
             return null;
     }
 
-    public static List<ActivityKind> listAllOrdered() {
-        return find("select ak from ActivityKind ak order by ak.name").fetch();
+    public static List<SchoolEventActivity> listAllOrdered(long schoolEventId) {
+        return find("select ak from SchoolEventActivity ak where ak.schoolEvent.id = :schoolEventId order by ak.name")
+                .bind("schoolEventId", schoolEventId)
+                .fetch();
     }
 
-    public static List<ActivityKind> listOrdered(List<Long> selection) {
-        return find("select ak from ActivityKind ak where ak.id in :selection order by ak.name")
+    public static List<SchoolEventActivity> listOrdered(List<Long> selection) {
+        return find("select ak from SchoolEventActivity ak where ak.id in :selection order by ak.name")
                 .bind("selection", selection)
                 .fetch();
     }
 
     public static void mergeAll(long rootId, List<Long> selection) {
-        ActivityKind root = findById(rootId);
+        SchoolEventActivity root = findById(rootId);
         selection.remove(rootId);
-        Logger.info("Merging all ActivityKind from %s into %s", selection, root.name);
+        Logger.info("Merging all SchoolEventActivity from %s into %s", selection, root.name);
         for (Long id : selection) {
-            ActivityKind todelete = findById(id);
+            SchoolEventActivity todelete = findById(id);
             mergeStudentChoices1(root, todelete);
             mergeStudentChoices2(root, todelete);
             mergeStudentChoices3(root, todelete);
@@ -63,26 +65,26 @@ public class ActivityKind extends Model {
             todelete.delete();
         }
     }
-    private static void mergeStudentChoices1(ActivityKind root, ActivityKind mergeMe) {
+    private static void mergeStudentChoices1(SchoolEventActivity root, SchoolEventActivity mergeMe) {
         for (StudentChoices studentChoices : StudentChoices.findAllChoice1(mergeMe)) {
             studentChoices.choice1=root;
             studentChoices.save();
         }
     }
-    private static void mergeStudentChoices2(ActivityKind root, ActivityKind mergeMe) {
+    private static void mergeStudentChoices2(SchoolEventActivity root, SchoolEventActivity mergeMe) {
         for (StudentChoices studentChoices  : StudentChoices.findAllChoice2(mergeMe)) {
             studentChoices.choice2=root;
             studentChoices.save();
         }
     }
-    private static void mergeStudentChoices3(ActivityKind root, ActivityKind mergeMe) {
+    private static void mergeStudentChoices3(SchoolEventActivity root, SchoolEventActivity mergeMe) {
         for (StudentChoices studentChoices  : StudentChoices.findAllChoice3(mergeMe)) {
             studentChoices.choice3=root;
             studentChoices.save();
         }
     }
 
-    private static void mergeStudentChoices4(ActivityKind root, ActivityKind mergeMe) {
+    private static void mergeStudentChoices4(SchoolEventActivity root, SchoolEventActivity mergeMe) {
         for (StudentChoices studentChoices  : StudentChoices.findAllChoice4(mergeMe)) {
             studentChoices.choice4=root;
             studentChoices.save();
@@ -90,10 +92,14 @@ public class ActivityKind extends Model {
     }
 
     public static void deleteAll(Collection<Long> selection) {
-        Logger.info("Deleting all ActivityKind from %s", selection);
+        Logger.info("Deleting all SchoolEventActivity from %s", selection);
+
         for (Long id : selection) {
-            ActivityKind activityKind = ActivityKind.findById(id);
-            activityKind.delete();
+            SchoolEventActivity schoolEventActivity = SchoolEventActivity.findById(id);
+            List<StudentChoices> inAllChoices = StudentChoices.findInAllChoices(schoolEventActivity);
+            if(inAllChoices.isEmpty())
+                schoolEventActivity.delete();
+
         }
     }
 }

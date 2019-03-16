@@ -6,18 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 /**
- * @since 16.03.19
  */
 @Entity
-public class SchoolEventGroup extends Model {
-
-    public String name;
+public class SchoolEventGroupStudentAssignment extends Model {
 
     @ManyToOne
-    SchoolEventGroupProposal schoolEventGroupProposal;
+    SchoolEventGroup schoolEventGroup;
+    @ManyToOne
+    StudentChoices studentChoices;
 
-    public SchoolEventGroup(SchoolEventGroupProposal schoolEventGroupProposal, String name) {
-        this.name = name;
-        this.schoolEventGroupProposal = schoolEventGroupProposal;
+    public SchoolEventGroupStudentAssignment(SchoolEventGroup schoolEventGroup, StudentChoices studentChoices) {
+        this.schoolEventGroup = schoolEventGroup;
+        this.studentChoices = studentChoices;
     }
 }

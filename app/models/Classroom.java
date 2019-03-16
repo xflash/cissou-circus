@@ -13,6 +13,7 @@ import java.util.List;
 public class Classroom extends Model {
 
     @Column(unique = true)
+    public
     String name;
 
     @Enumerated(EnumType.STRING)
@@ -32,6 +33,9 @@ public class Classroom extends Model {
     public static Classroom findByName(String classe) {
         return find("byName", classe).first();
     }
+    public static List<Classroom> findByKind(ClassRoomKind kind) {
+        return find("byKind", kind).fetch();
+    }
 
     public static Classroom findOrCreate(ClassRoomKind classRoomKind, String classe) {
         Classroom classroom = findByName(classe);
@@ -39,5 +43,9 @@ public class Classroom extends Model {
             classroom = createClassroom(classe, classRoomKind);
         }
         return classroom;
+    }
+
+    public static List<Classroom> findAllOrdered() {
+        return find("select cr from Classroom cr order by cr.kind, cr.name").fetch();
     }
 }

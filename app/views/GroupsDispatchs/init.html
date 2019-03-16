@@ -3,12 +3,12 @@
 
 
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>Group preparation</h1>
-        <p>Here you may prepare what classrooms are concerned for the wanted groups</p>
-    </div>
-</div>
+*{<div class="jumbotron">}*
+    *{<div class="container">}*
+        *{<h1>Group preparation</h1>}*
+        *{<p>Here you may prepare what classrooms are concerned for the wanted groups</p>}*
+    *{</div>}*
+*{</div>}*
 
 
 <div class="container">
@@ -20,7 +20,7 @@
     </div>
 #{/}
 #{else }
-    #{form @Groups.dispatch(), id:'dispatchForm'}
+    #{form @GroupsDispatchs.dispatch(), id:'dispatchForm'}
 
         <div class="row">
         <div class="col-sm">

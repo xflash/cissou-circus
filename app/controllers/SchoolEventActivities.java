@@ -3,65 +3,79 @@ package controllers;
 import models.*;
 import models.wrapper.ActivityKindSummary;
 import play.Logger;
+import play.db.jpa.JPABase;
 import play.mvc.Controller;
+import sun.rmi.runtime.Log;
 
 import java.util.List;
 
 
 /**
- * @author rcoqueugniot
- * @since 14.03.19
  */
-public class ActivityKinds extends Controller {
+public class SchoolEventActivities extends Controller {
 
-    public static void list() {
-        Logger.info("Listing ActivityKindSummary");
+    public static void root() {
 
-        List<ActivityKindSummary> activityKindSummaries =
-                ActivityKindSummary.computeSummaries(ActivityKind.listAllOrdered());
+        List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
 
-        render(activityKindSummaries);
+        Logger.info("SchoolEvent %d", schoolEvents.size());
+
+        if (schoolEvents.size() != 1)
+            badRequest("TODO handle "+schoolEvents.size()+" school events");
+
+        list(schoolEvents.get(0).id);
     }
 
-    public static void prepareBatch(String batchAction, List<Long> selection) {
+    public static void list(long schoolEventId) {
+        Logger.info("Listing activities for schoolevent %d", schoolEventId);
+
+        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
+
+        List<ActivityKindSummary> activityKindSummaries =
+                ActivityKindSummary.computeSummaries(SchoolEventActivity.listAllOrdered(schoolEventId));
+
+        render(schoolEvent, activityKindSummaries);
+    }
+
+    public static void prepareBatch(long schoolEventId, String batchAction, List<Long> selection) {
         Logger.info("Preparing batch %s on %s ", batchAction, selection);
+        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
         if (batchAction.equals("merge")) {
             List<ActivityKindSummary> activityKindSummaries =
-                    ActivityKindSummary.computeSummaries(ActivityKind.listOrdered(selection));
-            render(batchAction, activityKindSummaries);
-        }
-        else if (batchAction.equals("deletion")) {
-            ActivityKind.deleteAll(selection);
+                    ActivityKindSummary.computeSummaries(SchoolEventActivity.listOrdered(selection));
+            render(schoolEvent, batchAction, activityKindSummaries);
+        } else if (batchAction.equals("deletion")) {
+            SchoolEventActivity.deleteAll(selection);
 
-            list();
+            list(schoolEventId);
         }
 
         error(400, "Unknown batch action : " + batchAction);
     }
 
 
-    public static void batchAction(String batchAction, long root, List<Long> selection) {
+    public static void batchAction(long schoolEventId, String batchAction, long root, List<Long> selection) {
 
         Logger.info("Running batch %s on %s with root %d", batchAction, selection, root);
 
-        if (batchAction.equals("merge")) ActivityKind.mergeAll(root, selection);
-        else if (batchAction.equals("deletion")) ActivityKind.deleteAll(selection);
+        if (batchAction.equals("merge")) SchoolEventActivity.mergeAll(root, selection);
+        else if (batchAction.equals("deletion")) SchoolEventActivity.deleteAll(selection);
         else error(400, "Bad batch action : " + batchAction);
-        list();
+        list(schoolEventId);
     }
 
 
     public static void detail(long id) {
 
-        ActivityKind activityKind = ActivityKind.findById(id);
+        SchoolEventActivity schoolEventActivity = SchoolEventActivity.findById(id);
 
-        List<Student> choice1Students = StudentChoices.getStudents(StudentChoices.findAllChoice1(activityKind));
-        List<Student> choice2Students = StudentChoices.getStudents(StudentChoices.findAllChoice2(activityKind));
-        List<Student> choice3Students = StudentChoices.getStudents(StudentChoices.findAllChoice3(activityKind));
-        List<Student> choice4Students = StudentChoices.getStudents(StudentChoices.findAllChoice4(activityKind));
+        List<Student> choice1Students = StudentChoices.getStudents(StudentChoices.findAllChoice1(schoolEventActivity));
+        List<Student> choice2Students = StudentChoices.getStudents(StudentChoices.findAllChoice2(schoolEventActivity));
+        List<Student> choice3Students = StudentChoices.getStudents(StudentChoices.findAllChoice3(schoolEventActivity));
+        List<Student> choice4Students = StudentChoices.getStudents(StudentChoices.findAllChoice4(schoolEventActivity));
 
-        render(activityKind, choice1Students, choice2Students, choice3Students, choice4Students);
+        render(schoolEventActivity, choice1Students, choice2Students, choice3Students, choice4Students);
     }
 
 

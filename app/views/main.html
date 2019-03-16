@@ -5,46 +5,18 @@
     <title>Cissou-Circus #{get 'title' /}</title>
     <meta charset="${_response_encoding}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
 #{get 'moreStyles' /}
 
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.4/css/mdb.min.css" rel="stylesheet">
+    <link href="@{'/public/mdb-4.7.4/css/bootstrap.min.css'}" rel="stylesheet">
+    <link href="@{'/public/mdb-4.7.4/css/mdb.min.css'}" rel="stylesheet">
 
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 
-    *{<script src="@{'/public/javascripts/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>}*
 
-
-
-    <!-- JQuery -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-
-    <!-- Bootstrap tooltips -->
-*{<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>}*
-    <!-- Bootstrap core JavaScript -->
-*{<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>}*
-
-*{<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"}*
-*{integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"}*
-*{crossorigin="anonymous"></script>}*
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.4/js/mdb.min.js"></script>
+    <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/jquery-3.3.1.min.js'}" charset="${_response_encoding}"></script>
 
 </head>
 <body>
@@ -61,21 +33,52 @@
         *{<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>}*
         *{<a class="nav-link" href="#">Home </a>}*
         *{</li>}*
-            <li class="nav-item">
-                <a class="nav-link" href="@{Classrooms.list()}">Classrooms</a>
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Classrooms
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="@{Classrooms.list()}">Classroom list</a>
+                    *{<div class="dropdown-divider"></div>}*
+                    *{#{list models.Classroom.findAll(), as:'classroom'}}*
+                        *{<a class="dropdown-item" href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>}*
+                    *{#{/list}}*
+                </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="@{ActivityKinds.list()}">Activities</a>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    School activities
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    *{<a class="dropdown-item" href="@{SchoolEvents.list()}">School Events</a>}*
+                        <a class="dropdown-item" href="@{SchoolEventActivities.root()}">Activities</a>
+                        <a class="dropdown-item" href="@{SchoolEventStudentChoices.root()}">Student choices</a>
+                </div>
             </li>
+
+
             <li class="nav-item">
-                <a class="nav-link" href="@{Groups.init()}">Init Group</a>
+                <a class="nav-link" href="@{GroupsDispatchs.list()}">Groups</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="@{Application.resetAll()}">Reset</a>
+
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="@{Application.resetAll()}">Reset</a>
+                    <a class="dropdown-item" href="@{Application.init()}">Upload</a>
+                    *{<div class="dropdown-divider"></div>}*
+                    *{<a class="dropdown-item" href="#">Something else here</a>}*
+                </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="@{Application.init()}">Upload</a>
-            </li>
+
+
         *{<li class="nav-item">}*
         *{<a class="nav-link" href="#">Pricing</a>}*
         *{</li>}*
@@ -101,5 +104,10 @@
 
 
 #{get 'moreScripts' /}
+
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/popper.min.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/bootstrap.min.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/mdb.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/addons/datatables.js'}" charset="${_response_encoding}"></script>
 </body>
 </html>

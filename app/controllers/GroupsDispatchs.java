@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.wrapper.ClassroomSummary;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -13,6 +14,23 @@ import static java.util.Arrays.stream;
  */
 public class GroupsDispatchs extends Controller {
 
+
+    public static void list() {
+        List<SchoolEventProposal> schoolEventProposals = SchoolEventProposal.findAll();
+
+        render(schoolEventProposals);
+    }
+
+    public static void edit(long id) {
+        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
+        List<SchoolEventGroup> schoolEventGroups =
+                SchoolEventGroup.find("schoolEventProposal", schoolEventProposal).fetch();
+        for (SchoolEventGroup schoolEventGroup : schoolEventGroups) {
+            List<SchoolEventGroupStudentAssignment> schoolEventGroupStudentAssignments =
+                    SchoolEventGroupStudentAssignment.find("schoolEventGroup", schoolEventGroup).fetch();
+        }
+        render(schoolEventProposal);
+    }
 
     public static void init() {
         List<ClassroomSummary> classrooms = ClassroomSummary.wrap(Classroom.findAll());
@@ -35,38 +53,46 @@ public class GroupsDispatchs extends Controller {
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
         List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
-
-        List<StudentChoices> groupA = new ArrayList<>();
-        List<StudentChoices> groupB = new ArrayList<>();
-
         Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
 
-        List<StudentChoices> target = groupA;
+        List<List<StudentChoices>> groups = new ArrayList<>();
+        for (int i = 0; i < groupNumber; i++) {
+            groups.add(new ArrayList<>());
+        }
+
+        int lastGroupId = 0;
         for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-            target.addAll(fratrie.getValue());
+            groups.get(lastGroupId).addAll(fratrie.getValue());
             students.removeAll(fratrie.getValue());
-            if (target.equals(groupA)) target = groupB;
-            else if (target.equals(groupB)) target = groupA;
+            lastGroupId++;
+            if (lastGroupId >= groupNumber) lastGroupId = 0;
         }
 
-        //Collections.shuffle(students);
-        target = groupA;
+        lastGroupId = 0;
         for (StudentChoices studentChoice : students) {
-            target.add(studentChoice);
-            if (target.equals(groupA)) target = groupB;
-            else if (target.equals(groupB)) target = groupA;
+            groups.get(lastGroupId).add(studentChoice);
+            lastGroupId++;
+            if (lastGroupId >= groupNumber) lastGroupId = 0;
         }
 
-        Collections.sort(groupA, Comparator.comparing((StudentChoices o) -> o.student.name));
-        Collections.sort(groupB, Comparator.comparing((StudentChoices o) -> o.student.name));
+        for (List<StudentChoices> group : groups) {
+            Collections.sort(group, Comparator.comparing((StudentChoices o) -> o.student.name));
+        }
 
-        render(groupA, groupB, students);
+        render(schoolEvent, groups);
     }
 
     public static void saveDispatch(long schoolEventId) {
         Logger.info("Save group dispatch in school event %d", schoolEventId);
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
+
+        SchoolEventProposal schoolEventProposal = new SchoolEventProposal(schoolEvent).save();
+
+        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEventProposal, "Groupe A").save();
+        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEventProposal, "Groupe B").save();
+
+//        new SchoolEventGroupStudentAssignment(schoolEventGroupA, )
 
 //        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEvent, "Group A").save();
 //        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEvent, "Group B").save();

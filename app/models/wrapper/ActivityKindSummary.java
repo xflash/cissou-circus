@@ -1,41 +1,44 @@
-package models;
+package models.wrapper;
+
+import models.SchoolEventActivity;
+import models.StudentChoices;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityKindSummary {
-    private final ActivityKind activityKind;
+    private final SchoolEventActivity schoolEventActivity;
     private final int choice1;
     private final int choice2;
     private final int choice3;
     private final int choice4;
 
-    public ActivityKindSummary(ActivityKind activityKind, int choice1, int choice2, int choice3, int choice4) {
-        this.activityKind = activityKind;
+    public ActivityKindSummary(SchoolEventActivity schoolEventActivity, int choice1, int choice2, int choice3, int choice4) {
+        this.schoolEventActivity = schoolEventActivity;
         this.choice1 = choice1;
         this.choice2 = choice2;
         this.choice3 = choice3;
         this.choice4 = choice4;
     }
 
-    public static List<ActivityKindSummary> computeSummaries(List<ActivityKind> activityKinds) {
+    public static List<ActivityKindSummary> computeSummaries(List<SchoolEventActivity> schoolEventActivities) {
         List<ActivityKindSummary> activityKindSummaries = new ArrayList<>();
-        for (ActivityKind activityKind : activityKinds) {
-            activityKindSummaries.add(new ActivityKindSummary(activityKind,
-                    StudentChoices.findAllChoice1(activityKind).size(),
-                    StudentChoices.findAllChoice2(activityKind).size(),
-                    StudentChoices.findAllChoice3(activityKind).size(),
-                    StudentChoices.findAllChoice4(activityKind).size()
+        for (SchoolEventActivity schoolEventActivity : schoolEventActivities) {
+            activityKindSummaries.add(new ActivityKindSummary(schoolEventActivity,
+                    StudentChoices.findAllChoice1(schoolEventActivity).size(),
+                    StudentChoices.findAllChoice2(schoolEventActivity).size(),
+                    StudentChoices.findAllChoice3(schoolEventActivity).size(),
+                    StudentChoices.findAllChoice4(schoolEventActivity).size()
             ));
         }
         return activityKindSummaries;
     }
 
     public long getId() {
-        return activityKind.id;
+        return schoolEventActivity.id;
     }
     public String getName() {
-        return activityKind.name;
+        return schoolEventActivity.name;
     }
 
     public int getChoice1() {

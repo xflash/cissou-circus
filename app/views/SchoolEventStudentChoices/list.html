@@ -1,0 +1,77 @@
+#{extends 'main.html' /}
+#{set title:'StudentEventChoices' /}
+
+
+*{<div class="jumbotron">}*
+*{<div class="container">}*
+*{<h1>Student event choices</h1>}*
+*{<p>Allow to show all student choices for a given School event</p>}*
+*{</div>}*
+*{</div>}*
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+
+
+            <ul class="nav nav-tabs" role="tablist">
+            #{list classroomKindStudentChoices, as:'classroomKindStudentChoice'}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       id="classroomKindTab-${classroomKindStudentChoice_index}"
+                       data-toggle="tab"
+                       href="#classroomKindStudentChoice-${classroomKindStudentChoice_index}"
+                       role="tab"
+                    >${classroomKindStudentChoice.classroomKind}</a>
+                </li>
+            #{/list}
+            </ul>
+
+            <div class="tab-content">
+
+            #{list classroomKindStudentChoices, as:'classroomKindStudentChoice'}
+
+                <div class="tab-pane ${classroomKindStudentChoice_isFirst?'active':''}"
+                     id="classroomKindStudentChoice-${classroomKindStudentChoice_index}"
+                     role="tabpanel">
+                    <br/>
+                    <ul class="nav nav-tabs" role="tablist">
+                        #{list classroomKindStudentChoice.classroomStudentChoices, as:'classroomStudentChoice'}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   id="classroomTab-${classroomKindStudentChoice_index}-${classroomStudentChoice_index}"
+                                   data-toggle="tab"
+                                   href="#classroomStudentChoice-${classroomKindStudentChoice_index}-${classroomStudentChoice_index}"
+                                   role="tab"
+                                >${classroomStudentChoice.classroom.name}</a>
+                            </li>
+                        #{/list}
+                    </ul>
+
+                    <div class="tab-content">
+                        #{list classroomKindStudentChoice.classroomStudentChoices, as:'classroomStudentChoice'}
+                            <div class="tab-pane ${classroomStudentChoice_isFirst?'active':''}"
+                                 id="classroomStudentChoice-${classroomKindStudentChoice_index}-${classroomStudentChoice_index}"
+                                 role="tabpanel">
+                                <br/>
+
+                                <h2>Classroom ${classroomStudentChoice.classroom.name}</h2>
+                                #{studentChoices studentChoices:classroomStudentChoice.studentChoices, tableId:'Table'+classroomStudentChoice_index, fullChoices:true}
+                                    <h3>Students count <span class="badge badge-secondary">${classroomStudentChoice.studentChoices.size}</span></h3>
+                                #{/studentChoices}
+
+                            </div>
+                        #{/list}
+
+                    </div>
+                </div>
+
+            #{/list}
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

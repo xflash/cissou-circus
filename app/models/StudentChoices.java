@@ -14,16 +14,16 @@ public class StudentChoices extends Model {
     public Student student;
     @ManyToOne(cascade = CascadeType.ALL)
     public
-    ActivityKind choice1;
+    SchoolEventActivity choice1;
     @ManyToOne(cascade = CascadeType.ALL)
     public
-    ActivityKind choice2;
+    SchoolEventActivity choice2;
     @ManyToOne(cascade = CascadeType.ALL)
     public
-    ActivityKind choice3;
+    SchoolEventActivity choice3;
     @ManyToOne(cascade = CascadeType.ALL)
     public
-    ActivityKind choice4;
+    SchoolEventActivity choice4;
     @ManyToOne
     SchoolEvent schoolEvent;
 
@@ -35,32 +35,43 @@ public class StudentChoices extends Model {
     public static StudentChoices createStudentChoices(Student student, String choix1, String choix2, String choix3, String choix4, SchoolEvent schoolEvent) {
 //        Logger.info("Creating student choices for %s", student.identifiant);
         StudentChoices choices = new StudentChoices(student, schoolEvent);
-        choices.choice1 = ActivityKind.findOrCreate(choix1, schoolEvent);
-        choices.choice2 = ActivityKind.findOrCreate(choix2, schoolEvent);
-        choices.choice3 = ActivityKind.findOrCreate(choix3, schoolEvent);
-        choices.choice4 = ActivityKind.findOrCreate(choix4, schoolEvent);
+        choices.choice1 = SchoolEventActivity.findOrCreate(choix1, schoolEvent);
+        choices.choice2 = SchoolEventActivity.findOrCreate(choix2, schoolEvent);
+        choices.choice3 = SchoolEventActivity.findOrCreate(choix3, schoolEvent);
+        choices.choice4 = SchoolEventActivity.findOrCreate(choix4, schoolEvent);
         return choices.save();
     }
 
-    public static List<StudentChoices> findAllChoice1(ActivityKind activityKind) {
-        return findAllChoice(activityKind, "choice1");
+    public static List<StudentChoices> findInAllChoices(SchoolEventActivity schoolEventActivity) {
+        return StudentChoices.find("select sc from StudentChoices sc where " +
+                "1=1 " +
+                "or sc.choice1 = :choice " +
+                "or sc.choice2 = :choice " +
+                "or sc.choice3 = :choice " +
+                "or sc.choice4 = :choice ")
+                .bind("choice", schoolEventActivity)
+                .fetch();
     }
 
-    public static List<StudentChoices> findAllChoice2(ActivityKind activityKind) {
-        return findAllChoice(activityKind, "choice2");
+    public static List<StudentChoices> findAllChoice1(SchoolEventActivity schoolEventActivity) {
+        return findAllChoice(schoolEventActivity, "choice1");
     }
 
-    public static List<StudentChoices> findAllChoice3(ActivityKind activityKind) {
-        return findAllChoice(activityKind, "choice3");
+    public static List<StudentChoices> findAllChoice2(SchoolEventActivity schoolEventActivity) {
+        return findAllChoice(schoolEventActivity, "choice2");
     }
 
-    public static List<StudentChoices> findAllChoice4(ActivityKind activityKind) {
-        return findAllChoice(activityKind, "choice4");
+    public static List<StudentChoices> findAllChoice3(SchoolEventActivity schoolEventActivity) {
+        return findAllChoice(schoolEventActivity, "choice3");
     }
 
-    private static List<StudentChoices> findAllChoice(ActivityKind activityKind, String s) {
+    public static List<StudentChoices> findAllChoice4(SchoolEventActivity schoolEventActivity) {
+        return findAllChoice(schoolEventActivity, "choice4");
+    }
+
+    private static List<StudentChoices> findAllChoice(SchoolEventActivity schoolEventActivity, String s) {
         return StudentChoices.find("select sc from StudentChoices sc where sc." + s + " = :choice")
-                .bind("choice", activityKind)
+                .bind("choice", schoolEventActivity)
                 .fetch();
     }
 
@@ -106,6 +117,20 @@ public class StudentChoices extends Model {
                         "order by s.name")
                 .bind("schoolEvent", schoolEvent.id)
                 .bind("classrooms", classrooms)
+                .fetch();
+    }
+
+    public static List<StudentChoices> listStudentsChoices(long schoolEventId) {
+        return find(
+                "select sc " +
+                        "from StudentChoices as sc " +
+                        "inner join sc.schoolEvent as se " +
+                        "inner join sc.student as s " +
+                        "inner join s.classroom as cr " +
+                        "where 1=1 " +
+                        "and se.id in :schoolEvent " +
+                        "order by s.name")
+                .bind("schoolEvent", schoolEventId)
                 .fetch();
     }
 }

@@ -1,12 +1,12 @@
 *{ Display a list if StudentChoices a table }*
 #{set studentChoices:_studentChoices /}
 #{set tableId:_tableId /}
+#{set fullChoices:_fullChoices /}
 
 
 <div class="container">
     <div class="row">
-
-        <h3>Students count <span class="badge badge-secondary">${studentChoices.size}</span></h3>
+        #{doBody /}
 
         <table class="table  table-hover table-sm" id="${tableId}">
 
@@ -17,6 +17,10 @@
                 <th scope="col">ClassRoom</th>
                 <th scope="col">Choice 1</th>
                 <th scope="col">Choice 2</th>
+            #{if fullChoices}
+                <th scope="col">Choice 3</th>
+                <th scope="col">Choice 4</th>
+            #{/if}
             </tr>
             </thead>
 
@@ -24,12 +28,17 @@
 
             #{list items:studentChoices, as:'studentChoice'}
             <tr class="">
-                *{<i class="fas fa-leaf mr-2 blue-text" aria-hidden="true">}*
+            *{<i class="fas fa-leaf mr-2 blue-text" aria-hidden="true">}*
                 <td></i>${studentChoice.student.name}</td>
                 <td>${studentChoice.student.firstname}</td>
                 <td>${studentChoice.student.classroom.name}</td>
-                <td>${studentChoice.choice1.name}</td>
-                <td>${studentChoice.choice2.name}</td>
+                <td>${studentChoice.choice1?.name}</td>
+                <td>${studentChoice.choice2?.name}</td>
+                #{if fullChoices}
+
+                    <td>${studentChoice.choice3?.name}</td>
+                    <td>${studentChoice.choice4?.name}</td>
+                #{/if}
             </tr>
             #{/list}
 

@@ -29,9 +29,9 @@
             #{list items:students, as:'student'}
             <tr class="">
                 #{if withId}
-                    <td scope="row">
+                    <th scope="row">
                         <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
-                    </td>
+                    </th>
                 #{/if}
                 <td>${student.name}</td>
                 <td>${student.firstname}</td>

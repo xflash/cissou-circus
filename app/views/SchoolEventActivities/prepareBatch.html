@@ -3,12 +3,12 @@
 
 
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>Activite batch operations</h1>
-        <p>Allow to ${batchAction} <span class="badge">${activityKindSummaries.size()}</span> activities</p>
-    </div>
-</div>
+*{<div class="jumbotron">}*
+    *{<div class="container">}*
+        *{<h1>Activite batch operations</h1>}*
+        *{<p>Allow to ${batchAction} <span class="badge">${activityKindSummaries.size()}</span> activities</p>}*
+    *{</div>}*
+*{</div>}*
 
 
 <div class="container">
@@ -16,12 +16,13 @@
         <div class="col-sm">
 
             <nav class="nav">
-                <a class="nav-link" href="@{SchoolEventActivities.list()}">&leftarrow; Back to list</a>
+                <a class="nav-link" href="@{SchoolEventActivities.list(schoolEvent.id)}">&leftarrow; Back to list</a>
             *{<a class="nav-link" href="#">Link</a>}*
             *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
             </nav>
 
         #{form @batchAction()}
+            <input type="hidden" name="schoolEventId" value="${schoolEvent.id}">
 
             <fieldset>
                 <legen>Select which activity have to be ${batchAction}d into :</legen>

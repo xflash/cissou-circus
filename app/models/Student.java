@@ -43,8 +43,13 @@ public class Student extends Model {
         return fraties;
     }
 
-    static long countByClassroom(Classroom classroom) {
+    public static long countByClassroom(Classroom classroom) {
         return count("classroom.id", classroom.id);
+    }
+
+    public static List<Student> findByClassroomOrdered(Classroom classroom) {
+        return find("select s from Student s where classroom.id = ?1 order by name, firstname", classroom.id)
+                .fetch();
     }
 
     @Override

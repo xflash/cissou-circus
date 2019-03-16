@@ -1,4 +1,8 @@
-package models;
+package models.wrapper;
+
+import models.ClassRoomKind;
+import models.Classroom;
+import models.Student;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class ClassroomSummary {
     public String getName() {
         return classroom.name;
     }
+
     public ClassRoomKind getKind() {
         return classroom.kind;
     }
