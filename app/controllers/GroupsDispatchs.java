@@ -2,6 +2,7 @@ package controllers;
 
 import models.*;
 import models.wrapper.ClassroomSummary;
+import models.wrapper.SiblibgStudentChoices;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -64,7 +65,7 @@ public class GroupsDispatchs extends Controller {
 
         List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
 
-        List<List<StudentChoices>> groups = new ArrayList<>();
+        List<List<SiblibgStudentChoices>> groups = new ArrayList<>();
         for (int i = 0; i < groupNumber; i++) {
             groups.add(new ArrayList<>());
         }
@@ -73,7 +74,7 @@ public class GroupsDispatchs extends Controller {
             Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
             int lastGroupId = 0;
             for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-                groups.get(lastGroupId).addAll(fratrie.getValue());
+                groups.get(lastGroupId).addAll(SiblibgStudentChoices.wrapAll(fratrie.getValue(), true));
                 students.removeAll(fratrie.getValue());
                 lastGroupId++;
                 if (lastGroupId >= groupNumber) lastGroupId = 0;
@@ -81,13 +82,13 @@ public class GroupsDispatchs extends Controller {
         }
         int lastGroupId = 0;
         for (StudentChoices studentChoice : students) {
-            groups.get(lastGroupId).add(studentChoice);
+            groups.get(lastGroupId).add(SiblibgStudentChoices.wrap(studentChoice, false));
             lastGroupId++;
             if (lastGroupId >= groupNumber) lastGroupId = 0;
         }
 
-        for (List<StudentChoices> group : groups) {
-            Collections.sort(group, Comparator.comparing((StudentChoices o) -> o.student.name));
+        for (List<SiblibgStudentChoices> group : groups) {
+            group.sort(Comparator.comparing((SiblibgStudentChoices o) -> o.getStudent().name));
         }
 
         render(schoolEvent, groups);
