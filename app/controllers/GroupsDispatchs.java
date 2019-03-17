@@ -98,10 +98,10 @@ public class GroupsDispatchs extends Controller {
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
-        SchoolEventProposal schoolEventProposal = new SchoolEventProposal(schoolEvent).save();
-
-        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEventProposal, "Groupe A").save();
-        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEventProposal, "Groupe B").save();
+//        SchoolEventProposal schoolEventProposal = new SchoolEventProposal(schoolEvent).save();
+//
+//        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEventProposal, "Groupe A").save();
+//        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEventProposal, "Groupe B").save();
 
 //        new SchoolEventGroupStudentAssignment(schoolEventGroupA, )
 
