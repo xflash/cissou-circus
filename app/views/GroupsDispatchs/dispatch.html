@@ -29,33 +29,52 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-sm">
 
-            <ul class="nav nav-tabs" id="groupsTab" role="tablist">
-                #{list groups, as:'group'}
-                    <li class="nav-item">
-                        <a class="nav-link" id="groupTab-${group_index}" data-toggle="tab" href="#group${group_index}"
-                           role="tab"
-                           aria-controls="group${group_index}" aria-selected="true">Group ${group_index}</a>
+        #{list groups, as:'group'}
+            <div class="col-sm">
+                <h3>Group ${group_index} students count <span class="badge badge-secondary">${group.size}</span></h3>
+
+                <ul>
+
+                #{list items:group, as:'studentChoice'}
+                    <li>
+                        ${studentChoice.student.name} ${studentChoice.student.firstname}
                     </li>
                 #{/list}
-            </ul>
-
-            <div class="tab-content">
-
-                #{list groups, as:'group'}
-
-                    <div class="tab-pane" id="group${group_index}" role="tabpanel"
-                         aria-labelledby="group${group_index}-tab">
-                        <br/>
-                        #{studentChoices studentChoices:group, tableId:'group'+group_index+'Table', withClassroom:true}
-                        *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
-                        #{/studentChoices}
-                    </div>
-                #{/list}
+                </ul>
 
             </div>
-        </div>
+        #{/list}
+
+
+        *{<div class="col-sm">}*
+
+            *{<ul class="nav nav-tabs" id="groupsTab" role="tablist">}*
+                *{#{list groups, as:'group'}}*
+                    *{<li class="nav-item">}*
+                        *{<a class="nav-link" id="groupTab-${group_index}" data-toggle="tab" href="#group${group_index}"}*
+                           *{role="tab"}*
+                           *{aria-controls="group${group_index}" aria-selected="true">Group ${group_index}</a>}*
+                    *{</li>}*
+                *{#{/list}}*
+            *{</ul>}*
+
+            *{<div class="tab-content">}*
+
+                *{#{list groups, as:'group'}}*
+
+                    *{<div class="tab-pane" id="group${group_index}" role="tabpanel"}*
+                         *{aria-labelledby="group${group_index}-tab">}*
+                        *{<br/>}*
+
+                    *{#{studentChoices studentChoices:group, tableId:'group'+group_index+'Table', withClassroom:true}}*
+                        *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
+                        *{#{/studentChoices}}*
+                    *{</div>}*
+                *{#{/list}}*
+
+            *{</div>}*
+        *{</div>}*
     </div>
 </div>
 #{/form}
@@ -65,16 +84,5 @@
     $(function () {
         $('#groupsTab li:first-child a').tab('show');
 
-    #{list groups, as:'group'}
-        $('${'#group'+group_index+'Table'}').DataTable({
-            "paging": false,
-            "searching": false,
-        });
-
-    #{/list}
-
-        // $('#groupATable').DataTable();
-        // $('#groupBTable').DataTable();
-        $('.dataTables_length').addClass('bs-select');
     })
 </script>

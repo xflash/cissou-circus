@@ -93,7 +93,7 @@ public class GroupsDispatchs extends Controller {
         render(schoolEvent, groups);
     }
 
-    public static void saveDispatch(long schoolEventId) {
+    public static void saveDispatch(long schoolEventId, Map dispatch) {
         Logger.info("Save group dispatch in school event %d", schoolEventId);
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);

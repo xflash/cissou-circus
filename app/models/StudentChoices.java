@@ -127,6 +127,7 @@ public class StudentChoices extends Model {
                         "where 1=1 " +
                         "and se.id in :schoolEvent " +
                         "and cr.id in :classrooms " +
+                        "and (sc.absent is null or sc.absent = false)" +
                         "and sc.choice1 is not null " +
                         "and sc.choice2 is not null " +
                         "order by s.name")
@@ -135,17 +136,4 @@ public class StudentChoices extends Model {
                 .fetch();
     }
 
-    public static List<StudentChoices> listStudentsChoices(long schoolEventId) {
-        return find(
-                "select sc " +
-                        "from StudentChoices as sc " +
-                        "inner join sc.schoolEvent as se " +
-                        "inner join sc.student as s " +
-                        "inner join s.classroom as cr " +
-                        "where 1=1 " +
-                        "and se.id in :schoolEvent " +
-                        "order by s.name")
-                .bind("schoolEvent", schoolEventId)
-                .fetch();
-    }
 }
