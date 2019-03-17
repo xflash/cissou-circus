@@ -39,6 +39,7 @@
                 #{list items:group, as:'studentChoice'}
                     <li>
                         ${studentChoice.student.name} ${studentChoice.student.firstname}
+                            <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span class="badge badge-light">${studentChoice.choice2.name}</span>/<span class="badge badge-light">${studentChoice.choice3.name}</span>/<span class="badge badge-light">${studentChoice.choice4.name}</span>
                     </li>
                 #{/list}
                 </ul>
