@@ -14,6 +14,8 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
+        <h1>Classrooms list</h1>
+
         #{if classrooms}
 
             <table class="table table-striped table-hover table-sm" id="classroomsTable">
@@ -54,9 +56,9 @@
 
 <script>
     $(document).ready(function () {
-        $('#classroomsTable').DataTable({
-            "paging": true
-        });
+        // $('#classroomsTable').DataTable({
+        //     "paging": true
+        // });
         // $('.dataTables_length').addClass('bs-select');
     });
 </script>

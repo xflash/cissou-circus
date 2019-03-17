@@ -5,28 +5,36 @@
 
 
 *{<div class="jumbotron">}*
-    *{<div class="container">}*
-        *{<h1 >Student show</h1>}*
-        *{<p>Allow to show a single student</p>}*
-    *{</div>}*
+*{<div class="container">}*
+*{<h1 >Student show</h1>}*
+*{<p>Allow to show a single student</p>}*
+*{</div>}*
 *{</div>}*
 
 <div class="container">
     <div class="row">
+        <div class="col-sm">
+            <h2>Student ${student.name} ${student.firstname}</h2>
 
 
-        <dl>
-            <dt>Firstname</dt>
-            <dd>${student.firstname}</dd>
+            <dl>
+                <dt>Firstname</dt>
+                <dd>${student.firstname}</dd>
 
-            <dt>Name</dt>
-            <dd>${student.name}</dd>
+                <dt>Name</dt>
+                <dd>${student.name}</dd>
 
-            <dt>Classroom</dt>
-            <dd>${student.classroom.name}</dd>
+                <dt>Classroom</dt>
+                <dd>${student.classroom.name}</dd>
 
-        </dl>
+            </dl>
 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+
+        </div>
     </div>
 </div>
 

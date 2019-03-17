@@ -3,20 +3,21 @@
 
 
 
-<div class="jumbotron">
-    <div class="container">
-        <h1>Activity ${schoolEventActivity.name}</h1>
-        <p>Allow to show what choices have been by whom on a given activity</p>
-    </div>
-</div>
+*{<div class="jumbotron">}*
+    *{<div class="container">}*
+        *{<h1>Activity ${schoolEventActivity.name}</h1>}*
+        *{<p>Allow to show what choices have been by whom on a given activity</p>}*
+    *{</div>}*
+*{</div>}*
 
 
 <div class="container">
     <div class="row">
         <div class="col-sm">
+        <h2>Activity "${schoolEventActivity.name}"</h2>
 
             <nav class="nav">
-                <a class="nav-link" href="@{SchoolEventActivities.list()}">&leftarrow; Back to list</a>
+                <a class="nav-link" href="@{SchoolEventActivities.list(schoolEventActivity.schoolEvent.id)}">&leftarrow; Back to list</a>
             *{<a class="nav-link" href="#">Link</a>}*
             *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
             </nav>
@@ -59,3 +60,17 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "paging": false,
+            "searching": false
+        });
+        $('.dataTables_length').addClass('bs-select');
+        // $('.dataTables_length').addClass('bs-select');
+    });
+</script>

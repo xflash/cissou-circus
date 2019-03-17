@@ -57,28 +57,29 @@ public class GroupsDispatchs extends Controller {
         render(classrooms, selected, schoolEvents);
     }
 
-    public static void dispatch(int groupNumber, long schoolEventId, List<Long> classrooms) {
+    public static void dispatch(boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
         Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classroms %s", schoolEventId, groupNumber, classrooms);
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
         List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
-        Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
 
         List<List<StudentChoices>> groups = new ArrayList<>();
         for (int i = 0; i < groupNumber; i++) {
             groups.add(new ArrayList<>());
         }
 
-        int lastGroupId = 0;
-        for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-            groups.get(lastGroupId).addAll(fratrie.getValue());
-            students.removeAll(fratrie.getValue());
-            lastGroupId++;
-            if (lastGroupId >= groupNumber) lastGroupId = 0;
+        if(siblingKept) {
+            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
+            int lastGroupId = 0;
+            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
+                groups.get(lastGroupId).addAll(fratrie.getValue());
+                students.removeAll(fratrie.getValue());
+                lastGroupId++;
+                if (lastGroupId >= groupNumber) lastGroupId = 0;
+            }
         }
-
-        lastGroupId = 0;
+        int lastGroupId = 0;
         for (StudentChoices studentChoice : students) {
             groups.get(lastGroupId).add(studentChoice);
             lastGroupId++;

@@ -19,8 +19,8 @@
         <div class="col-sm">
             <h2>Groups result dispatch</h2>
 
-            <div class="btn-toolbar" role="toolbar" >
-                <div class="btn-group mr-2" role="group" >
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group mr-2" role="group">
                     <button type="submit" value="save" class="btn btn-info">Save</button>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                     <div class="tab-pane" id="group${group_index}" role="tabpanel"
                          aria-labelledby="group${group_index}-tab">
                         <br/>
-                        #{studentChoices studentChoices:group, tableId:'group'+group_index+'Table'}
-                            *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
+                        #{studentChoices studentChoices:group, tableId:'group'+group_index+'Table', withClassroom:true}
+                        *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
                         #{/studentChoices}
                     </div>
                 #{/list}
@@ -62,14 +62,13 @@
 
 
 <script>
-
     $(function () {
         $('#groupsTab li:first-child a').tab('show');
 
     #{list groups, as:'group'}
         $('${'#group'+group_index+'Table'}').DataTable({
-            "paging":false,
-            "searching":false,
+            "paging": false,
+            "searching": false,
         });
 
     #{/list}

@@ -1,5 +1,6 @@
 package models;
 
+import org.apache.commons.lang.StringUtils;
 import play.db.jpa.Model;
 
 import javax.persistence.CascadeType;
@@ -26,19 +27,33 @@ public class StudentChoices extends Model {
     SchoolEventActivity choice4;
     @ManyToOne
     SchoolEvent schoolEvent;
+    private boolean orangeSheet;
+    private boolean absentFriday;
+    private boolean absentSaturday;
+    private boolean absent;
 
     public StudentChoices(Student student, SchoolEvent schoolEvent) {
         this.student = student;
         this.schoolEvent = schoolEvent;
     }
 
-    public static StudentChoices createStudentChoices(Student student, String choix1, String choix2, String choix3, String choix4, SchoolEvent schoolEvent) {
+    public static StudentChoices createStudentChoices(SchoolEvent schoolEvent, Student student,
+                                                      String choix1, String choix2, String choix3, String choix4,
+                                                      String orangesSheet,
+                                                      String absentFriday,
+                                                      String absentSaturday,
+                                                      String absent) {
 //        Logger.info("Creating student choices for %s", student.identifiant);
         StudentChoices choices = new StudentChoices(student, schoolEvent);
         choices.choice1 = SchoolEventActivity.findOrCreate(choix1, schoolEvent);
         choices.choice2 = SchoolEventActivity.findOrCreate(choix2, schoolEvent);
         choices.choice3 = SchoolEventActivity.findOrCreate(choix3, schoolEvent);
         choices.choice4 = SchoolEventActivity.findOrCreate(choix4, schoolEvent);
+
+        choices.orangeSheet = StringUtils.isNotBlank(orangesSheet);
+        choices.absentFriday = StringUtils.isNotBlank(absentFriday);
+        choices.absentSaturday = StringUtils.isNotBlank(absentSaturday);
+        choices.absent = StringUtils.isNotBlank(absent);
         return choices.save();
     }
 

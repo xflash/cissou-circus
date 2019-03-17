@@ -56,8 +56,8 @@
                                 <br/>
 
                                 <h2>Classroom ${classroomStudentChoice.classroom.name}</h2>
-                                #{studentChoices studentChoices:classroomStudentChoice.studentChoices, tableId:'Table'+classroomStudentChoice_index, fullChoices:true}
-                                    <h3>Students count <span class="badge badge-secondary">${classroomStudentChoice.studentChoices.size}</span></h3>
+                                #{studentChoices studentChoices:classroomStudentChoice.studentChoices, tableId:'Table-'+ classroomKindStudentChoice_index+'-'+classroomStudentChoice_index, fullChoices:true}
+                                    *{<h3>Students count <span class="badge badge-secondary">${classroomStudentChoice.studentChoices.size}</span></h3>}*
                                 #{/studentChoices}
 
                             </div>
@@ -75,3 +75,11 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>

@@ -82,12 +82,17 @@ public class Application extends Controller {
                             student.save();
 
 
-                            StudentChoices.createStudentChoices(student,
+                            StudentChoices.createStudentChoices(schoolEvent, student,
                                     dataFormatter.formatCellValue(row.getCell(4)),
                                     dataFormatter.formatCellValue(row.getCell(5)),
                                     dataFormatter.formatCellValue(row.getCell(6)),
-                                    dataFormatter.formatCellValue(row.getCell(7)), schoolEvent)
-                                    .save();
+                                    dataFormatter.formatCellValue(row.getCell(7)),
+
+                                    dataFormatter.formatCellValue(row.getCell(9)),
+                                    dataFormatter.formatCellValue(row.getCell(10)),
+                                    dataFormatter.formatCellValue(row.getCell(11)),
+                                    dataFormatter.formatCellValue(row.getCell(12))
+                            ).save();
                         }
 
                     });
@@ -101,10 +106,10 @@ public class Application extends Controller {
     private static void deleteAllEntities() {
         SchoolEventGroupStudentAssignment.deleteAll();
         SchoolEventProposal.deleteAll();
-        SchoolEventActivity.deleteAll();
         SchoolEventGroup.deleteAll();
 
         StudentChoices.deleteAll();
+        SchoolEventActivity.deleteAll();
 
         Student.deleteAll();
         Classroom.deleteAll();

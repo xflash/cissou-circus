@@ -19,7 +19,7 @@
                 #{/if}
                     <th scope="col">Name</th>
                     <th scope="col">Firstname</th>
-                #{if extended}
+                #{if withClassroom}
                     <th>ClassRoom</th>
                 #{/if}
                 </tr>
@@ -36,10 +36,10 @@
                     #{/if}
                     <td>${student.name}</td>
                     <td>${student.firstname}</td>
-                    #{if extended}
-                        <td>
+                    #{if withClassroom}
+                        <th>
                             <a href="@{Classrooms.openDetail(student.classroom.id)}">${student.classroom.name}</a>
-                        </td>
+                        </th>
                     #{/}
                 </tr>
                 #{/list}

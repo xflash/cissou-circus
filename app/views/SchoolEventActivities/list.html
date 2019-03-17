@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h3>Listing activities in school event ${schoolEvent.name}</h3>
+            <h2>Listing activities in school event ${schoolEvent.name}</h2>
         </div>
     </div>
     <div class="row">
@@ -82,8 +82,9 @@
 <script>
     $(document).ready(function () {
         $('#activitiesTable').DataTable({
-            "paging": true
+            "paging": false,
+            "searching": false
         });
-        // $('.dataTables_length').addClass('bs-select');
+        $('.dataTables_length').addClass('bs-select');
     });
 </script>
