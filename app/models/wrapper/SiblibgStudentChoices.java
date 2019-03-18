@@ -23,6 +23,10 @@ public class SiblibgStudentChoices {
         this.sibling = sibling;
     }
 
+    public StudentChoices getStudentChoices() {
+        return studentChoices;
+    }
+
     public boolean isSibling() {
         return sibling;
     }

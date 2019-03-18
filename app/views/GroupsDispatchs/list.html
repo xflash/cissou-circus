@@ -24,8 +24,9 @@
     <ul>
         #{list schoolEventProposals, as:'schoolEventProposal'}
         <li>
-            #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id)}${schoolEventProposal.id}#{/a}
-            #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id)}delete#{/a}
+            ${schoolEventProposal.name}
+            #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'}Open#{/a}
+            #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'}Delete#{/a}
         </li>
         #{/list}
     </ul>

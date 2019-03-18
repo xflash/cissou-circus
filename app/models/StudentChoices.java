@@ -136,4 +136,19 @@ public class StudentChoices extends Model {
                 .fetch();
     }
 
+    public SchoolEventActivity getChoice1() {
+        return choice1;
+    }
+
+    public SchoolEventActivity getChoice2() {
+        return choice2;
+    }
+
+    public SchoolEventActivity getChoice3() {
+        return choice3;
+    }
+
+    public SchoolEventActivity getChoice4() {
+        return choice4;
+    }
 }

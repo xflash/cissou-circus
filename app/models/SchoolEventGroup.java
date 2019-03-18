@@ -1,13 +1,16 @@
 package models;
 
+import org.hibernate.annotations.SortComparator;
 import play.db.jpa.Model;
 import play.db.jpa.Transactional;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import java.beans.Transient;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  *
@@ -21,7 +24,9 @@ public class SchoolEventGroup extends Model {
     SchoolEventProposal schoolEventProposal;
 
     @OneToMany(mappedBy = "schoolEventGroup")
-    public Set<SchoolEventGroupActivity> activities=new TreeSet<>(Comparator.comparing(o -> o.schoolEventActivity.name));
+//    @OrderBy("schoolEventActivity.name")
+    @SortComparator(SchoolEventGroupActivityComparator.class)
+    public Set<SchoolEventGroupActivity> activities=new TreeSet<>(new SchoolEventGroupActivityComparator());
 
     public SchoolEventGroup(SchoolEventProposal schoolEventProposal, String name) {
         this.name = name;
@@ -41,5 +46,12 @@ public class SchoolEventGroup extends Model {
             }
         }
         return nb;
+    }
+
+    public static class SchoolEventGroupActivityComparator implements Comparator<SchoolEventGroupActivity> {
+        @Override
+        public int compare(SchoolEventGroupActivity o1, SchoolEventGroupActivity o2) {
+            return o1.schoolEventActivity.name.compareTo(o2.schoolEventActivity.name);
+        }
     }
 }

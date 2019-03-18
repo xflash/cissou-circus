@@ -1,12 +1,11 @@
 #{extends 'main.html' /}
-#{set title:'Groups' /}
-
+#{set title:'Group' /}
 
 
 *{<div class="jumbotron">}*
 *{<div class="container">}*
-*{<h1>Group edition</h1>}*
-*{<p>Here you may edit a group content</p>}*
+*{<h1>Group dispatch</h1>}*
+*{<p>Here is the result of the dispatch</p>}*
 *{</div>}*
 *{</div>}*
 
@@ -14,21 +13,46 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-
-            #{list schoolEventProposal}
-
-#{/list}
-
+            <h2>Groups result dispatch for event ${proposal.schoolEvent.name}</h2>
         </div>
+    </div>
+    <hr/>
+    <div class="row">
+
+        #{list items:proposal.groups, as:'schoolEventGroup'}
+            <div class="col-sm">
+                <h3>${schoolEventGroup.name}  <span class="badge badge-secondary">${schoolEventGroup.studentCount}</span></h3>
+                <ul>
+                    #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
+                        <li>${schoolEventGroupActivity.schoolEventActivity.name} <span class="badge badge-primary">${schoolEventGroupActivity.assignments.size()}</span>
+                            <ul>
+                                #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
+                                    #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
+                                    <li>
+                                    *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+                                    ${studentChoice.student.name} ${studentChoice.student.firstname}
+                                        <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
+                                        <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice2.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice3.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice4.name}</span>
+                                    </li>
+                                #{/list}
+                            </ul>
+                        </li>
+                    #{/list}
+                </ul>
+
+            </div>
+        #{/list}
+
+
     </div>
 </div>
 
 
 <script>
     $(function () {
-        // $('#dispatchButton').click(function () {
-        //     $('#dispatchForm').submit()
-        // })
-    });
 
+    })
 </script>
