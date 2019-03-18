@@ -7,7 +7,6 @@ import play.mvc.Controller;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -41,8 +40,9 @@ public class GroupsDispatchs extends Controller {
         render(classrooms, selected, schoolEvents);
     }
 
-    public static void dispatch(boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
-        Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classroms %s", schoolEventId, groupNumber, classrooms);
+    public static void dispatch(int maximumStudents, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
+        Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classrooms %s maximumStudents %d",
+                schoolEventId, groupNumber, classrooms, maximumStudents);
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
@@ -58,9 +58,9 @@ public class GroupsDispatchs extends Controller {
 
         List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
         if (siblingKept) {
-            dispatchStudentChoicesWithSiblings(proposal.groups, students);
+            dispatchStudentChoicesWithSiblings(proposal.groups, students, maximumStudents);
         }
-        dispatchStudentChoices(proposal.groups, students);
+        dispatchStudentChoices(proposal.groups, students, maximumStudents);
 
         proposal.save();
         edit(proposal.id);
@@ -96,12 +96,14 @@ public class GroupsDispatchs extends Controller {
 //        list();
     }
 
-    private static void dispatchStudentChoicesWithSiblings(List<SchoolEventGroup> groups, List<StudentChoices> students) {
+    private static void dispatchStudentChoicesWithSiblings(List<SchoolEventGroup> groups,
+                                                           List<StudentChoices> students,
+                                                           int maximumStudents) {
         Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
         int lastGroupId = 0;
         for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
             for (StudentChoices studentChoices : fratrie.getValue()) {
-                dispatchThem(groups.get(lastGroupId), studentChoices);
+                dispatchSudentChoices(studentChoices, groups.get(lastGroupId).activities, maximumStudents);
             }
             students.removeAll(fratrie.getValue());
             lastGroupId++;
@@ -109,28 +111,36 @@ public class GroupsDispatchs extends Controller {
         }
     }
 
-    private static void dispatchStudentChoices(List<SchoolEventGroup> groups, List<StudentChoices> studentChoicesList) {
+    private static void dispatchStudentChoices(List<SchoolEventGroup> groups,
+                                               List<StudentChoices> studentChoicesList,
+                                               int maximumStudents) {
         int lastGroupId = 0;
         for (StudentChoices studentChoices : studentChoicesList) {
-            dispatchThem(groups.get(lastGroupId), studentChoices);
+            dispatchSudentChoices(studentChoices, groups.get(lastGroupId).activities, maximumStudents);
             lastGroupId++;
             if (lastGroupId >= groups.size()) lastGroupId = 0;
         }
     }
 
-    private static void dispatchThem(SchoolEventGroup schoolEventGroup, StudentChoices studentChoices) {
+    private static void dispatchSudentChoices(StudentChoices studentChoices,
+                                              Set<SchoolEventGroupActivity> eventGroupActivities,
+                                              int maximumStudents) {
         boolean added = false;
-        for (SchoolEventGroupActivity groupActivity : schoolEventGroup.activities) {
-//            int i = ThreadLocalRandom.current().nextInt(1, 4 + 1);
-            if (studentChoices.getChoice1().equals(groupActivity.schoolEventActivity))
-                added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-            else if (studentChoices.getChoice2().equals(groupActivity.schoolEventActivity))
-                added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-            else if (studentChoices.getChoice3().equals(groupActivity.schoolEventActivity))
-                added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-            else if (studentChoices.getChoice4().equals(groupActivity.schoolEventActivity))
-                added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
+        for (SchoolEventGroupActivity groupActivity : eventGroupActivities) {
+            if(groupActivity.assignments.size() < maximumStudents) {
+                if (studentChoices.getChoice1().equals(groupActivity.schoolEventActivity))
+                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
+                else if (studentChoices.getChoice2().equals(groupActivity.schoolEventActivity))
+                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
+                else if (studentChoices.getChoice3().equals(groupActivity.schoolEventActivity))
+                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
+                else if (studentChoices.getChoice4().equals(groupActivity.schoolEventActivity))
+                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
+            }
             if (added) break;
+        }
+        if(!added) {
+            Logger.error("We have an unpllaned Student %s", studentChoices.student.identifiant);
         }
     }
 
