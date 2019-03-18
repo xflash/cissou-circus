@@ -3,7 +3,9 @@ package controllers;
 import models.*;
 import models.wrapper.ClassroomSummary;
 import play.Logger;
+import play.db.jpa.JPABase;
 import play.mvc.Controller;
+import sun.rmi.runtime.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -144,22 +146,23 @@ public class GroupsDispatchs extends Controller {
         }
     }
 
-    public static void saveDispatch(long schoolEventId, Map dispatch) {
-        Logger.info("Save group dispatch in school event %d", schoolEventId);
+    public static void swapStudentActivity(long schoolEventGroupStudentAssignmentId, long newActivityId) {
+        Logger.info("Swap activity for schoolEventGroupStudentAssignmentId %d newWctivityId %d",
+            schoolEventGroupStudentAssignmentId, newActivityId);
+        SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
+                SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
+        if(schoolEventGroupStudentAssignment==null)badRequest("Unknwon schoolEventGroupStudentAssignment "+schoolEventGroupStudentAssignmentId);
 
-        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
-
-//        SchoolEventProposal schoolEventProposal = new SchoolEventProposal(schoolEvent).save();
-//
-//        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEventProposal, "Groupe A").save();
-//        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEventProposal, "Groupe B").save();
-
-//        new SchoolEventGroupStudentAssignment(schoolEventGroupA, )
-
-//        SchoolEventGroup schoolEventGroupA = new SchoolEventGroup(schoolEvent, "Group A").save();
-//        SchoolEventGroup schoolEventGroupB = new SchoolEventGroup(schoolEvent, "Group B").save();
-
-        badRequest();
+        SchoolEventGroup schoolEventGroup = schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup;
+        for (SchoolEventGroupActivity activity : schoolEventGroup.activities) {
+            if(activity.schoolEventActivity.id.equals(newActivityId)) {
+                schoolEventGroupStudentAssignment.schoolEventGroupActivity=activity;
+                schoolEventGroupStudentAssignment.save();
+            }
+        }
+        edit(schoolEventGroup.schoolEventProposal.id);
 
     }
+
+
 }

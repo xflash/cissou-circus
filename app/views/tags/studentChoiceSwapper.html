@@ -1,0 +1,11 @@
+#{set studentChosenActivity:_new/}
+#{set actualActivity:_actual/}
+#{set schoolEventGroupStudentAssignmentId:_schoolEventGroupStudentAssignmentId/}
+
+#{if studentChosenActivity.id==actualActivity.id}
+<span class="badge badge-light">${studentChosenActivity.name}</span>
+#{/if}
+#{else }
+<a href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignmentId, studentChosenActivity.id)}"><span
+        class="badge badge-info">${studentChosenActivity.name}</span></a>
+#{/else}

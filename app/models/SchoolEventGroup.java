@@ -21,6 +21,7 @@ public class SchoolEventGroup extends Model {
     public String name;
 
     @ManyToOne(optional = false)
+    public
     SchoolEventProposal schoolEventProposal;
 
     @OneToMany(mappedBy = "schoolEventGroup")

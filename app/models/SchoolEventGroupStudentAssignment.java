@@ -12,6 +12,7 @@ import java.util.List;
 public class SchoolEventGroupStudentAssignment extends Model {
 
     @ManyToOne
+    public
     SchoolEventGroupActivity schoolEventGroupActivity;
 
     @ManyToOne

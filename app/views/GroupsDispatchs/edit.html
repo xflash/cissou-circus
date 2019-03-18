@@ -25,17 +25,19 @@
                 <ul>
                     #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
                         <li>${schoolEventGroupActivity.schoolEventActivity.name} <span class="badge badge-primary">${schoolEventGroupActivity.assignments.size()}</span>
-                            <ul>
+                            <ul class="list-group- list-group-sortable-connected">
                                 #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
                                     #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
-                                    <li>
-                                    *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
-                                    ${studentChoice.student.name} ${studentChoice.student.firstname}
+                                    <li class="list-group-item- ">
+                                        <p>
+                                        *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+                                        ${studentChoice.student.name} ${studentChoice.student.firstname}
                                         <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
-                                        <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span
-                                            class="badge badge-light">${studentChoice.choice2.name}</span>/<span
-                                            class="badge badge-light">${studentChoice.choice3.name}</span>/<span
-                                            class="badge badge-light">${studentChoice.choice4.name}</span>
+                                            #{studentChoiceSwapper new:studentChoice.choice1, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/
+                                            #{studentChoiceSwapper new:studentChoice.choice2, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/
+                                            #{studentChoiceSwapper new:studentChoice.choice3, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/
+                                            #{studentChoiceSwapper new:studentChoice.choice4, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}
+                                        </p>
                                     </li>
                                 #{/list}
                             </ul>
@@ -45,14 +47,22 @@
 
             </div>
         #{/list}
-
-
     </div>
 </div>
 
 
-<script>
-    $(function () {
+*{#{set 'moreScripts'}}*
+    *{#{script 'sortable/jquery.sortable.js' /}}*
+*{#{/set}}*
 
-    })
-</script>
+*{<script>}*
+    *{$(function () {}*
+        *{$('.list-group-sortable-connected').sortable({}*
+            *{placeholderClass: 'list-group-item',}*
+            *{connectWith: '.connected'}*
+        *{}).bind('sortupdate', function(e, ui) {}*
+            *{alert(ui);}*
+        *{});}*
+
+    *{})}*
+*{</script>}*
