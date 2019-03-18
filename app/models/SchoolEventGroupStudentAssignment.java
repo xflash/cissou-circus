@@ -12,19 +12,17 @@ import java.util.List;
 public class SchoolEventGroupStudentAssignment extends Model {
 
     @ManyToOne
-    SchoolEventGroup schoolEventGroup;
-    @ManyToOne
-    SchoolEventActivity schoolEventActivity;
+    SchoolEventGroupActivity schoolEventGroupActivity;
+
     @ManyToOne
     StudentChoices studentChoices;
 
-    public SchoolEventGroupStudentAssignment(SchoolEventGroup schoolEventGroup, SchoolEventActivity schoolEventActivity, StudentChoices studentChoices) {
-        this.schoolEventGroup = schoolEventGroup;
+    public SchoolEventGroupStudentAssignment(SchoolEventGroupActivity schoolEventGroupActivity, StudentChoices studentChoices) {
+        this.schoolEventGroupActivity = schoolEventGroupActivity;
         this.studentChoices = studentChoices;
-        this.schoolEventActivity = schoolEventActivity;
     }
 
-    public static List<SchoolEventGroupStudentAssignment> list4GroupSchoolEventGroup(SchoolEventGroup schoolEventGroup) {
-        return find("schoolEventGroup", schoolEventGroup).fetch();
-    }
+//    public static List<SchoolEventGroupStudentAssignment> list4GroupSchoolEventGroup(SchoolEventGroup schoolEventGroup) {
+//        return find("schoolEventGroup", schoolEventGroup).fetch();
+//    }
 }

@@ -2,8 +2,6 @@
 #{set title:'Group' /}
 
 
-
-
 *{<div class="jumbotron">}*
 *{<div class="container">}*
 *{<h1>Group dispatch</h1>}*
@@ -12,12 +10,12 @@
 *{</div>}*
 
 #{form @saveDispatch()}
-<input type="hidden" name="schoolEventId" value="${schoolEvent.id}"/>
+<input type="hidden" name="schoolEventId" value="${proposal.schoolEvent.id}"/>
 
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Groups result dispatch</h2>
+            <h2>Groups result dispatch for event ${proposal.schoolEvent.name}</h2>
 
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group mr-2" role="group">
@@ -30,54 +28,63 @@
     <hr/>
     <div class="row">
 
-        #{list groups, as:'group'}
+        #{list items:proposal.groups, as:'schoolEventGroup'}
             <div class="col-sm">
-                <h3>Group ${group_index}  <span class="badge badge-secondary">${group.size}</span></h3>
-
+                <h3>${schoolEventGroup.name}  <span
+                        class="badge badge-secondary">${schoolEventGroup.studentCount}</span></h3>
                 <ul>
-
-                #{list items:group, as:'studentChoice'}
-                    <li>
-                        #{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}
-                        ${studentChoice.student.name} ${studentChoice.student.firstname}
-                        <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
-                            <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span class="badge badge-light">${studentChoice.choice2.name}</span>/<span class="badge badge-light">${studentChoice.choice3.name}</span>/<span class="badge badge-light">${studentChoice.choice4.name}</span>
-                    </li>
-                #{/list}
+                    #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
+                        <li>${schoolEventGroupActivity.schoolEventActivity.name}
+                            <ul>
+                                #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
+                                    #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
+                                    <li>
+                                    *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+                                    ${studentChoice.student.name} ${studentChoice.student.firstname}
+                                        <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
+                                        <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice2.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice3.name}</span>/<span
+                                            class="badge badge-light">${studentChoice.choice4.name}</span>
+                                    </li>
+                                #{/list}
+                            </ul>
+                        </li>
+                    #{/list}
                 </ul>
 
             </div>
         #{/list}
 
 
-        *{<div class="col-sm">}*
+    *{<div class="col-sm">}*
 
-            *{<ul class="nav nav-tabs" id="groupsTab" role="tablist">}*
-                *{#{list groups, as:'group'}}*
-                    *{<li class="nav-item">}*
-                        *{<a class="nav-link" id="groupTab-${group_index}" data-toggle="tab" href="#group${group_index}"}*
-                           *{role="tab"}*
-                           *{aria-controls="group${group_index}" aria-selected="true">Group ${group_index}</a>}*
-                    *{</li>}*
-                *{#{/list}}*
-            *{</ul>}*
+    *{<ul class="nav nav-tabs" id="groupsTab" role="tablist">}*
+    *{#{list groups, as:'group'}}*
+    *{<li class="nav-item">}*
+    *{<a class="nav-link" id="groupTab-${group_index}" data-toggle="tab" href="#group${group_index}"}*
+    *{role="tab"}*
+    *{aria-controls="group${group_index}" aria-selected="true">Group ${group_index}</a>}*
+    *{</li>}*
+    *{#{/list}}*
+    *{</ul>}*
 
-            *{<div class="tab-content">}*
+    *{<div class="tab-content">}*
 
-                *{#{list groups, as:'group'}}*
+    *{#{list groups, as:'group'}}*
 
-                    *{<div class="tab-pane" id="group${group_index}" role="tabpanel"}*
-                         *{aria-labelledby="group${group_index}-tab">}*
-                        *{<br/>}*
+    *{<div class="tab-pane" id="group${group_index}" role="tabpanel"}*
+    *{aria-labelledby="group${group_index}-tab">}*
+    *{<br/>}*
 
-                    *{#{studentChoices studentChoices:group, tableId:'group'+group_index+'Table', withClassroom:true}}*
-                        *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
-                        *{#{/studentChoices}}*
-                    *{</div>}*
-                *{#{/list}}*
+    *{#{studentChoices studentChoices:group, tableId:'group'+group_index+'Table', withClassroom:true}}*
+    *{<h3>Students count <span class="badge badge-secondary">${group.size}</span></h3>}*
+    *{#{/studentChoices}}*
+    *{</div>}*
+    *{#{/list}}*
 
-            *{</div>}*
-        *{</div>}*
+    *{</div>}*
+    *{</div>}*
     </div>
 </div>
 #{/form}

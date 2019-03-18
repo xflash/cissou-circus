@@ -11,7 +11,7 @@ import java.util.*;
 @Entity
 public class StudentChoices extends Model {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public Student student;
     @ManyToOne(cascade = CascadeType.ALL)
     public

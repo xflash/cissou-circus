@@ -23,24 +23,26 @@ public class GroupsDispatchs extends Controller {
     }
 
     public static void delete(long id) {
-        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
-        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
-            for (SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment : SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup)) {
-                schoolEventGroupStudentAssignment.delete();
-            }
-            schoolEventGroup.delete();
-        }
-        schoolEventProposal.delete();
-
-        list();
+        badRequest("TODO not yet implemented");
+//        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
+//        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
+//            for (SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment : SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup)) {
+//                schoolEventGroupStudentAssignment.delete();
+//            }
+//            schoolEventGroup.delete();
+//        }
+//        schoolEventProposal.delete();
+//        list();
     }
+
     public static void edit(long id) {
-        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
-        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
-            List<SchoolEventGroupStudentAssignment> schoolEventGroupStudentAssignments =
-                    SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup);
-        }
-        render(schoolEventProposal);
+        badRequest("TODO not yet implemented");
+//        SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);
+//        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
+//            List<SchoolEventGroupStudentAssignment> schoolEventGroupStudentAssignments =
+//                    SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup);
+//        }
+//        render(schoolEventProposal);
     }
 
     public static void init() {
@@ -63,23 +65,19 @@ public class GroupsDispatchs extends Controller {
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
-        List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
+        SchoolEventProposal proposal = new SchoolEventProposal(schoolEvent);
 
-        List<SchoolEventActivity> schoolEventActivities = SchoolEventActivity.listAllOrdered(schoolEventId);
-
-
-
-        List<SchoolEventGroup> groups = new ArrayList<>();
-        for (int i = 0; i < groupNumber; i++) {
-            List<SchoolEventGroupStudentAssignment> schoolEventActivityChoices = new ArrayList<>();
-            groups.add(schoolEventActivityChoices);
-            for (SchoolEventActivity schoolEventActivity : schoolEventActivities) {
-                schoolEventActivityChoices.add(new SchoolEventActivityChoices(schoolEventActivity));
+        for (int i = 1; i <= groupNumber; i++) {
+            SchoolEventGroup schoolEventGroup = new SchoolEventGroup(proposal, "Group " + i);
+            proposal.groups.add(schoolEventGroup);
+            for (SchoolEventActivity schoolEventActivity : SchoolEventActivity.listAllOrdered(schoolEventId)) {
+                schoolEventGroup.activities.add(new SchoolEventGroupActivity(schoolEventGroup, schoolEventActivity));
             }
         }
 
-//        if(siblingKept) {
-//            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
+        List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
+        if(siblingKept) {
+            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
 //            int lastGroupId = 0;
 //            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
 //                List<SiblibgStudentChoices> siblibgStudentChoices = SiblibgStudentChoices.wrapAll(fratrie.getValue(), true);
@@ -89,19 +87,19 @@ public class GroupsDispatchs extends Controller {
 //                lastGroupId++;
 //                if (lastGroupId >= groupNumber) lastGroupId = 0;
 //            }
-//        }
-//        int lastGroupId = 0;
-//        for (StudentChoices studentChoice : students) {
+        }
+        int lastGroupId = 0;
+        for (StudentChoices studentChoice : students) {
 //            groups.get(lastGroupId).add(SiblibgStudentChoices.wrap(studentChoice, false));
 //            lastGroupId++;
 //            if (lastGroupId >= groupNumber) lastGroupId = 0;
-//        }
-//
+        }
+
 //        for (List<SiblibgStudentChoices> group : groups) {
 //            group.sort(Comparator.comparing((SiblibgStudentChoices o) -> o.getStudent().name));
 //        }
 
-        render(schoolEvent, groups);
+        render(proposal);
     }
 
     public static void saveDispatch(long schoolEventId, Map dispatch) {
