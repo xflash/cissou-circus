@@ -32,7 +32,12 @@
                         <input type="radio" id="rootRadio${activityKindSummary.id}" name="root" class="form-check-input"
                                value="${activityKindSummary.id}">
                         <label class="form-check-label"
-                               for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name} </label>
+                               for="rootRadio${activityKindSummary.id}"> ${activityKindSummary.name}
+                            <span class="badge badge-sm badge-light">${activityKindSummary.choice1}</span>/
+                            <span class="badge badge-sm badge-light">${activityKindSummary.choice2}</span>/
+                            <span class="badge badge-sm badge-light">${activityKindSummary.choice3}</span>/
+                            <span class="badge badge-sm badge-light">${activityKindSummary.choice4}</span></label>
+
                     </div>
 
                     <input type="hidden" name="selection" value="${activityKindSummary.id}">
