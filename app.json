@@ -1,0 +1,27 @@
+{
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-play"
+    }
+  ],
+  "env": {
+    "JAVA_OPTS": {
+      "required": true
+    },
+    "PLAY_OPTS": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "cissou-circus",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
