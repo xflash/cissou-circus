@@ -40,6 +40,7 @@
                     <li>
                         #{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}
                         ${studentChoice.student.name} ${studentChoice.student.firstname}
+                        <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
                             <span class="badge badge-light">${studentChoice.choice1.name}</span>/<span class="badge badge-light">${studentChoice.choice2.name}</span>/<span class="badge badge-light">${studentChoice.choice3.name}</span>/<span class="badge badge-light">${studentChoice.choice4.name}</span>
                     </li>
                 #{/list}

@@ -65,31 +65,41 @@ public class GroupsDispatchs extends Controller {
 
         List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
 
-        List<List<SiblibgStudentChoices>> groups = new ArrayList<>();
-        for (int i = 0; i < groupNumber; i++) {
-            groups.add(new ArrayList<>());
-        }
+        List<SchoolEventActivity> schoolEventActivities = SchoolEventActivity.listAllOrdered(schoolEventId);
 
-        if(siblingKept) {
-            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
-            int lastGroupId = 0;
-            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-                groups.get(lastGroupId).addAll(SiblibgStudentChoices.wrapAll(fratrie.getValue(), true));
-                students.removeAll(fratrie.getValue());
-                lastGroupId++;
-                if (lastGroupId >= groupNumber) lastGroupId = 0;
+
+
+        List<SchoolEventGroup> groups = new ArrayList<>();
+        for (int i = 0; i < groupNumber; i++) {
+            List<SchoolEventGroupStudentAssignment> schoolEventActivityChoices = new ArrayList<>();
+            groups.add(schoolEventActivityChoices);
+            for (SchoolEventActivity schoolEventActivity : schoolEventActivities) {
+                schoolEventActivityChoices.add(new SchoolEventActivityChoices(schoolEventActivity));
             }
         }
-        int lastGroupId = 0;
-        for (StudentChoices studentChoice : students) {
-            groups.get(lastGroupId).add(SiblibgStudentChoices.wrap(studentChoice, false));
-            lastGroupId++;
-            if (lastGroupId >= groupNumber) lastGroupId = 0;
-        }
 
-        for (List<SiblibgStudentChoices> group : groups) {
-            group.sort(Comparator.comparing((SiblibgStudentChoices o) -> o.getStudent().name));
-        }
+//        if(siblingKept) {
+//            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
+//            int lastGroupId = 0;
+//            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
+//                List<SiblibgStudentChoices> siblibgStudentChoices = SiblibgStudentChoices.wrapAll(fratrie.getValue(), true);
+//                List<SchoolEventActivityChoices> schoolEventActivityChoices = groups.get(lastGroupId);
+//                schoolEventActivityChoices.addAll(siblibgStudentChoices);
+//                students.removeAll(fratrie.getValue());
+//                lastGroupId++;
+//                if (lastGroupId >= groupNumber) lastGroupId = 0;
+//            }
+//        }
+//        int lastGroupId = 0;
+//        for (StudentChoices studentChoice : students) {
+//            groups.get(lastGroupId).add(SiblibgStudentChoices.wrap(studentChoice, false));
+//            lastGroupId++;
+//            if (lastGroupId >= groupNumber) lastGroupId = 0;
+//        }
+//
+//        for (List<SiblibgStudentChoices> group : groups) {
+//            group.sort(Comparator.comparing((SiblibgStudentChoices o) -> o.getStudent().name));
+//        }
 
         render(schoolEvent, groups);
     }
