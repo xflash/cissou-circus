@@ -4,34 +4,36 @@
 
 
 *{<div class="jumbotron">}*
-    *{<div class="container">}*
-        *{<h1>Group proposal list</h1>}*
-        *{<p>Here you may select an already proposal for group adssignment</p>}*
-    *{</div>}*
+*{<div class="container">}*
+*{<h1>Group proposal list</h1>}*
+*{<p>Here you may select an already proposal for group adssignment</p>}*
+*{</div>}*
 *{</div>}*
 
 
 <div class="container">
-#{if !schoolEventProposals}
     <div class="row">
         <div class="col-sm">
+        #{if !schoolEventProposals}
             <h5>No group proposals yet available</h5>
+        #{/}
+        #{else }
+            <ul>
+                #{list schoolEventProposals, as:'schoolEventProposal'}
+                    <li>
+                    ${schoolEventProposal.name}
+                        #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'}
+                            Open#{/a}
+                        #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'}
+                            Delete#{/a}
+                    </li>
+                #{/list}
+            </ul>
+
+        #{/else}
             <p>Click #{a @init()}here#{/a} to create a new group dispatch proposal</p>
         </div>
     </div>
-#{/}
-#{else }
-    <ul>
-        #{list schoolEventProposals, as:'schoolEventProposal'}
-        <li>
-            ${schoolEventProposal.name}
-            #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'}Open#{/a}
-            #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'}Delete#{/a}
-        </li>
-        #{/list}
-    </ul>
-
-#{/else}
 
 </div>
 

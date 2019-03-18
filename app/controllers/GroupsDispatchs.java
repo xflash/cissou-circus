@@ -71,7 +71,16 @@ public class GroupsDispatchs extends Controller {
     public static void edit(long id) {
         SchoolEventProposal proposal = SchoolEventProposal.findById(id);
         if (proposal == null) badRequest("Unknown SchoolEventProposal id " + id);
-        render(proposal);
+
+        HashMap<Long, Map<Long, Integer>> activitiesCountMap = new HashMap<>();
+        for (SchoolEventGroup group : proposal.groups) {
+            Map<Long, Integer> groupActivitiesMap = activitiesCountMap.computeIfAbsent(group.id, (k) -> new HashMap<>());
+            for (SchoolEventGroupActivity activity : group.activities) {
+                groupActivitiesMap.put(activity.schoolEventActivity.id, activity.assignments.size());
+            }
+        }
+
+        render(proposal, activitiesCountMap);
     }
 
     public static void delete(long id) {
@@ -162,6 +171,37 @@ public class GroupsDispatchs extends Controller {
         }
         edit(schoolEventGroup.schoolEventProposal.id);
 
+    }
+
+
+    public static void moveStudentNextGroup(long schoolEventGroupStudentAssignmentId, int way) {
+        Logger.info("Move student to next group for schoolEventGroupStudentAssignmentId %d ",
+            schoolEventGroupStudentAssignmentId);
+        SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
+                SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
+        if(schoolEventGroupStudentAssignment==null)badRequest("Unknwon schoolEventGroupStudentAssignment "+schoolEventGroupStudentAssignmentId);
+
+
+        SchoolEventGroup schoolEventGroup = schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup;
+        SchoolEventProposal schoolEventProposal = schoolEventGroup.schoolEventProposal;
+
+        int i = schoolEventProposal.groups.indexOf(schoolEventGroup);
+        i += way;
+        if(i>=schoolEventProposal.groups.size())
+            i=0;
+        else if(i<0)
+            i=schoolEventProposal.groups.size()-1;
+
+        SchoolEventGroup newSchoolEventGroup = schoolEventProposal.groups.get(i);
+        for (SchoolEventGroupActivity schoolEventGroupActivity : newSchoolEventGroup.activities) {
+            if(schoolEventGroupActivity.schoolEventActivity.id.equals(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.id)) {
+                schoolEventGroupStudentAssignment.schoolEventGroupActivity=schoolEventGroupActivity;
+                schoolEventGroupStudentAssignment.save();
+                break;
+            }
+        }
+
+        edit(schoolEventProposal.id);
     }
 
 

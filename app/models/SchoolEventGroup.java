@@ -25,7 +25,6 @@ public class SchoolEventGroup extends Model {
     SchoolEventProposal schoolEventProposal;
 
     @OneToMany(mappedBy = "schoolEventGroup")
-//    @OrderBy("schoolEventActivity.name")
     @SortComparator(SchoolEventGroupActivityComparator.class)
     public Set<SchoolEventGroupActivity> activities=new TreeSet<>(new SchoolEventGroupActivityComparator());
 
