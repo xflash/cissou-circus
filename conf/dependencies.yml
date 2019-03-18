@@ -1,7 +1,7 @@
 # Application dependencies
 
 require:
-    - play
-    - play -> docviewer
+    - play 1.5.2
+#    - play -> docviewer
 #    - org.apache.poi -> poi 3.17
     - org.apache.poi -> poi-ooxml 3.17
