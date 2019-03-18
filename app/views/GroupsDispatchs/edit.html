@@ -13,83 +13,89 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Groups result dispatch for event ${proposal.schoolEvent.name}</h2>
+            <h3>${proposal.name}</h3>
         </div>
     </div>
     <hr/>
     <div class="row">
 
-        #{list items:proposal.groups, as:'schoolEventGroup'}
-            #{set groupCount:activitiesCountMap.get(schoolEventGroup.id)/}
-            <div class="col-sm">
+    #{list items:proposal.groups, as:'schoolEventGroup'}
+        #{set groupCount:activitiesCountMap.get(schoolEventGroup.id)/}
+        <div class="col-sm">
 
-                <h3>${schoolEventGroup.name}  <span class="badge badge-secondary">${schoolEventGroup.studentCount}</span></h3>
-                <ul>
-                    #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
-                        <li>${schoolEventGroupActivity.schoolEventActivity.name} <span class="badge badge-primary">${groupCount.get(schoolEventGroupActivity.schoolEventActivity.id)}</span>
-                            <ul class="list-group- list-group-sortable-connected">
-                                #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
-                                    #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
-                                    <li class="list-group-item- ">
-                                        *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
-                                        ${studentChoice.student.name} ${studentChoice.student.firstname}
-                                        <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
+            <h3>${schoolEventGroup.name}  <span class="badge badge-secondary">${schoolEventGroup.studentCount}</span>
+            </h3>
+            <ul>
+                #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
+                    <li>${schoolEventGroupActivity.schoolEventActivity.name} <span
+                            class="badge badge-primary">${groupCount.get(schoolEventGroupActivity.schoolEventActivity.id)}</span>
+                        <ul class="list-group- list-group-sortable-connected">
+                            #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
+                                #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
+                                <li class="list-group-item- ">
+                                *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+                                ${studentChoice.student.name} ${studentChoice.student.firstname}
+                                    <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
 
-                                        <div class="btn-toolbar" role="toolbar">
-                                            #{if !schoolEventGroup_isFirst}
-                                                <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Third group">
-                                                    <a class="btn btn-sm btn-dark-green"
-                                                       href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, -1)}">&larr;</a>
-                                                </div>
-                                            #{/if}
-
-                                            <div class="btn-group btn-group-sm mr-2" role="group">
-                                                <a class="btn btn-blue-grey ${studentChoice.choice1.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                   href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice1.id)}">${studentChoice.choice1.name}&nbsp;<span class="badge badge-info">${groupCount.get(studentChoice.choice1.id)}</span></a>
-                                                <a class="btn btn-blue-grey ${studentChoice.choice2.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                   href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice2.id)}">${studentChoice.choice2.name}&nbsp;<span class="badge badge-info">${groupCount.get(studentChoice.choice2.id)}</span></a>
-                                                <a class="btn btn-blue-grey ${studentChoice.choice3.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                   href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice3.id)}">${studentChoice.choice3.name}&nbsp;<span class="badge badge-info">${groupCount.get(studentChoice.choice3.id)}</span></a>
-                                                <a class="btn btn-blue-grey ${studentChoice.choice4.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                   href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice4.id)}">${studentChoice.choice4.name}&nbsp;<span class="badge badge-info">${groupCount.get(studentChoice.choice4.id)}</span></a>
-
+                                    <div class="btn-toolbar" role="toolbar">
+                                        #{if !schoolEventGroup_isFirst}
+                                            <div class="btn-group btn-group-sm mr-2" role="group"
+                                                 aria-label="Third group">
+                                                <a class="btn btn-sm btn-dark-green"
+                                                   href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, -1)}">&larr;</a>
                                             </div>
-                                            #{if !schoolEventGroup_isLast}
-                                                <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
-                                                    <a class="btn btn-sm btn-dark-green"
-                                                       href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, 1)}">&rarr;</a>
-                                                </div>
-                                            #{/if}
+                                        #{/if}
+
+                                        <div class="btn-group btn-group-sm mr-2" role="group">
+                                            <a class="btn btn-blue-grey ${studentChoice.choice1.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice1.id)}">${studentChoice.choice1.name}
+                                                &nbsp;<span
+                                                        class="badge badge-info">${groupCount.get(studentChoice.choice1.id)}</span></a>
+                                            <a class="btn btn-blue-grey ${studentChoice.choice2.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice2.id)}">${studentChoice.choice2.name}
+                                                &nbsp;<span
+                                                        class="badge badge-info">${groupCount.get(studentChoice.choice2.id)}</span></a>
+                                            <a class="btn btn-blue-grey ${studentChoice.choice3.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice3.id)}">${studentChoice.choice3.name}
+                                                &nbsp;<span
+                                                        class="badge badge-info">${groupCount.get(studentChoice.choice3.id)}</span></a>
+                                            <a class="btn btn-blue-grey ${studentChoice.choice4.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice4.id)}">${studentChoice.choice4.name}
+                                                &nbsp;<span
+                                                        class="badge badge-info">${groupCount.get(studentChoice.choice4.id)}</span></a>
+
                                         </div>
-                                            *{#{studentChoiceSwapper new:studentChoice.choice1, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
+                                        #{if !schoolEventGroup_isLast}
+                                            <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
+                                                <a class="btn btn-sm btn-dark-green"
+                                                   href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, 1)}">&rarr;</a>
+                                            </div>
+                                        #{/if}
+                                    </div>
+                                *{#{studentChoiceSwapper new:studentChoice.choice1, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
                                             *{#{studentChoiceSwapper new:studentChoice.choice2, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
                                             *{#{studentChoiceSwapper new:studentChoice.choice3, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
                                             *{#{studentChoiceSwapper new:studentChoice.choice4, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}}*
-                                    </li>
-                                #{/list}
-                            </ul>
-                        </li>
-                    #{/list}
-                </ul>
+                                </li>
+                            #{/list}
+                        </ul>
+                    </li>
+                #{/list}
+            </ul>
 
-            </div>
-        #{/list}
+        </div>
+    #{/list}
     </div>
 </div>
 
 
 *{#{set 'moreScripts'}}*
-    *{#{script 'sortable/jquery.sortable.js' /}}*
+*{#{script 'sortable/jquery.sortable.js' /}}*
 *{#{/set}}*
 
-*{<script>}*
-    *{$(function () {}*
-        *{$('.list-group-sortable-connected').sortable({}*
-            *{placeholderClass: 'list-group-item',}*
-            *{connectWith: '.connected'}*
-        *{}).bind('sortupdate', function(e, ui) {}*
-            *{alert(ui);}*
-        *{});}*
+<script type="text/javascript">
 
-    *{})}*
-*{</script>}*
+    $(function () {
+
+})
+</script>

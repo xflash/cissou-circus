@@ -68,6 +68,7 @@ public class GroupsDispatchs extends Controller {
         edit(proposal.id);
     }
 
+
     public static void edit(long id) {
         SchoolEventProposal proposal = SchoolEventProposal.findById(id);
         if (proposal == null) badRequest("Unknown SchoolEventProposal id " + id);
