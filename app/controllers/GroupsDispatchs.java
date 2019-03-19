@@ -3,9 +3,7 @@ package controllers;
 import models.*;
 import models.wrapper.ClassroomSummary;
 import play.Logger;
-import play.db.jpa.JPABase;
 import play.mvc.Controller;
-import sun.rmi.runtime.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,33 +39,6 @@ public class GroupsDispatchs extends Controller {
         List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
         render(classrooms, selected, schoolEvents);
     }
-
-    public static void dispatch(int maximumStudents, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
-        Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classrooms %s maximumStudents %d",
-                schoolEventId, groupNumber, classrooms, maximumStudents);
-
-        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
-
-        SchoolEventProposal proposal = new SchoolEventProposal(schoolEvent, "Group proposal from " + sdf.format(new Date())).save();
-
-        for (int i = 1; i <= groupNumber; i++) {
-            SchoolEventGroup schoolEventGroup = new SchoolEventGroup(proposal, "Group " + i).save();
-            proposal.groups.add(schoolEventGroup);
-            for (SchoolEventActivity schoolEventActivity : SchoolEventActivity.listAllOrdered(schoolEventId)) {
-                schoolEventGroup.activities.add(new SchoolEventGroupActivity(schoolEventGroup, schoolEventActivity).save());
-            }
-        }
-
-        List<StudentChoices> students = StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms);
-        if (siblingKept) {
-            dispatchStudentChoicesWithSiblings(proposal.groups, students, maximumStudents);
-        }
-        dispatchStudentChoices(proposal.groups, students, maximumStudents);
-
-        proposal.save();
-        edit(proposal.id);
-    }
-
 
     public static void edit(long id) {
         SchoolEventProposal proposal = SchoolEventProposal.findById(id);
@@ -108,6 +79,87 @@ public class GroupsDispatchs extends Controller {
 //        list();
     }
 
+    public static void dispatch(int maximumStudents, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
+        Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classrooms %s maximumStudents %d",
+                schoolEventId, groupNumber, classrooms, maximumStudents);
+
+        SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
+
+        SchoolEventProposal proposal = new SchoolEventProposal(schoolEvent, "Group proposal from " + sdf.format(new Date())).save();
+
+        for (int i = 1; i <= groupNumber; i++) {
+            SchoolEventGroup schoolEventGroup = new SchoolEventGroup(proposal, "Group " + i).save();
+            proposal.groups.add(schoolEventGroup);
+            for (SchoolEventActivity schoolEventActivity : SchoolEventActivity.listAllOrdered(schoolEventId)) {
+                schoolEventGroup.activities.add(new SchoolEventGroupActivity(schoolEventGroup, schoolEventActivity).save());
+            }
+        }
+
+        Map<SchoolEventGroup, List<StudentChoices>> studentsGroupMap =
+                buildStudentGroupMap(
+                        proposal,
+                        StudentChoices.listStudentsChoicesInClassrooms(schoolEvent, classrooms),
+                        siblingKept);
+
+        for (Map.Entry<SchoolEventGroup, List<StudentChoices>> entry : studentsGroupMap.entrySet()) {
+            SchoolEventGroup eventGroup = entry.getKey();
+            List<StudentChoices> groupStudentChoices = entry.getValue();
+
+            for (SchoolEventGroupActivity eventGroupActivity : eventGroup.activities) {
+                SchoolEventActivity eventActivity = eventGroupActivity.schoolEventActivity;
+                Iterator<StudentChoices> it = groupStudentChoices.iterator();
+                while (it.hasNext()) {
+                    StudentChoices studentChoices = it.next();
+                    if(studentChoices.choice1.id.equals(eventActivity.id))
+                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if(studentChoices.choice2.id.equals(eventActivity.id))
+                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if(studentChoices.choice3.id.equals(eventActivity.id))
+                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if(studentChoices.choice4.id.equals(eventActivity.id))
+                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+
+                }
+            }
+        }
+
+//        if (siblingKept) {
+//            dispatchStudentChoicesWithSiblings(proposal.groups, students, maximumStudents);
+//        }
+//        dispatchStudentChoices(proposal.groups, students, maximumStudents);
+
+        proposal.save();
+        edit(proposal.id);
+    }
+
+    private static Map<SchoolEventGroup, List<StudentChoices>>
+        buildStudentGroupMap(SchoolEventProposal proposal, List<StudentChoices> students, boolean siblingKept) {
+        Map<SchoolEventGroup, List<StudentChoices>> map = new HashMap<>();
+        if (siblingKept) {
+            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
+            int lastGroupId = 0;
+            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
+                Set<StudentChoices> familly = fratrie.getValue();
+                map.computeIfAbsent(proposal.groups.get(lastGroupId), k -> new ArrayList<>())
+                        .addAll(familly);
+
+                students.removeAll(familly);
+                lastGroupId++;
+                if (lastGroupId >= proposal.groups.size()) lastGroupId = 0;
+            }
+        }
+        int lastGroupId = 0;
+        for (StudentChoices studentChoices : students) {
+            map.computeIfAbsent(proposal.groups.get(lastGroupId), k -> new ArrayList<>())
+                    .add(studentChoices);
+            lastGroupId++;
+            if (lastGroupId >= proposal.groups.size()) lastGroupId = 0;
+        }
+
+        return map;
+    }
+
+
     private static void dispatchStudentChoicesWithSiblings(List<SchoolEventGroup> groups,
                                                            List<StudentChoices> students,
                                                            int maximumStudents) {
@@ -139,7 +191,7 @@ public class GroupsDispatchs extends Controller {
                                               int maximumStudents) {
         boolean added = false;
         for (SchoolEventGroupActivity groupActivity : eventGroupActivities) {
-            if(groupActivity.assignments.size() < maximumStudents) {
+            if (groupActivity.assignments.size() < maximumStudents) {
                 if (studentChoices.getChoice1().equals(groupActivity.schoolEventActivity))
                     added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
                 else if (studentChoices.getChoice2().equals(groupActivity.schoolEventActivity))
@@ -151,22 +203,23 @@ public class GroupsDispatchs extends Controller {
             }
             if (added) break;
         }
-        if(!added) {
+        if (!added) {
             Logger.error("We have an unpllaned Student %s", studentChoices.student.identifiant);
         }
     }
 
     public static void swapStudentActivity(long schoolEventGroupStudentAssignmentId, long newActivityId) {
         Logger.info("Swap activity for schoolEventGroupStudentAssignmentId %d newWctivityId %d",
-            schoolEventGroupStudentAssignmentId, newActivityId);
+                schoolEventGroupStudentAssignmentId, newActivityId);
         SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
                 SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
-        if(schoolEventGroupStudentAssignment==null)badRequest("Unknwon schoolEventGroupStudentAssignment "+schoolEventGroupStudentAssignmentId);
+        if (schoolEventGroupStudentAssignment == null)
+            badRequest("Unknwon schoolEventGroupStudentAssignment " + schoolEventGroupStudentAssignmentId);
 
         SchoolEventGroup schoolEventGroup = schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup;
         for (SchoolEventGroupActivity activity : schoolEventGroup.activities) {
-            if(activity.schoolEventActivity.id.equals(newActivityId)) {
-                schoolEventGroupStudentAssignment.schoolEventGroupActivity=activity;
+            if (activity.schoolEventActivity.id.equals(newActivityId)) {
+                schoolEventGroupStudentAssignment.schoolEventGroupActivity = activity;
                 schoolEventGroupStudentAssignment.save();
             }
         }
@@ -177,10 +230,11 @@ public class GroupsDispatchs extends Controller {
 
     public static void moveStudentNextGroup(long schoolEventGroupStudentAssignmentId, int way) {
         Logger.info("Move student to next group for schoolEventGroupStudentAssignmentId %d ",
-            schoolEventGroupStudentAssignmentId);
+                schoolEventGroupStudentAssignmentId);
         SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
                 SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
-        if(schoolEventGroupStudentAssignment==null)badRequest("Unknwon schoolEventGroupStudentAssignment "+schoolEventGroupStudentAssignmentId);
+        if (schoolEventGroupStudentAssignment == null)
+            badRequest("Unknwon schoolEventGroupStudentAssignment " + schoolEventGroupStudentAssignmentId);
 
 
         SchoolEventGroup schoolEventGroup = schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup;
@@ -188,15 +242,15 @@ public class GroupsDispatchs extends Controller {
 
         int i = schoolEventProposal.groups.indexOf(schoolEventGroup);
         i += way;
-        if(i>=schoolEventProposal.groups.size())
-            i=0;
-        else if(i<0)
-            i=schoolEventProposal.groups.size()-1;
+        if (i >= schoolEventProposal.groups.size())
+            i = 0;
+        else if (i < 0)
+            i = schoolEventProposal.groups.size() - 1;
 
         SchoolEventGroup newSchoolEventGroup = schoolEventProposal.groups.get(i);
         for (SchoolEventGroupActivity schoolEventGroupActivity : newSchoolEventGroup.activities) {
-            if(schoolEventGroupActivity.schoolEventActivity.id.equals(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.id)) {
-                schoolEventGroupStudentAssignment.schoolEventGroupActivity=schoolEventGroupActivity;
+            if (schoolEventGroupActivity.schoolEventActivity.id.equals(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.id)) {
+                schoolEventGroupStudentAssignment.schoolEventGroupActivity = schoolEventGroupActivity;
                 schoolEventGroupStudentAssignment.save();
                 break;
             }

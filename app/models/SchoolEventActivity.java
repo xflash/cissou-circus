@@ -23,6 +23,8 @@ public class SchoolEventActivity extends Model {
         this.name = name;
     }
 
+
+
     public static SchoolEventActivity findByName(String name) {
         return SchoolEventActivity.find("byName", name).first();
     }

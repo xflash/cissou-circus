@@ -3,6 +3,7 @@ package models;
 import play.db.jpa.Model;
 
 import javax.persistence.*;
+import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -15,6 +16,8 @@ public class SchoolEventProposal extends Model {
     @ManyToOne
     SchoolEvent schoolEvent;
 
+    Date creationDate;
+
     @OneToMany(mappedBy = "schoolEventProposal")
     @OrderBy("name")
     public List<SchoolEventGroup> groups=new ArrayList<>();
@@ -22,5 +25,15 @@ public class SchoolEventProposal extends Model {
     public SchoolEventProposal(SchoolEvent schoolEvent, String name) {
         this.schoolEvent = schoolEvent;
         this.name = name;
+        creationDate = new Date();
     }
+    @Transient
+    public int getStudentCount(){
+        int nb = 0;
+        for (SchoolEventGroup group : groups) {
+            nb += group.getStudentCount();
+        }
+        return nb;
+    }
+
 }

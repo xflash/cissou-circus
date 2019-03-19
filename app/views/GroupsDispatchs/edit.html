@@ -23,7 +23,7 @@
         #{set groupCount:activitiesCountMap.get(schoolEventGroup.id)/}
         <div class="col-sm">
 
-            <h3>${schoolEventGroup.name}  <span class="badge badge-secondary">${schoolEventGroup.studentCount}</span>
+            <h3>${schoolEventGroup.name}  <span class="badge badge-pill badge-secondary">${schoolEventGroup.studentCount}</span>
             </h3>
             <ul>
                 #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
@@ -34,8 +34,7 @@
                                 #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
                                 <li class="list-group-item- ">
                                 *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
-                                ${studentChoice.student.name} ${studentChoice.student.firstname}
-                                    <span class="badge badge-danger">${studentChoice.student.classroom.name}</span>
+                                    ${studentChoice.student.name} ${studentChoice.student.firstname} <span class="badge badge-pill badge-dark text-right">${studentChoice.student.classroom.name}</span>
 
                                     <div class="btn-toolbar" role="toolbar">
                                         #{if !schoolEventGroup_isFirst}
