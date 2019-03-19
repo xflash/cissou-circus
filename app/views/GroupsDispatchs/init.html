@@ -95,7 +95,7 @@
             <fieldset>
                 <h3>How many students in a given activity</h3>
                 <div class="form-group">
-                    <label for="formControlRange">Select a maximum number of students (1-25)</label>
+                    <label for="formControlRange">Select a maximum number of students (1-25) : <span class="badge badge-primary badge-pill" id="rangeVal">20</span></label>
                     <input type="range" class="custom-range" min="1" max="25" value="20" id="formControlRange" name="maximumStudents">
                 </div>
             </fieldset>
@@ -112,8 +112,19 @@
 </div>
 
 
+
+#{set 'moreStyles'}
+    #{stylesheet 'bootstrap-slider.min.css' /}
+#{/set}
+
+#{set 'moreScripts'}
+    #{script 'bootstrap-slider.min.js' /}
+#{/set}
 <script>
     $(function () {
+        $('.custom-range').on('change',function (e) {
+            $('#rangeVal').text($(this).val())
+        })
         // $('#dispatchButton').click(function () {
         //     $('#dispatchForm').submit()
         // })
