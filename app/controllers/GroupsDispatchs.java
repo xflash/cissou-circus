@@ -110,19 +110,22 @@ public class GroupsDispatchs extends Controller {
 
             for (SchoolEventGroupActivity eventGroupActivity : eventGroup.activities) {
                 SchoolEventActivity eventActivity = eventGroupActivity.schoolEventActivity;
-                Iterator<StudentChoices> it = groupStudentChoices.iterator();
-                while (it.hasNext()) {
-                    StudentChoices studentChoices = it.next();
-                    if (studentChoices.choice1.id.equals(eventActivity.id))
-                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice2.id.equals(eventActivity.id))
-                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice3.id.equals(eventActivity.id))
-                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice4.id.equals(eventActivity.id))
-                        eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
 
+                HashSet<StudentChoices> handled = new HashSet<>();
+                for (StudentChoices studentChoices : groupStudentChoices) {
+                    boolean added = false;
+                    if (studentChoices.choice1.id.equals(eventActivity.id))
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if (studentChoices.choice2.id.equals(eventActivity.id))
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if (studentChoices.choice3.id.equals(eventActivity.id))
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    else if (studentChoices.choice4.id.equals(eventActivity.id))
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+
+                    if (added) handled.add(studentChoices);
                 }
+                groupStudentChoices.removeAll(handled);
             }
         }
 
