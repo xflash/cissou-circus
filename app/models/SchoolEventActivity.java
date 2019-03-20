@@ -18,6 +18,8 @@ public class SchoolEventActivity extends Model {
     public
     String name;
 
+    String description;
+
     public SchoolEventActivity(SchoolEvent schoolEvent, String name) {
         this.schoolEvent = schoolEvent;
         this.name = name;

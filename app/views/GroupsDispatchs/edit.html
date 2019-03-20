@@ -9,6 +9,19 @@
 *{</div>}*
 *{</div>}*
 
+<style rel="stylesheet">
+    tr.labels {
+        cursor: pointer;
+    }
+
+    tr.actions {
+        display: none;
+    }
+
+    table.table-sm {
+        width: 100%;
+    }
+</style>
 
 <div class="container">
     <div class="row">
@@ -23,64 +36,122 @@
         #{set groupCount:activitiesCountMap.get(schoolEventGroup.id)/}
         <div class="col-sm">
 
-            <h3>${schoolEventGroup.name}  <span class="badge badge-pill badge-secondary">${schoolEventGroup.studentCount}</span>
+            <h3>${schoolEventGroup.name}  <span
+                    class="badge badge-pill badge-secondary">${schoolEventGroup.studentCount}</span>
             </h3>
-            <ul>
-                #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
-                    <li>${schoolEventGroupActivity.schoolEventActivity.name} <span
-                            class="badge badge-primary">${groupCount.get(schoolEventGroupActivity.schoolEventActivity.id)}</span>
-                        <ul class="list-group- list-group-sortable-connected">
-                            #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
-                                #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
-                                <li class="list-group-item- ">
-                                *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
-                                    ${studentChoice.student.name} ${studentChoice.student.firstname} <span class="badge badge-pill badge-dark text-right">${studentChoice.student.classroom.name}</span>
+            <table class="table-borderless table-sm ">
+                <thead>
+                <tr>
+                    <th scope="row">Activities</th>
+                </tr>
+                </thead>
+                <tbody>
 
-                                    <div class="btn-toolbar" role="toolbar">
-                                        #{if !schoolEventGroup_isFirst}
-                                            <div class="btn-group btn-group-sm mr-2" role="group"
-                                                 aria-label="Third group">
-                                                <a class="btn btn-sm btn-dark-green"
+                    #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
+                    <tr>
+                        <th scope="row">${schoolEventGroupActivity.schoolEventActivity.name} <span
+                                class="badge badge-primary">${groupCount.get(schoolEventGroupActivity.schoolEventActivity.id)}</span>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="table-sm ">
+                                #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
+                                    #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
+                                    <tr class="labels" data-id="${studentChoice.student.id}">
+                                    *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+                                        <td colspan="3">${studentChoice.student.name} ${studentChoice.student.firstname}
+                                        </td>
+
+                                        <td colspan="2">
+                                            <span
+                                                    class="badge badge-pill badge-dark text-right">${studentChoice.student.classroom.name}</span>
+                                        </td>
+                                        <td>
+                                            <i class="fas fa-chevron-down"></i>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="actions" data-id="${studentChoice.student.id}">
+                                        <td>
+                                            #{if !schoolEventGroup_isFirst}
+                                                <a class="btn btn-sm btn-blue-grey"
                                                    href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, -1)}">&larr;</a>
+                                            #{/if}
+                                        </td>
+                                        <td>
+                                            <div class="card" >
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${studentChoice.choice1.name}</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
+                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice1.id)}</span></h6>
+                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
+
+                                                    <a class="btn btn-sm btn-info ${studentChoice.choice1.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice1.id)}">Move</a>
+                                                </div>
                                             </div>
-                                        #{/if}
 
-                                        <div class="btn-group btn-group-sm mr-2" role="group">
-                                            <a class="btn btn-blue-grey ${studentChoice.choice1.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice1.id)}">${studentChoice.choice1.name}
-                                                &nbsp;<span
-                                                        class="badge badge-info">${groupCount.get(studentChoice.choice1.id)}</span></a>
-                                            <a class="btn btn-blue-grey ${studentChoice.choice2.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice2.id)}">${studentChoice.choice2.name}
-                                                &nbsp;<span
-                                                        class="badge badge-info">${groupCount.get(studentChoice.choice2.id)}</span></a>
-                                            <a class="btn btn-blue-grey ${studentChoice.choice3.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice3.id)}">${studentChoice.choice3.name}
-                                                &nbsp;<span
-                                                        class="badge badge-info">${groupCount.get(studentChoice.choice3.id)}</span></a>
-                                            <a class="btn btn-blue-grey ${studentChoice.choice4.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                               href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice4.id)}">${studentChoice.choice4.name}
-                                                &nbsp;<span
-                                                        class="badge badge-info">${groupCount.get(studentChoice.choice4.id)}</span></a>
+                                        </td>
+                                        <td>
+                                            <div class="card" >
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${studentChoice.choice2.name}</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
+                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice2.id)}</span></h6>
+                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
 
-                                        </div>
-                                        #{if !schoolEventGroup_isLast}
-                                            <div class="btn-group btn-group-sm" role="group" aria-label="Third group">
-                                                <a class="btn btn-sm btn-dark-green"
+                                                    <a class="btn btn-sm btn-info ${studentChoice.choice2.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice2.id)}">Move</a>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="card" >
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${studentChoice.choice3.name}</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
+                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice3.id)}</span></h6>
+                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
+
+                                                    <a class="btn btn-sm btn-info ${studentChoice.choice3.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice3.id)}">Move</a>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="card" >
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${studentChoice.choice3.name}</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
+                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice4.id)}</span></h6>
+                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
+
+                                                    <a class="btn btn-sm btn-info ${studentChoice.choice4.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice4.id)}">Move</a>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            #{if !schoolEventGroup_isLast}
+                                                <a class="btn btn-sm btn-blue-grey"
                                                    href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, 1)}">&rarr;</a>
-                                            </div>
-                                        #{/if}
-                                    </div>
-                                *{#{studentChoiceSwapper new:studentChoice.choice1, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
-                                            *{#{studentChoiceSwapper new:studentChoice.choice2, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
-                                            *{#{studentChoiceSwapper new:studentChoice.choice3, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}/}*
-                                            *{#{studentChoiceSwapper new:studentChoice.choice4, actual:schoolEventGroupActivity.schoolEventActivity, schoolEventGroupStudentAssignmentId:schoolEventGroupStudentAssignment.id /}}*
-                                </li>
-                            #{/list}
-                        </ul>
-                    </li>
-                #{/list}
-            </ul>
+                                            #{/if}
+                                        </td>
+                                    </tr>
+
+                                #{/list}
+
+                            </table>
+                        </td>
+                    </tr>
+                    #{/list}
+                </tbody>
+
+            </table>
 
         </div>
     #{/list}
@@ -92,9 +163,16 @@
 *{#{script 'sortable/jquery.sortable.js' /}}*
 *{#{/set}}*
 
+
 <script type="text/javascript">
 
     $(function () {
-
-})
+        $('tr.labels').click(function (ev) {
+            // $(this).removeClass('collapsed');
+            var id = $(this).data('id');
+            $('tr.actions[data-id!="' + id + '"]').hide();
+            $('tr.actions[data-id="' + id + '"]')
+                    .toggle();
+        })
+    })
 </script>
