@@ -240,20 +240,76 @@ public class GroupsDispatchs extends Controller {
         SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
                 SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
         if (schoolEventGroupStudentAssignment == null)
-            badRequest("Unknwon schoolEventGroupStudentAssignment " + schoolEventGroupStudentAssignmentId);
-
+            badRequest("Unknown schoolEventGroupStudentAssignment " + schoolEventGroupStudentAssignmentId);
 
         SchoolEventGroup schoolEventGroup = schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup;
+
         SchoolEventProposal schoolEventProposal = schoolEventGroup.schoolEventProposal;
+        SchoolEventGroup newSchoolEventGroup = schoolEventProposal.guessNextGroup(schoolEventGroup, way);
 
-        int i = schoolEventProposal.groups.indexOf(schoolEventGroup);
-        i += way;
-        if (i >= schoolEventProposal.groups.size())
-            i = 0;
-        else if (i < 0)
-            i = schoolEventProposal.groups.size() - 1;
 
-        SchoolEventGroup newSchoolEventGroup = schoolEventProposal.groups.get(i);
+        Student student = schoolEventGroupStudentAssignment.studentChoices.student;
+        HashSet<SchoolEventGroupStudentAssignment> fratriesInGroup = new HashSet<>();
+        for (SchoolEventGroupActivity schoolEventGroupActivity : schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.activities) {
+            for (SchoolEventGroupStudentAssignment assignment : schoolEventGroupActivity.assignments) {
+                if (!schoolEventGroupStudentAssignment.id.equals(assignment.id)
+                        && assignment.studentChoices.student.name.equals(student.name)) {
+                    fratriesInGroup.add(assignment);
+                }
+            }
+        }
+        if(!fratriesInGroup.isEmpty()) {
+            render(schoolEventGroupStudentAssignment, fratriesInGroup, schoolEventGroupStudentAssignment, newSchoolEventGroup, schoolEventProposal);
+        }
+
+        moveAssignmentTo(schoolEventGroupStudentAssignment, newSchoolEventGroup);
+
+        edit(schoolEventProposal.id);
+    }
+
+
+
+    public static void confirmMoveStudentNextGroup(long schoolEventGroupStudentAssignmentId,
+                                                   long newSchoolEventGroupId,
+                                                   String chosenChoice,
+                                                   List<Long> selectedToMove) {
+        Logger.info("Confirmation of moving student assignment $d to a new group $%d with action %s",
+                schoolEventGroupStudentAssignmentId,newSchoolEventGroupId, chosenChoice);
+
+        SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
+                SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
+        if (schoolEventGroupStudentAssignment == null)
+            badRequest("Unknown schoolEventGroupStudentAssignment " + schoolEventGroupStudentAssignmentId);
+
+        SchoolEventGroup newSchoolEventGroup = SchoolEventGroup.findById(newSchoolEventGroupId);
+        if (newSchoolEventGroup == null)
+            badRequest("Unknown newSchoolEventGroup " + newSchoolEventGroup);
+
+        switch (chosenChoice) {
+            case "moveAllFamily":
+                if(selectedToMove==null)
+                    badRequest("Unknown selectedToMove ");
+                for (SchoolEventGroupActivity schoolEventGroupActivity : schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.activities) {
+                    for (SchoolEventGroupStudentAssignment assignment : schoolEventGroupActivity.assignments) {
+                        if(selectedToMove.contains(assignment.id))
+                            moveAssignmentTo(assignment, newSchoolEventGroup);
+                    }
+                }
+                edit(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.schoolEventProposal.id);
+                break;
+            case "moveConfirmed":
+                moveAssignmentTo(schoolEventGroupStudentAssignment, newSchoolEventGroup);
+                edit(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.schoolEventProposal.id);
+                break;
+            default:
+                badRequest("Unknown chosen confirmation "+chosenChoice);
+        }
+
+
+    }
+
+
+    private static void moveAssignmentTo(SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment, SchoolEventGroup newSchoolEventGroup) {
         for (SchoolEventGroupActivity schoolEventGroupActivity : newSchoolEventGroup.activities) {
             if (schoolEventGroupActivity.schoolEventActivity.id.equals(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.id)) {
                 schoolEventGroupStudentAssignment.schoolEventGroupActivity = schoolEventGroupActivity;
@@ -261,8 +317,6 @@ public class GroupsDispatchs extends Controller {
                 break;
             }
         }
-
-        edit(schoolEventProposal.id);
     }
 
 

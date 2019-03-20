@@ -28,6 +28,18 @@ public class SchoolEventProposal extends Model {
         creationDate = new Date();
     }
     @Transient
+    public  SchoolEventGroup guessNextGroup(SchoolEventGroup schoolEventGroup, int way) {
+        int i1 = this.groups.indexOf(schoolEventGroup);
+        i1 += way;
+        if (i1 >= this.groups.size())
+            i1 = 0;
+        else if (i1 < 0)
+            i1 = this.groups.size() - 1;
+        int i = i1;
+        return this.groups.get(i);
+    }
+
+    @Transient
     public int getStudentCount(){
         int nb = 0;
         for (SchoolEventGroup group : groups) {

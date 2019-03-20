@@ -16,6 +16,7 @@ public class SchoolEventGroupStudentAssignment extends Model {
     SchoolEventGroupActivity schoolEventGroupActivity;
 
     @ManyToOne
+    public
     StudentChoices studentChoices;
 
     public SchoolEventGroupStudentAssignment(SchoolEventGroupActivity schoolEventGroupActivity, StudentChoices studentChoices) {
