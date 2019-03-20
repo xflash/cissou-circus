@@ -36,8 +36,11 @@ public class GroupsDispatchs extends Controller {
                                         .collect(Collectors.toList()))
                         .fetch();
 
+        String proposalName = "Proposal #" + SchoolEventProposal.count() + 1;
+
         List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
-        render(classrooms, selected, schoolEvents);
+
+        render(classrooms, selected, schoolEvents, proposalName);
     }
 
     public static void edit(long id) {
@@ -79,13 +82,13 @@ public class GroupsDispatchs extends Controller {
 //        list();
     }
 
-    public static void dispatch(int maximumStudents, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms) {
+    public static void dispatch(int maximumStudents, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms, String proposalName) {
         Logger.info("Prepare Group dispatch in school event %d for %d groups, selected classrooms %s maximumStudents %d",
                 schoolEventId, groupNumber, classrooms, maximumStudents);
 
         SchoolEvent schoolEvent = SchoolEvent.findById(schoolEventId);
 
-        SchoolEventProposal proposal = new SchoolEventProposal(schoolEvent, "Group proposal from " + sdf.format(new Date())).save();
+        SchoolEventProposal proposal = new SchoolEventProposal(schoolEvent, proposalName).save();
 
         for (int i = 1; i <= groupNumber; i++) {
             SchoolEventGroup schoolEventGroup = new SchoolEventGroup(proposal, "Group " + i).save();
@@ -110,13 +113,13 @@ public class GroupsDispatchs extends Controller {
                 Iterator<StudentChoices> it = groupStudentChoices.iterator();
                 while (it.hasNext()) {
                     StudentChoices studentChoices = it.next();
-                    if(studentChoices.choice1.id.equals(eventActivity.id))
+                    if (studentChoices.choice1.id.equals(eventActivity.id))
                         eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if(studentChoices.choice2.id.equals(eventActivity.id))
+                    else if (studentChoices.choice2.id.equals(eventActivity.id))
                         eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if(studentChoices.choice3.id.equals(eventActivity.id))
+                    else if (studentChoices.choice3.id.equals(eventActivity.id))
                         eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if(studentChoices.choice4.id.equals(eventActivity.id))
+                    else if (studentChoices.choice4.id.equals(eventActivity.id))
                         eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
 
                 }
@@ -133,7 +136,7 @@ public class GroupsDispatchs extends Controller {
     }
 
     private static Map<SchoolEventGroup, List<StudentChoices>>
-        buildStudentGroupMap(SchoolEventProposal proposal, List<StudentChoices> students, boolean siblingKept) {
+    buildStudentGroupMap(SchoolEventProposal proposal, List<StudentChoices> students, boolean siblingKept) {
         Map<SchoolEventGroup, List<StudentChoices>> map = new HashMap<>();
         if (siblingKept) {
             Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
