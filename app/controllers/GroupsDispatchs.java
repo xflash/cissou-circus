@@ -129,11 +129,6 @@ public class GroupsDispatchs extends Controller {
             }
         }
 
-//        if (siblingKept) {
-//            dispatchStudentChoicesWithSiblings(proposal.groups, students, maximumStudents);
-//        }
-//        dispatchStudentChoices(proposal.groups, students, maximumStudents);
-
         proposal.save();
         edit(proposal.id);
     }
@@ -165,54 +160,6 @@ public class GroupsDispatchs extends Controller {
         return map;
     }
 
-
-    private static void dispatchStudentChoicesWithSiblings(List<SchoolEventGroup> groups,
-                                                           List<StudentChoices> students,
-                                                           int maximumStudents) {
-        Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
-        int lastGroupId = 0;
-        for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-            for (StudentChoices studentChoices : fratrie.getValue()) {
-                dispatchSudentChoices(studentChoices, groups.get(lastGroupId).activities, maximumStudents);
-            }
-            students.removeAll(fratrie.getValue());
-            lastGroupId++;
-            if (lastGroupId >= groups.size()) lastGroupId = 0;
-        }
-    }
-
-    private static void dispatchStudentChoices(List<SchoolEventGroup> groups,
-                                               List<StudentChoices> studentChoicesList,
-                                               int maximumStudents) {
-        int lastGroupId = 0;
-        for (StudentChoices studentChoices : studentChoicesList) {
-            dispatchSudentChoices(studentChoices, groups.get(lastGroupId).activities, maximumStudents);
-            lastGroupId++;
-            if (lastGroupId >= groups.size()) lastGroupId = 0;
-        }
-    }
-
-    private static void dispatchSudentChoices(StudentChoices studentChoices,
-                                              Set<SchoolEventGroupActivity> eventGroupActivities,
-                                              int maximumStudents) {
-        boolean added = false;
-        for (SchoolEventGroupActivity groupActivity : eventGroupActivities) {
-            if (groupActivity.assignments.size() < maximumStudents) {
-                if (studentChoices.getChoice1().equals(groupActivity.schoolEventActivity))
-                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-                else if (studentChoices.getChoice2().equals(groupActivity.schoolEventActivity))
-                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-                else if (studentChoices.getChoice3().equals(groupActivity.schoolEventActivity))
-                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-                else if (studentChoices.getChoice4().equals(groupActivity.schoolEventActivity))
-                    added = groupActivity.assignments.add(new SchoolEventGroupStudentAssignment(groupActivity, studentChoices).save());
-            }
-            if (added) break;
-        }
-        if (!added) {
-            Logger.error("We have an unpllaned Student %s", studentChoices.student.identifiant);
-        }
-    }
 
     public static void swapStudentActivity(long schoolEventGroupStudentAssignmentId, long newActivityId) {
         Logger.info("Swap activity for schoolEventGroupStudentAssignmentId %d newWctivityId %d",

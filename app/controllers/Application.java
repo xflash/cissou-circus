@@ -6,12 +6,18 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import play.Logger;
+import play.db.jpa.Model;
 import play.mvc.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Application extends Controller {
@@ -99,8 +105,27 @@ public class Application extends Controller {
                 }
             }
         });
-
+        Logger.info("Merging some known mistakes");
+        merginKnownMistakes("acro dyn", Collections.singletonList("acro dyna"));
+        merginKnownMistakes("clowns", Collections.singletonList("c;owns"));
+        merginKnownMistakes("couture", Collections.singletonList("costume"));
+        merginKnownMistakes("hula hoop", Arrays.asList("hula hoop trapeze", "hul hoop", "huka hoop"));
+        merginKnownMistakes("jongle", Arrays.asList("jonglerie"));
+        merginKnownMistakes("magie", Arrays.asList("magiciens", "magicien"));
+        merginKnownMistakes("tonneaux", Arrays.asList("tonnaux"));
         Classrooms.list();
+    }
+
+    private static void merginKnownMistakes(String root, List<String> mistakes) {
+        SchoolEventActivity acro_dyn = SchoolEventActivity.findByName(root);
+        if (acro_dyn != null) {
+            SchoolEventActivity.mergeAll(acro_dyn.id,
+                    mistakes.stream()
+                            .map(SchoolEventActivity::findByName)
+                            .filter(Objects::nonNull)
+                            .map(Model::getId)
+                            .collect(Collectors.toList()));
+        }
     }
 
     private static void deleteAllEntities() {
