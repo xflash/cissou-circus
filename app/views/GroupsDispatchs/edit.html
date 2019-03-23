@@ -42,11 +42,10 @@
             <table class="table-borderless table-sm ">
                 <thead>
                 <tr>
-                    <th scope="row">Activities</th>
+                    <th scope="row">Activities <span class="badge badge-success">${schoolEventGroup.activities.size()}</span></th>
                 </tr>
                 </thead>
                 <tbody>
-
                     #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
                     <tr>
                         <th scope="row">${schoolEventGroupActivity.schoolEventActivity.name} <span
@@ -58,91 +57,10 @@
                             <table class="table-sm ">
                                 #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
                                     #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
-                                    <tr class="labels" data-id="${studentChoice.student.id}">
-                                    *{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
-                                        <td colspan="3">${studentChoice.student.name} ${studentChoice.student.firstname}
-                                        </td>
-
-                                        <td colspan="2">
-                                            <span
-                                                    class="badge badge-pill badge-dark text-right">${studentChoice.student.classroom.name}</span>
-                                        </td>
-                                        <td>
-                                            <i class="fas fa-chevron-down"></i>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="actions" data-id="${studentChoice.student.id}">
-                                        <td>
-                                            #{if !schoolEventGroup_isFirst}
-                                                <a class="btn btn-sm btn-blue-grey"
-                                                   href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, -1)}">&larr;</a>
-                                            #{/if}
-                                        </td>
-                                        <td>
-                                            <div class="card" >
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${studentChoice.choice1.name}</h5>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
-                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice1.id)}</span></h6>
-                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
-
-                                                    <a class="btn btn-sm btn-info ${studentChoice.choice1.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice1.id)}">Move</a>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            <div class="card" >
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${studentChoice.choice2.name}</h5>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
-                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice2.id)}</span></h6>
-                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
-
-                                                    <a class="btn btn-sm btn-info ${studentChoice.choice2.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice2.id)}">Move</a>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            <div class="card" >
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${studentChoice.choice3.name}</h5>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
-                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice3.id)}</span></h6>
-                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
-
-                                                    <a class="btn btn-sm btn-info ${studentChoice.choice3.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice3.id)}">Move</a>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            <div class="card" >
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${studentChoice.choice3.name}</h5>
-                                                    <h6 class="card-subtitle mb-2 text-muted">Students: <span
-                                                            class="badge badge-primary">${groupCount.get(studentChoice.choice4.id)}</span></h6>
-                                                    <p class="card-text">${schoolEventGroupActivity.schoolEventActivity.description}</p>
-
-                                                    <a class="btn btn-sm btn-info ${studentChoice.choice4.id==schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
-                                                       href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, studentChoice.choice4.id)}">Move</a>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            #{if !schoolEventGroup_isLast}
-                                                <a class="btn btn-sm btn-blue-grey"
-                                                   href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, 1)}">&rarr;</a>
-                                            #{/if}
-                                        </td>
-                                    </tr>
-
+                                    #{studentChoiceSwapper schoolEventGroupStudentAssignment:schoolEventGroupStudentAssignment,
+                                        schoolEventGroup_isFirst:schoolEventGroup_isFirst,
+                                        schoolEventGroup_isLast:schoolEventGroup_isLast
+                                        /}
                                 #{/list}
 
                             </table>

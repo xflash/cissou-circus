@@ -1,11 +1,48 @@
-#{set studentChosenActivity:_new/}
-#{set actualActivity:_actual/}
-#{set schoolEventGroupStudentAssignmentId:_schoolEventGroupStudentAssignmentId/}
+#{set schoolEventGroupStudentAssignment:_schoolEventGroupStudentAssignment/}
+#{set schoolEventGroup_isFirst:_schoolEventGroup_isFirst/}
+#{set schoolEventGroup_isLast:_schoolEventGroup_isLast/}
 
-#{if studentChosenActivity.id==actualActivity.id}
-<span class="badge badge-light">${studentChosenActivity.name}</span>
-#{/if}
-#{else }
-<a href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignmentId, studentChosenActivity.id)}"><span
-        class="badge badge-info">${studentChosenActivity.name}</span></a>
-#{/else}
+#{set studentChoice:schoolEventGroupStudentAssignment.studentChoices/}
+#{set schoolEventGroupActivity:schoolEventGroupStudentAssignment.schoolEventGroupActivity/}
+
+
+<tr class="labels" data-id="${studentChoice.student.id}">
+*{#{if studentChoice.sibling}<i class="fas fa-child"></i>#{/if}}*
+    <td colspan="3">${studentChoice.student.name} ${studentChoice.student.firstname}
+    </td>
+
+    <td colspan="2">
+                                            <span
+                                                    class="badge badge-pill badge-dark text-right">${studentChoice.student.classroom.name}</span>
+    </td>
+    <td>
+        <i class="fas fa-chevron-down"></i>
+    </td>
+</tr>
+
+<tr class="actions" data-id="${studentChoice.student.id}">
+    <td>
+    #{if !schoolEventGroup_isFirst}
+        <a class="btn btn-sm btn-blue-grey"
+           href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, -1)}">&larr;</a>
+    #{/if}
+    </td>
+    <td>
+    #{studentChoiceGroupMover schoolEventGroupStudentAssignment:schoolEventGroupStudentAssignment, choice:studentChoice.choice1, groupCount:groupCount /}
+    </td>
+    <td>
+    #{studentChoiceGroupMover schoolEventGroupStudentAssignment:schoolEventGroupStudentAssignment, choice:studentChoice.choice2, groupCount:groupCount /}
+    </td>
+    <td>
+    #{studentChoiceGroupMover schoolEventGroupStudentAssignment:schoolEventGroupStudentAssignment, choice:studentChoice.choice3, groupCount:groupCount /}
+    </td>
+    <td>
+    #{studentChoiceGroupMover schoolEventGroupStudentAssignment:schoolEventGroupStudentAssignment, choice:studentChoice.choice4, groupCount:groupCount /}
+    </td>
+    <td>
+    #{if !schoolEventGroup_isLast}
+        <a class="btn btn-sm btn-blue-grey"
+           href="@{GroupsDispatchs.moveStudentNextGroup(schoolEventGroupStudentAssignment.id, 1)}">&rarr;</a>
+    #{/if}
+    </td>
+</tr>

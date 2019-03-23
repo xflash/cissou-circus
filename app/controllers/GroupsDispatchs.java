@@ -108,38 +108,72 @@ public class GroupsDispatchs extends Controller {
             SchoolEventGroup eventGroup = entry.getKey();
             List<StudentChoices> groupStudentChoices = entry.getValue();
 
-            for (SchoolEventGroupActivity eventGroupActivity : eventGroup.activities) {
-                SchoolEventActivity eventActivity = eventGroupActivity.schoolEventActivity;
+            while (!groupStudentChoices.isEmpty()) {
+                dispatchGroup(maximumStudents, eventGroup, groupStudentChoices);
 
-                HashSet<StudentChoices> handled = new HashSet<>();
                 for (StudentChoices studentChoices : groupStudentChoices) {
-                    boolean added = false;
-                    if (studentChoices.choice1.id.equals(eventActivity.id)) {
-                        if (eventGroupActivity.assignments.size() < maximumStudents) {
-                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                        }
-                    } else if (studentChoices.choice2.id.equals(eventActivity.id)) {
-                        if (eventGroupActivity.assignments.size() < maximumStudents) {
-                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                        }
-                    } else if (studentChoices.choice3.id.equals(eventActivity.id)) {
-                        if (eventGroupActivity.assignments.size() < maximumStudents) {
-                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                        }
-                    } else if (studentChoices.choice4.id.equals(eventActivity.id)) {
-                        if (eventGroupActivity.assignments.size() < maximumStudents) {
-                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                        }
-                    }
-
-                    if (added) handled.add(studentChoices);
+                    SchoolEventGroupActivity eventGroupActivity1 = findEventGroupActivity(eventGroup, studentChoices.choice1);
+                    SchoolEventGroupActivity eventGroupActivity2 = findEventGroupActivity(eventGroup, studentChoices.choice2);
+                    SchoolEventGroupActivity eventGroupActivity3 = findEventGroupActivity(eventGroup, studentChoices.choice3);
+                    SchoolEventGroupActivity eventGroupActivity4 = findEventGroupActivity(eventGroup, studentChoices.choice4);
+                    if (eventGroupActivity1.assignments.size() >= maximumStudents
+                            && eventGroupActivity2.assignments.size() >= maximumStudents
+                            && eventGroupActivity3.assignments.size() >= maximumStudents
+                            && eventGroupActivity4.assignments.size() >= maximumStudents
+                    )
+                        maximumStudents++;
                 }
-                groupStudentChoices.removeAll(handled);
             }
+
+
         }
 
         proposal.save();
         edit(proposal.id);
+    }
+
+    private static SchoolEventGroupActivity findEventGroupActivity(SchoolEventGroup eventGroup, SchoolEventActivity activity) {
+        for (SchoolEventGroupActivity eventGroupActivity : eventGroup.activities) {
+            if (eventGroupActivity.schoolEventActivity.id.equals(activity.id)) {
+                return eventGroupActivity;
+            }
+        }
+        return null;
+    }
+
+    private static void dispatchGroup(int maximumStudents, SchoolEventGroup eventGroup, List<StudentChoices> groupStudentChoices) {
+        for (SchoolEventGroupActivity eventGroupActivity : eventGroup.activities) {
+            SchoolEventActivity eventActivity = eventGroupActivity.schoolEventActivity;
+
+            Set<StudentChoices> handled = new HashSet<>();
+
+            for (StudentChoices studentChoices : groupStudentChoices) {
+                boolean added = false;
+                if (studentChoices.choice1.id.equals(eventActivity.id)) {
+                    if (eventGroupActivity.assignments.size() < maximumStudents) {
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    }
+                } else if (!added && studentChoices.choice2.id.equals(eventActivity.id)) {
+                    if (eventGroupActivity.assignments.size() < maximumStudents) {
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    }
+                } else if (!added && studentChoices.choice3.id.equals(eventActivity.id)) {
+                    if (eventGroupActivity.assignments.size() < maximumStudents) {
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    }
+                } else if (!added && studentChoices.choice4.id.equals(eventActivity.id)) {
+                    if (eventGroupActivity.assignments.size() < maximumStudents) {
+                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    }
+                }
+
+                if (added) {
+                    handled.add(studentChoices);
+                    break;
+                }
+            }
+            groupStudentChoices.removeAll(handled);
+        }
     }
 
     private static Map<SchoolEventGroup, List<StudentChoices>>

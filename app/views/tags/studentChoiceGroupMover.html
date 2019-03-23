@@ -1,0 +1,15 @@
+#{set schoolEventGroupStudentAssignment:_schoolEventGroupStudentAssignment/}
+#{set choice:_choice/}
+#{set groupCount:_groupCount/}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title text-center">${choice.name}</h5>
+        <h6 class="card-subtitle mb-2 text-muted text-center"><span
+                class="badge badge-primary">${groupCount.get(choice.id)}</span></h6>
+        <p class="card-text">${schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.description}</p>
+
+        <a class="btn btn-sm btn-info ${choice.id==schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.id?'disabled':''}"
+           href="@{GroupsDispatchs.swapStudentActivity(schoolEventGroupStudentAssignment.id, choice.id)}">Move</a>
+    </div>
+</div>

@@ -23,8 +23,4 @@ public class SchoolEventGroupStudentAssignment extends Model {
         this.schoolEventGroupActivity = schoolEventGroupActivity;
         this.studentChoices = studentChoices;
     }
-
-//    public static List<SchoolEventGroupStudentAssignment> list4GroupSchoolEventGroup(SchoolEventGroup schoolEventGroup) {
-//        return find("schoolEventGroup", schoolEventGroup).fetch();
-//    }
 }
