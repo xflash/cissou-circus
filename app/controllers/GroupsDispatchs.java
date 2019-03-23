@@ -114,14 +114,23 @@ public class GroupsDispatchs extends Controller {
                 HashSet<StudentChoices> handled = new HashSet<>();
                 for (StudentChoices studentChoices : groupStudentChoices) {
                     boolean added = false;
-                    if (studentChoices.choice1.id.equals(eventActivity.id))
-                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice2.id.equals(eventActivity.id))
-                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice3.id.equals(eventActivity.id))
-                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
-                    else if (studentChoices.choice4.id.equals(eventActivity.id))
-                        added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                    if (studentChoices.choice1.id.equals(eventActivity.id)) {
+                        if (eventGroupActivity.assignments.size() < maximumStudents) {
+                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                        }
+                    } else if (studentChoices.choice2.id.equals(eventActivity.id)) {
+                        if (eventGroupActivity.assignments.size() < maximumStudents) {
+                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                        }
+                    } else if (studentChoices.choice3.id.equals(eventActivity.id)) {
+                        if (eventGroupActivity.assignments.size() < maximumStudents) {
+                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                        }
+                    } else if (studentChoices.choice4.id.equals(eventActivity.id)) {
+                        if (eventGroupActivity.assignments.size() < maximumStudents) {
+                            added = eventGroupActivity.assignments.add(new SchoolEventGroupStudentAssignment(eventGroupActivity, studentChoices).save());
+                        }
+                    }
 
                     if (added) handled.add(studentChoices);
                 }
@@ -205,7 +214,7 @@ public class GroupsDispatchs extends Controller {
                 }
             }
         }
-        if(!fratriesInGroup.isEmpty()) {
+        if (!fratriesInGroup.isEmpty()) {
             render(schoolEventGroupStudentAssignment, fratriesInGroup, schoolEventGroupStudentAssignment, newSchoolEventGroup, schoolEventProposal);
         }
 
@@ -215,13 +224,12 @@ public class GroupsDispatchs extends Controller {
     }
 
 
-
     public static void confirmMoveStudentNextGroup(long schoolEventGroupStudentAssignmentId,
                                                    long newSchoolEventGroupId,
                                                    String chosenChoice,
                                                    List<Long> selectedToMove) {
         Logger.info("Confirmation of moving student assignment $d to a new group $%d with action %s",
-                schoolEventGroupStudentAssignmentId,newSchoolEventGroupId, chosenChoice);
+                schoolEventGroupStudentAssignmentId, newSchoolEventGroupId, chosenChoice);
 
         SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment =
                 SchoolEventGroupStudentAssignment.findById(schoolEventGroupStudentAssignmentId);
@@ -234,11 +242,11 @@ public class GroupsDispatchs extends Controller {
 
         switch (chosenChoice) {
             case "moveAllFamily":
-                if(selectedToMove==null)
+                if (selectedToMove == null)
                     badRequest("Unknown selectedToMove ");
                 for (SchoolEventGroupActivity schoolEventGroupActivity : schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.activities) {
                     for (SchoolEventGroupStudentAssignment assignment : schoolEventGroupActivity.assignments) {
-                        if(selectedToMove.contains(assignment.id))
+                        if (selectedToMove.contains(assignment.id))
                             moveAssignmentTo(assignment, newSchoolEventGroup);
                     }
                 }
@@ -249,7 +257,7 @@ public class GroupsDispatchs extends Controller {
                 edit(schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventGroup.schoolEventProposal.id);
                 break;
             default:
-                badRequest("Unknown chosen confirmation "+chosenChoice);
+                badRequest("Unknown chosen confirmation " + chosenChoice);
         }
 
 
