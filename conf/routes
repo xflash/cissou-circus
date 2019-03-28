@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
+GET     /                                           Application.index
+GET     /exports/byClassroom/{<[0-9]+>proposalId}   Exports.byClassroom
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

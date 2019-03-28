@@ -28,8 +28,19 @@
         <div class="col-sm">
             <h3>${proposal.name}</h3>
         </div>
+        *{<div class="col-sm">}*
+            *{<div class="text-right">}*
+                *{<span>XLS export</span>&nbsp;}*
+                *{<div class="btn-group btn-group-sm" role="group" aria-label="Basic example">}*
+                    *{<a href="@{Exports.byClassroom(proposal.id)}" class="btn btn-info" onclick="">by classrooms</a>}*
+                    *{<a href="@{Exports.byActivities(proposal.id)}" class="btn btn-info" onclick="">by activities</a>}*
+                *{</div>}*
+            *{</div>}*
+        *{</div>}*
     </div>
+
     <hr/>
+
     <div class="row">
 
     #{list items:proposal.groups, as:'schoolEventGroup'}
