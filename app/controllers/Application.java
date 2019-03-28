@@ -130,8 +130,9 @@ public class Application extends Controller {
 
     private static void deleteAllEntities() {
         SchoolEventGroupStudentAssignment.deleteAll();
-        SchoolEventProposal.deleteAll();
+        SchoolEventGroupActivity.deleteAll();
         SchoolEventGroup.deleteAll();
+        SchoolEventProposal.deleteAll();
 
         StudentChoices.deleteAll();
         SchoolEventActivity.deleteAll();

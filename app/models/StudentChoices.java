@@ -37,6 +37,25 @@ public class StudentChoices extends Model {
         this.schoolEvent = schoolEvent;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        StudentChoices that = (StudentChoices) o;
+        return Objects.equals(student, that.student) &&
+                Objects.equals(choice1, that.choice1) &&
+                Objects.equals(choice2, that.choice2) &&
+                Objects.equals(choice3, that.choice3) &&
+                Objects.equals(choice4, that.choice4) &&
+                Objects.equals(schoolEvent, that.schoolEvent);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), student, choice1, choice2, choice3, choice4, schoolEvent);
+    }
+
     public static StudentChoices createStudentChoices(SchoolEvent schoolEvent, Student student,
                                                       String choix1, String choix2, String choix3, String choix4,
                                                       String orangesSheet,

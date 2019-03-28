@@ -33,6 +33,21 @@ public class SchoolEventGroup extends Model {
         this.schoolEventProposal = schoolEventProposal;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SchoolEventGroup that = (SchoolEventGroup) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(schoolEventProposal, that.schoolEventProposal);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, schoolEventProposal);
+    }
+
     public static List<SchoolEventGroup> list4Proposal(SchoolEventProposal schoolEventProposal) {
         return find("schoolEventProposal", schoolEventProposal).fetch();
     }

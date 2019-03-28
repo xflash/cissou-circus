@@ -26,6 +26,20 @@ public class Student extends Model {
     @ManyToOne()
     public Classroom classroom;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Student student = (Student) o;
+        return Objects.equals(identifiant, student.identifiant);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), identifiant);
+    }
+
     public static Map<String, Set<Student>> buildSiblings(List<Student> students) {
         Map<String, Set<Student>> fraties = new HashMap<>();
 

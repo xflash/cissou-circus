@@ -178,16 +178,18 @@ public class GroupsDispatchs extends Controller {
 
     private static Map<SchoolEventGroup, List<StudentChoices>>
     buildStudentGroupMap(SchoolEventProposal proposal, List<StudentChoices> students, boolean siblingKept) {
+
         Map<SchoolEventGroup, List<StudentChoices>> map = new HashMap<>();
+
         if (siblingKept) {
-            Map<String, Set<StudentChoices>> siblings = StudentChoices.buildSiblings(students);
             int lastGroupId = 0;
-            for (Map.Entry<String, Set<StudentChoices>> fratrie : siblings.entrySet()) {
-                Set<StudentChoices> familly = fratrie.getValue();
+            for (Set<StudentChoices> familly : StudentChoices.buildSiblings(students).values()) {
                 map.computeIfAbsent(proposal.groups.get(lastGroupId), k -> new ArrayList<>())
                         .addAll(familly);
 
-                students.removeAll(familly);
+                for (StudentChoices studentChoices : familly) {
+                    students.remove(studentChoices);
+                }
                 lastGroupId++;
                 if (lastGroupId >= proposal.groups.size()) lastGroupId = 0;
             }

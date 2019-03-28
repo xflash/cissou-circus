@@ -20,8 +20,12 @@ public class SchoolEventActivities extends Controller {
 
         Logger.info("SchoolEvent %d", schoolEvents.size());
 
-        if (schoolEvents.size() != 1)
-            badRequest("TODO handle "+schoolEvents.size()+" school events");
+        if (schoolEvents.size() == 0) {
+            Application.init();
+        }
+
+        if (schoolEvents.size() > 1)
+            badRequest("TODO handle " + schoolEvents.size() + " school events");
 
         list(schoolEvents.get(0).id);
     }

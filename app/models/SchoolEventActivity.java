@@ -7,6 +7,7 @@ import play.db.jpa.Model;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class SchoolEventActivity extends Model {
@@ -25,7 +26,20 @@ public class SchoolEventActivity extends Model {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SchoolEventActivity that = (SchoolEventActivity) o;
+        return Objects.equals(schoolEvent, that.schoolEvent) &&
+                Objects.equals(name, that.name);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), schoolEvent, name);
+    }
 
     public static SchoolEventActivity findByName(String name) {
         return SchoolEventActivity.find("byName", name).first();

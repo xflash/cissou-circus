@@ -27,6 +27,23 @@ public class SchoolEventProposal extends Model {
         this.name = name;
         creationDate = new Date();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SchoolEventProposal that = (SchoolEventProposal) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(schoolEvent, that.schoolEvent) &&
+                Objects.equals(creationDate, that.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, schoolEvent, creationDate);
+    }
+
     @Transient
     public  SchoolEventGroup guessNextGroup(SchoolEventGroup schoolEventGroup, int way) {
         int i1 = this.groups.indexOf(schoolEventGroup);

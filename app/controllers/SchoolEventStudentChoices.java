@@ -20,7 +20,10 @@ public class SchoolEventStudentChoices extends Controller {
 
     public static void root() {
         List<SchoolEvent> schoolEvents = SchoolEvent.findAll();
-        if (schoolEvents.size() != 1)
+        if (schoolEvents.size() == 0)
+            Application.init();
+
+        if (schoolEvents.size() > 1)
             badRequest("TODO handle " + schoolEvents.size() + " school events");
 
         list(schoolEvents.get(0).id);

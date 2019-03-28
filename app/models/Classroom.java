@@ -4,6 +4,7 @@ import play.db.jpa.Model;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author rcoqueugniot
@@ -18,6 +19,21 @@ public class Classroom extends Model {
 
     @Enumerated(EnumType.STRING)
     public ClassRoomKind kind;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Classroom classroom = (Classroom) o;
+        return Objects.equals(name, classroom.name) &&
+                kind == classroom.kind;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, kind);
+    }
 
     @OneToMany(mappedBy = "classroom")
     List<Student> students;
