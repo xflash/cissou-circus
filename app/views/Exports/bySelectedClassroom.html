@@ -1,0 +1,44 @@
+#{extends 'main.html' /}
+#{set title:'Exports' /}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>${classroom.name} Classroom export for proposal ${proposal.name}</h2>
+
+            <table class="table table-sm table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Firstname</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Group</th>
+                </tr>
+                </thead>
+                <tbody>
+                #{list activities, as:'activity'}
+                <tr>
+                    <th scope="rowgroup" colspan="3">${activity.schoolEventActivity.name}</th>
+                </tr>
+                    #{list activity.assignments, as:'assignment'}
+                    <tr>
+                        <td>${assignment.studentChoices.student.firstname}</td>
+                        <td>${assignment.studentChoices.student.name}</td>
+                        <td>${assignment.schoolEventGroupActivity.schoolEventGroup.name}</td>
+                    </tr>
+                    #{/list}
+                #{/list}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+    });
+
+</script>

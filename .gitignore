@@ -6,4 +6,5 @@ target
 tmp
 lib
 *.iws
+modules/
 

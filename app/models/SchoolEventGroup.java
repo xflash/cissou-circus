@@ -4,10 +4,7 @@ import org.hibernate.annotations.SortComparator;
 import play.db.jpa.Model;
 import play.db.jpa.Transactional;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.*;
 import java.beans.Transient;
 import java.util.*;
 import java.util.function.Function;

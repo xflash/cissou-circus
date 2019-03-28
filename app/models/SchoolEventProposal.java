@@ -5,8 +5,10 @@ import play.db.jpa.Model;
 import javax.persistence.*;
 import java.beans.Transient;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
+ *
  */
 @Entity
 public class SchoolEventProposal extends Model {
@@ -18,9 +20,9 @@ public class SchoolEventProposal extends Model {
 
     Date creationDate;
 
-    @OneToMany(mappedBy = "schoolEventProposal")
+    @OneToMany(mappedBy = "schoolEventProposal", fetch = FetchType.EAGER)
     @OrderBy("name")
-    public List<SchoolEventGroup> groups=new ArrayList<>();
+    public List<SchoolEventGroup> groups = new ArrayList<>();
 
     public SchoolEventProposal(SchoolEvent schoolEvent, String name) {
         this.schoolEvent = schoolEvent;
@@ -45,7 +47,7 @@ public class SchoolEventProposal extends Model {
     }
 
     @Transient
-    public  SchoolEventGroup guessNextGroup(SchoolEventGroup schoolEventGroup, int way) {
+    public SchoolEventGroup guessNextGroup(SchoolEventGroup schoolEventGroup, int way) {
         int i1 = this.groups.indexOf(schoolEventGroup);
         i1 += way;
         if (i1 >= this.groups.size())
@@ -57,12 +59,23 @@ public class SchoolEventProposal extends Model {
     }
 
     @Transient
-    public int getStudentCount(){
+    public int getStudentCount() {
         int nb = 0;
         for (SchoolEventGroup group : groups) {
             nb += group.getStudentCount();
         }
         return nb;
+    }
+
+
+    public void forEachAssignment(Consumer<SchoolEventGroupStudentAssignment> consumer) {
+        for (SchoolEventGroup group : this.groups) {
+            for (SchoolEventGroupActivity activity : group.activities) {
+                for (SchoolEventGroupStudentAssignment assignment : activity.assignments) {
+                    consumer.accept(assignment);
+                }
+            }
+        }
     }
 
 }

@@ -4,10 +4,7 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import org.hibernate.annotations.SortComparator;
 import play.db.jpa.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.*;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;

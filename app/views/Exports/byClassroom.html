@@ -1,0 +1,38 @@
+#{extends 'main.html' /}
+#{set title:'Exports' /}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Classroom export for proposal ${proposal.name}</h2>
+
+
+        #{form @Exports.bySelectedClassroom(), id:'dispatchForm'}
+            <input type="hidden" name="proposalId" value="${proposal.id}">
+
+            <label for="classroomSelect">Select a classroom</label>
+            <select id="classroomSelect" name="classroomId">
+                #{list classrooms, as:'classroom'}
+                    <option value="${classroom.id}">${classroom.name}</option>
+                #{/list}
+            </select>
+
+            <button type="submit" class="btn btn-dark-green">Export</button>
+        #{/form}
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+        // $('#dispatchButton').click(function () {
+        //     $('#dispatchForm').submit()
+        // })
+    });
+
+</script>
