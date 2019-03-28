@@ -38,4 +38,12 @@ public class ClassroomProposalActivities {
     private void add(SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment) {
         assignments.add(schoolEventGroupStudentAssignment);
     }
+
+    public SchoolEventActivity getSchoolEventActivity() {
+        return schoolEventActivity;
+    }
+
+    public Set<SchoolEventGroupStudentAssignment> getAssignments() {
+        return assignments;
+    }
 }

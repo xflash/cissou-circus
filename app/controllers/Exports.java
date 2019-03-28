@@ -45,11 +45,11 @@ public class Exports extends Controller {
 
         Date date = new Date();
 
-        render(date, proposal, classroom, activities);
-
-//        String __EXCEL_FILE_NAME__ = "byClassroom.xlsx";
+        String __EXCEL_FILE_NAME__ = "bySelectedClassroom.xlsx";
 //        renderArgs.put(RenderExcel.RA_ASYNC, true);
 //        render(__EXCEL_FILE_NAME__, proposal, date);
+        request.format = "xlsx";
+        render(__EXCEL_FILE_NAME__, classroom, proposal, activities, date);
     }
 
     public static void byActivities(long id) {
