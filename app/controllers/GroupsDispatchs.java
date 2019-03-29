@@ -79,14 +79,6 @@ public class GroupsDispatchs extends Controller {
         }
         schoolEventProposal.delete();
         list();
-//        for (SchoolEventGroup schoolEventGroup : SchoolEventGroup.list4Proposal(schoolEventProposal)) {
-//            for (SchoolEventGroupStudentAssignment schoolEventGroupStudentAssignment : SchoolEventGroupStudentAssignment.list4GroupSchoolEventGroup(schoolEventGroup)) {
-//                schoolEventGroupStudentAssignment.delete();
-//            }
-//            schoolEventGroup.delete();
-//        }
-//        schoolEventProposal.delete();
-//        list();
     }
 
     public static void dispatch(final int maximumStudentss, boolean siblingKept, int groupNumber, long schoolEventId, List<Long> classrooms, String proposalName) {

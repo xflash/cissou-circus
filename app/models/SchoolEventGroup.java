@@ -53,9 +53,7 @@ public class SchoolEventGroup extends Model {
     public int getStudentCount(){
         int nb = 0;
         for (SchoolEventGroupActivity activity : activities) {
-            for (SchoolEventGroupStudentAssignment assignment : activity.assignments) {
-                nb++;
-            }
+            nb+=activity.assignments.size();
         }
         return nb;
     }
