@@ -2,23 +2,14 @@
 #{set title:'Classroom' /}
 
 
-
-*{<div class="jumbotron">}*
-*{<div class="container">}*
-*{<h1>Classroom</h1>}*
-*{<p>Allow to show a single classroom list</p>}*
-*{</div>}*
-*{</div>}*
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Classroom ${classroom.name}</h2>
+            <h1>&{'classrooms.title.classrooms_edit.name', classroom.name}</h1>
             <dl>
-                <dt>Type</dt>
+                <dt>&{'classrooms.dt.classrooms_edit.kind'}</dt>
                 <dd>${classroom.kind}</dd>
-                <dt>Students</dt>
+                <dt>&{'classrooms.dt.classrooms_edit.students_nb'}</dt>
                 <dd>${students.size()}</dd>
             </dl>
 

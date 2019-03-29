@@ -1,7 +1,16 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
-
+admin.button.upload_submit=Send it
+admin.label.upload_file=File to upload
+admin.label.upload_file.helper=This excel spreadheet will be uploaded and parsed.
+admin.title.helper=This form helps you to initalize a full database from a given Excel spreadsheet
+admin.title.init=Initialization
+admin.title.upload=Upload
+classrooms.title.classrooms_list=Classroom list
+classrooms.th.classrooms_list.level=Level
+classrooms.th.classrooms_list.name=Name
+classrooms.th.classrooms_list.nb=nb
 export.title.classroom_for_proposal=Classroom export for proposal %s
 main.activities.list=Activities
 main.admin=Admin
@@ -12,3 +21,11 @@ main.classrooms=Classrooms
 main.groups=Groups
 main.school.activities=School activities
 main.student_choices.list=Student choices
+classrooms.title.classrooms_list.empty=No classrooms
+classrooms.title.classrooms_edit.name=Classroom %s
+classrooms.dt.classrooms_edit.kind=Kind
+classrooms.dt.classrooms_edit.students_nb=Students
+users.th.identifiant=Identifiant
+users.th.name=Name
+users.th.firstname=Firstname
+users.th.classroom=ClassRoom

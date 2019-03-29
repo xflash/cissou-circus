@@ -5,7 +5,6 @@
 #{set tableId:_tableId /}
 
 
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
@@ -15,12 +14,12 @@
                 <thead>
                 <tr>
                 #{if withId}
-                    <th scope="col">Identifiant</th>
+                    <th scope="col">&{'users.th.identifiant'}</th>
                 #{/if}
-                    <th scope="col">Name</th>
-                    <th scope="col">Firstname</th>
+                    <th scope="col">&{'users.th.name'}</th>
+                    <th scope="col">&{'users.th.firstname'}</th>
                 #{if withClassroom}
-                    <th>ClassRoom</th>
+                    <th scope="col">&{'users.th.classroom'}</th>
                 #{/if}
                 </tr>
                 </thead>

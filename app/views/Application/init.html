@@ -4,38 +4,29 @@
 
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3">Initialization</h1>
-        <p>This form helps you to initalize a full database from a given Excel spreadsheet</p>
-    *{<p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more »</a></p>}*
+        <h1 class="display-3">&{'admin.title.init'}</h1>
+        <p>&{'admin.title.helper'}</p>
     </div>
 </div>
 
 <div class="container">
     <div class="row">
-        *{<div class="col-md-2 col-xl-8">}*
 
-        #{form @uploadData(), enctype:'multipart/form-data'}
-            <fieldset>
-                <legend>Upload </legend>
-                <div class="form-group">
-                    <label for="excelFile1">File to upload</label>
-                    <input type="file" class="form-control-file" id="excelFile1" name="excel"
-                           aria-describedby="excelFileHelp">
-                    <small id="excelFileHelp" class="form-text text-muted">This excel spreadheet will be uploaded and
-                        parsed.
-                    </small>
+    #{form @uploadData(), enctype:'multipart/form-data'}
+        <fieldset>
+            <legend>&{'admin.title.upload'}</legend>
+            <div class="form-group">
+                <label for="excelFile1">&{'admin.label.upload_file'}</label>
+                <input type="file" class="form-control-file" id="excelFile1" name="excel"
+                       aria-describedby="excelFileHelp">
+                <small id="excelFileHelp" class="form-text text-muted">&{'admin.label.upload_file.helper'}</small>
 
-                </div>
-            </fieldset>
-            <fieldset>
-                <button type="submit" class="btn btn-primary">Send it</button>
-            </fieldset>
+            </div>
+        </fieldset>
+        <fieldset>
+            <button type="submit" class="btn btn-primary">&{'admin.button.upload_submit'}</button>
+        </fieldset>
 
-        #{/form}
-
-
-
-
-        *{</div>}*
+    #{/form}
     </div>
 </div>
