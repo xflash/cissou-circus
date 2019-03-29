@@ -5,6 +5,7 @@
 # Home page
 GET     /                                           Application.index
 GET     /exports/byClassroom/{<[0-9]+>proposalId}   Exports.byClassroom
+GET     /exports/byActivities/{<[0-9]+>proposalId}   Exports.byActivities
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -14,20 +14,21 @@ import java.util.function.Consumer;
 public class SchoolEventProposal extends Model {
 
     public String name;
-
-    @ManyToOne
-    SchoolEvent schoolEvent;
-
-    Date creationDate;
-
-    @OneToMany(mappedBy = "schoolEventProposal", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "schoolEventProposal")
     @OrderBy("name")
     public List<SchoolEventGroup> groups = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    SchoolEvent schoolEvent;
+    Date creationDate;
 
     public SchoolEventProposal(SchoolEvent schoolEvent, String name) {
         this.schoolEvent = schoolEvent;
         this.name = name;
         creationDate = new Date();
+    }
+
+    public static SchoolEventProposal loadById(long id) {
+        return findById(id);
     }
 
     @Override

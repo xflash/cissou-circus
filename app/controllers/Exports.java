@@ -22,6 +22,7 @@ import java.util.function.Function;
 @With(ExcelControllerHelper.class)
 public class Exports extends Controller {
 
+
     public static void byClassroom(long proposalId) {
         Logger.info("Export byClassroom for proposal %d", proposalId);
 
@@ -41,19 +42,54 @@ public class Exports extends Controller {
                 ClassroomProposalActivities.wrap(SchoolEventGroupStudentAssignment.listByClassRoomAndProposal(proposalId, classroomId));
 
         SchoolEventProposal proposal = SchoolEventProposal.findById(proposalId);
+        if (proposal == null) badRequest("No proposal ID: " + proposalId);
         Classroom classroom = Classroom.findById(classroomId);
+        if (proposal == null) badRequest("No classroom ID: " + classroomId);
 
         Date date = new Date();
-
         String __EXCEL_FILE_NAME__ = "bySelectedClassroom.xlsx";
+
 //        renderArgs.put(RenderExcel.RA_ASYNC, true);
-//        render(__EXCEL_FILE_NAME__, proposal, date);
+        renderArgs.put(RenderExcel.RA_FILENAME, String.format("%s-Classroom-export-proposal-%s.xlsx", classroom.name, proposal.name));
         request.format = "xlsx";
         render(__EXCEL_FILE_NAME__, classroom, proposal, activities, date);
     }
 
-    public static void byActivities(long id) {
+    public static void byActivities(long proposalId) {
 
+        Logger.info("Export byActivities for proposal %d", proposalId);
+
+        SchoolEventProposal proposal = SchoolEventProposal.findById(proposalId);
+        if (proposal == null) badRequest("No proposal ID: " + proposalId);
+
+        Set<SchoolEventActivity> activities = new TreeSet<>(Comparator.comparing(o -> o.name));
+        proposal.forEachAssignment(assignment -> activities.add(assignment.schoolEventGroupActivity.schoolEventActivity));
+
+        render(proposal, activities);
     }
 
+    public static void bySelectedActivity(long proposalId, long activityId) {
+        Logger.info("Export bySelectedActivity for proposal %d and selected activity %d", proposalId, activityId);
+
+
+        List<SchoolEventGroupStudentAssignment> assignments =
+                SchoolEventGroupStudentAssignment.listByProposalAndActivity(proposalId, activityId);
+
+        assignments.sort(
+                Comparator.<SchoolEventGroupStudentAssignment,Integer>comparing(assignment->assignment.studentChoices.student.classroom.kind.ordinal())
+                        .thenComparing(assignment->assignment.studentChoices.student.name)
+        );
+
+        SchoolEventProposal proposal = SchoolEventProposal.findById(proposalId);
+        SchoolEventActivity activity = SchoolEventActivity.findById(activityId);
+
+
+        Date date = new Date();
+        String __EXCEL_FILE_NAME__ = "bySelectedActivity.xlsx";
+
+        renderArgs.put(RenderExcel.RA_FILENAME, String.format("%s-Activity-export-proposal-%s.xlsx", activity.name, proposal.name));
+        request.format = "xlsx";
+        render(__EXCEL_FILE_NAME__, activity, proposal, assignments, date);
+
+    }
 }

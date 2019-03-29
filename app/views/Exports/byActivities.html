@@ -6,16 +6,16 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Classroom export for proposal ${proposal.name}</h2>
+            <h2>Activity export for proposal ${proposal.name}</h2>
 
 
-        #{form @Exports.bySelectedClassroom(), id:'dispatchForm', method:'GET'}
+        #{form @Exports.bySelectedActivity(), id:'dispatchForm', method:'GET'}
             <input type="hidden" name="proposalId" value="${proposal.id}">
 
-            <label for="classroomSelect">Select a classroom</label>
-            <select id="classroomSelect" name="classroomId">
-                #{list classrooms, as:'classroom'}
-                    <option value="${classroom.id}">${classroom.name}</option>
+            <label for="activitiySelect">Select a classroom</label>
+            <select id="activitiySelect" name="activityId">
+                #{list activities, as:'activity'}
+                    <option value="${activity.id}">${activity.name}</option>
                 #{/list}
             </select>
 

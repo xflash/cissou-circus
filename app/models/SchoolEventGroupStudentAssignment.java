@@ -41,4 +41,16 @@ public class SchoolEventGroupStudentAssignment extends Model {
                 .bind("proposalId", proposalId)
                 .fetch();
     }
+
+    public static List<SchoolEventGroupStudentAssignment> listByProposalAndActivity(long proposalId, long activityId) {
+        return find("select segsa " +
+                        "from SchoolEventGroupStudentAssignment segsa " +
+                        "where 1=1 " +
+                        "and segsa.schoolEventGroupActivity.schoolEventGroup.schoolEventProposal.id = :proposalId "+
+                        "and segsa.schoolEventGroupActivity.schoolEventActivity.id = :activityId "
+        )
+                .bind("activityId", activityId)
+                .bind("proposalId", proposalId)
+                .fetch();
+    }
 }
