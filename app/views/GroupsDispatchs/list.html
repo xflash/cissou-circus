@@ -23,8 +23,16 @@
                     <li>
                         "${schoolEventProposal.name}" made at ${schoolEventProposal.creationDate?.format('dd.MM.yyyy HH:mm')}
                         *{with <span>${schoolEventProposal.groups.size()}</span> groups and <span>${schoolEventProposal.studentCount}</span> students}*
-                        #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'} Open#{/a}
-                        #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'} Delete#{/a}
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Basic example">
+                                #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'}Open#{/a}
+                                #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'}Delete#{/a}
+                            </div>
+                            <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Basic example">
+                                <a href="@{Exports.byClassroom(schoolEventProposal.id)}" class="btn btn-sm btn-dark-green" onclick=""><i class="fa fa-file-excel"></i>&nbsp;classrooms</a>
+                                <a href="@{Exports.byActivities(schoolEventProposal.id)}" class="btn btn-sm btn-dark-green" onclick=""><i class="fa fa-file-excel"></i>&nbsp;activities</a>
+                            </div>
+                        </div>
                     </li>
                 #{/list}
             </ul>

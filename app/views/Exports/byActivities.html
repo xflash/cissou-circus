@@ -11,15 +11,19 @@
 
         #{form @Exports.bySelectedActivity(), id:'dispatchForm', method:'GET'}
             <input type="hidden" name="proposalId" value="${proposal.id}">
-
-            <label for="activitiySelect">Select a classroom</label>
-            <select id="activitiySelect" name="activityId">
-                #{list activities, as:'activity'}
-                    <option value="${activity.id}">${activity.name}</option>
-                #{/list}
-            </select>
-
-            <button type="submit" class="btn btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;Export</button>
+            <div class="form-group">
+                <label for="activitiySelect">Select a classroom</label>
+                <select id="activitiySelect" name="activityId" class="form-control form-control-sm">
+                    #{list activities, as:'activity'}
+                        <option value="${activity.id}">${activity.name}</option>
+                    #{/list}
+                </select>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;Export
+                </button>
+            </div>
         #{/form}
 
         </div>

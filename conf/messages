@@ -1,3 +1,14 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
+
+export.title.classroom_for_proposal=Classroom export for proposal %s
+main.activities.list=Activities
+main.admin=Admin
+main.admin.reset=Reset
+main.admin.upload=Upload
+main.classroom.list=Classroom list
+main.classrooms=Classrooms
+main.groups=Groups
+main.school.activities=School activities
+main.student_choices.list=Student choices

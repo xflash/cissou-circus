@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import play.Logger;
 import play.db.jpa.JPABase;
 import play.exceptions.UnexpectedException;
+import play.i18n.Lang;
 import play.modules.excel.RenderExcel;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -24,7 +25,7 @@ public class Exports extends Controller {
 
 
     public static void byClassroom(long proposalId) {
-        Logger.info("Export byClassroom for proposal %d", proposalId);
+        Logger.info("Export byClassroom for proposal %d in %s", proposalId, Lang.get());
 
         SchoolEventProposal proposal = SchoolEventProposal.findById(proposalId);
 

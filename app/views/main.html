@@ -17,75 +17,72 @@
     <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 
 
-    <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/jquery-3.3.1.min.js'}" charset="${_response_encoding}"></script>
+    <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/jquery-3.3.1.min.js'}"
+            charset="${_response_encoding}"></script>
 
 </head>
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Cissou-Circus</a>
+    <a class="navbar-brand" href="#">Cissou</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-        *{<li class="nav-item active">}*
-        *{<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>}*
-        *{<a class="nav-link" href="#">Home </a>}*
-        *{</li>}*
-
+        <ul class="navbar-nav mr-auto">
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Classrooms
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                &{'main.classrooms'}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="@{Classrooms.list()}">Classroom list</a>
-                    *{<div class="dropdown-divider"></div>}*
-                    *{#{list models.Classroom.findAll(), as:'classroom'}}*
-                        *{<a class="dropdown-item" href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>}*
-                    *{#{/list}}*
+                    <a class="dropdown-item" href="@{Classrooms.list()}">&{'main.classroom.list'}</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    School activities
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                &{'main.school.activities'}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    *{<a class="dropdown-item" href="@{SchoolEvents.list()}">School Events</a>}*
-                        <a class="dropdown-item" href="@{SchoolEventActivities.root()}">Activities</a>
-                        <a class="dropdown-item" href="@{SchoolEventStudentChoices.root()}">Student choices</a>
+                    <a class="dropdown-item" href="@{SchoolEventActivities.root()}">&{'main.activities.list'}</a>
+                    <a class="dropdown-item"
+                       href="@{SchoolEventStudentChoices.root()}">&{'main.student_choices.list'}</a>
                 </div>
             </li>
 
 
             <li class="nav-item">
-                <a class="nav-link" href="@{GroupsDispatchs.list()}">Groups</a>
+                <a class="nav-link" href="@{GroupsDispatchs.list()}">&{'main.groups'}</a>
             </li>
 
 
-
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Admin
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                &{'main.admin'}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="@{Application.resetAll()}">Reset</a>
-                    <a class="dropdown-item" href="@{Application.init()}">Upload</a>
-                    *{<div class="dropdown-divider"></div>}*
-                    *{<a class="dropdown-item" href="#">Something else here</a>}*
+                    <a class="dropdown-item" href="@{Application.resetAll()}">&{'main.admin.reset'}</a>
+                    <a class="dropdown-item" href="@{Application.init()}">&{'main.admin.upload'}</a>
                 </div>
             </li>
 
 
-        *{<li class="nav-item">}*
-        *{<a class="nav-link" href="#">Pricing</a>}*
-        *{</li>}*
-        *{<li class="nav-item">}*
-        *{<a class="nav-link disabled" href="#">Disabled</a>}*
-        *{</li>}*
+        </ul>
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link ${play.i18n.Lang.get().equals('en')?'disabled':''}"
+                   href="@{controllers.Langs.switchTo(request.url,'en')}">en</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link ${play.i18n.Lang.get().equals('fr')?'disabled':''}"
+                   href="@{controllers.Langs.switchTo(request.url,'fr')}">fr</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -103,12 +100,12 @@
 </footer>
 
 
-
-
 <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/popper.min.js'}" charset="${_response_encoding}"></script>
-<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/bootstrap.min.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/bootstrap.min.js'}"
+        charset="${_response_encoding}"></script>
 <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/mdb.js'}" charset="${_response_encoding}"></script>
-<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/addons/datatables.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/addons/datatables.js'}"
+        charset="${_response_encoding}"></script>
 #{get 'moreScripts' /}
 
 </body>
