@@ -4,6 +4,7 @@ import models.*;
 import models.wrapper.ClassroomSummary;
 import org.slf4j.LoggerFactory;
 import play.Logger;
+import play.db.jpa.JPABase;
 import play.jobs.Job;
 import play.libs.F;
 import play.mvc.Controller;
@@ -51,19 +52,31 @@ public class GroupsDispatchs extends Controller {
 
         SchoolEventProposal proposal = SchoolEventProposal.loadById(id);
         if (proposal == null) badRequest("Unknown SchoolEventProposal id " + id);
-        Logger.info("End loading proposal %d", id);
 
-        HashMap<Long, Map<Long, Integer>> activitiesCountMap = new HashMap<>();
-        for (SchoolEventGroup group : proposal.groups) {
-            Map<Long, Integer> groupActivitiesMap = activitiesCountMap.computeIfAbsent(group.id, (k) -> new HashMap<>());
-            for (SchoolEventGroupActivity activity : group.activities) {
-                groupActivitiesMap.put(activity.schoolEventActivity.id, activity.assignments.size());
-            }
+        if(proposal.groups.isEmpty())
+            badRequest("SchoolEventProposal id " + id + " have no groups");
+
+        editWithGroup(proposal.groups.get(0).id);
+    }
+
+    public static void editWithGroup(long groupId) {
+        Logger.info("Showing Proposal group %d", groupId);
+
+        SchoolEventGroup schoolEventGroup = SchoolEventGroup.findById(groupId);
+        if (schoolEventGroup == null) badRequest("Unknown SchoolEventGroup id " + groupId);
+
+        SchoolEventProposal proposal = schoolEventGroup.schoolEventProposal;
+
+
+        Map<Long, Map<Long, Integer>> activitiesCountMap = new HashMap<>();
+        Map<Long, Integer> groupActivitiesMap = activitiesCountMap.computeIfAbsent(schoolEventGroup.id, (k) -> new HashMap<>());
+        for (SchoolEventGroupActivity activity : schoolEventGroup.activities) {
+            groupActivitiesMap.put(activity.schoolEventActivity.id, activity.assignments.size());
         }
 
-
-        render(proposal, activitiesCountMap);
+        render(proposal, schoolEventGroup, activitiesCountMap);
     }
+
 
     public static void delete(long id) {
         SchoolEventProposal schoolEventProposal = SchoolEventProposal.findById(id);

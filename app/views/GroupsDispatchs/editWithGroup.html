@@ -1,0 +1,178 @@
+#{extends 'main.html' /}
+#{set title:'Group' /}
+
+<style rel="stylesheet">
+
+    table.table-sm {
+        width: 100%;
+    }
+
+    table.table-sm tbody {
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h3>${proposal.name}</h3>
+        </div>
+        <div class="col-sm">
+            <div class="text-right">
+                <span>Exports</span>&nbsp;
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                    <a href="@{Exports.byClassroom(proposal.id)}" class="btn btn-dark-green" onclick=""><i
+                            class="fa fa-file-excel"></i>&nbsp;by classrooms</a>
+                    <a href="@{Exports.byActivities(proposal.id)}" class="btn btn-dark-green" onclick=""><i
+                            class="fa fa-file-excel"></i>&nbsp;by activities</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+#{set groupCount:activitiesCountMap.get(schoolEventGroup.id)/}
+
+    <div class="row">
+        <div class="col-sm">
+
+            <ul class="nav nav-tabs">
+            #{list proposal.groups, as:'group'}
+                <li class="nav-item">
+                    <a class="nav-link ${schoolEventGroup.id==group.id?'active':''}"
+                       href="@{editWithGroup(group.id)}">${group.name} <span
+                            class="badge badge-secondary">${group.studentCount}</span></a>
+                </li>
+            #{/list}
+            </ul>
+
+            <br/>
+            <div class="tab-content">
+
+                <h3>Activities </h3>
+                <table class="table table-sm table-striped ">
+                    <thead>
+                    <tr>
+                        <th scope="col">Activity</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Firstname</th>
+                        <th scope="col">Classroom</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                #{list items:schoolEventGroup.activities, as:'schoolEventGroupActivity'}
+                    <tbody>
+                    <tr>
+                        <th scope="row" colspan="5">${schoolEventGroupActivity.schoolEventActivity.name} <span
+                                class="badge badge-primary">${groupCount.get(schoolEventGroupActivity.schoolEventActivity.id)}</span>
+                        </th>
+                    </tr>
+                        #{list items:schoolEventGroupActivity.assignments, as:'schoolEventGroupStudentAssignment'}
+                            #{set studentChoice:schoolEventGroupStudentAssignment.studentChoices /}
+                        <tr class="labels" data-id="${studentChoice.student.id}">
+                            <td></td>
+                            <td>${studentChoice.student.name}</td>
+                            <td>${studentChoice.student.firstname}</td>
+                            <td>${studentChoice.student.classroom.name}
+                            </td>
+                            <td><a href="#" data-toggle="modal" data-target="#myModal"
+                                   data-id="${schoolEventGroupStudentAssignment.id}"
+                                   data-activity="${schoolEventGroupActivity.id}"
+                                   data-choice1="${schoolEventGroupStudentAssignment.studentChoices.choice1.id}"
+                                   data-choice1-name="${schoolEventGroupStudentAssignment.studentChoices.choice1.name}"
+                                   data-choice2="${schoolEventGroupStudentAssignment.studentChoices.choice2.id}"
+                                   data-choice2-name="${schoolEventGroupStudentAssignment.studentChoices.choice2.name}"
+                                   data-choice3="${schoolEventGroupStudentAssignment.studentChoices.choice3.id}"
+                                   data-choice3-name="${schoolEventGroupStudentAssignment.studentChoices.choice3.name}"
+                                   data-choice4="${schoolEventGroupStudentAssignment.studentChoices.choice4.id}"
+                                   data-choice4-name="${schoolEventGroupStudentAssignment.studentChoices.choice4.name}"
+                                   data-student="${schoolEventGroupStudentAssignment.studentChoices.student.firstname} ${schoolEventGroupStudentAssignment.studentChoices.student.name}"
+                            ><i class="fa fa-ellipsis-h"></i></a>
+                            </td>
+                        </tr>
+                        #{/list}
+                    </tbody>
+                #{/list}
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Actions</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>Move <span class="studentTitle">STUDENT</span> to </h2>
+
+                    #{form @GroupsDispatchs.swapStudentActivity(), method:'GET'}
+                        <input type="hidden" class="schoolEventGroupStudentAssignment" name="schoolEventGroupStudentAssignmentId" value="">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="submit" class="btn btn-sm btn-info" id="choice1" name="newActivityId"
+                                    value=""><span>CHOICE</span></button>
+                            <button type="submit" class="btn btn-sm btn-info" id="choice2" name="newActivityId"
+                                    value=""><span>CHOICE</span></button>
+                            <button type="submit" class="btn btn-sm btn-info" id="choice3" name="newActivityId"
+                                    value=""><span>CHOICE</span></button>
+                            <button type="submit" class="btn btn-sm btn-info" id="choice4" name="newActivityId"
+                                    value=""><span>CHOICE</span></button>
+                        </div>
+                    #{/form}
+                        <hr/>
+                    #{form @GroupsDispatchs.moveStudentNextGroup(), method:'GET'}
+                        <input type="hidden" class="schoolEventGroupStudentAssignment" name="schoolEventGroupStudentAssignmentId" value="">
+
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="submit" class="btn btn-sm btn-blue-grey" name="way" value="-1"><i
+                                    class="fa fa-left-arr"></i> Previous Group
+                            </button>
+                            <button type="submit" class="btn btn-sm btn-blue-grey" name="way" value="1"><i
+                                    class="fa fa-right-arr"></i>Next Group
+                            </button>
+                        </div>
+
+                    #{/form}
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#myModal').on('show.bs.modal', function (e) {
+                var relatedTarget = $(e.relatedTarget);
+                console.log("show", relatedTarget.data('id'));
+                $('input.schoolEventGroupStudentAssignment').val(relatedTarget.data('id'));
+                $('#choice1').val(relatedTarget.data('choice1'));
+                $('#choice1 span').text(relatedTarget.data('choice1-name'));
+                $('#choice2').val(relatedTarget.data('choice2'));
+                $('#choice2 span').text(relatedTarget.data('choice2-name'));
+                $('#choice3').val(relatedTarget.data('choice3'));
+                $('#choice3 span').text(relatedTarget.data('choice3-name'));
+                $('#choice4').val(relatedTarget.data('choice4'));
+                $('#choice4 span').text(relatedTarget.data('choice4-name'));
+                $('#myModal .studentTitle').text(relatedTarget.data('student'));
+            })
+            // $('#myModal').modal({});
+            // $('tr.labels').click(function (ev) {
+            //     var id = $(this).data('id');
+            //     $('tr.actions[data-id!="' + id + '"]').hide();
+            //     $('tr.actions[data-id="' + id + '"]')
+            //             .toggle();
+            // })
+        })
+    </script>
