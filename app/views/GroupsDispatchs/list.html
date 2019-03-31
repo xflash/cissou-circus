@@ -18,25 +18,36 @@
             <h5>No group proposals yet available</h5>
         #{/}
         #{else }
-            <ul>
+            <h1>Existing groups dispatch proposals</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Creation date</th>
+                    <th scope="col">Groups</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
                 #{list schoolEventProposals, as:'schoolEventProposal'}
-                    <li>
-                        "${schoolEventProposal.name}" made at ${schoolEventProposal.creationDate?.format('dd.MM.yyyy HH:mm')}
-                        *{with <span>${schoolEventProposal.groups.size()}</span> groups and <span>${schoolEventProposal.studentCount}</span> students}*
-                        <div class="btn-toolbar" role="toolbar">
-                            <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Basic example">
-                                #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id), class:'btn btn-sm btn-primary'}Open#{/a}
-                                #{a @controllers.GroupsDispatchs.delete(schoolEventProposal.id), class:'btn btn-sm btn-danger'}Delete#{/a}
-                            </div>
-                            <div class="btn-group btn-group-sm mr-2" role="group" aria-label="Basic example">
-                                <a href="@{Exports.byClassroom(schoolEventProposal.id)}" class="btn btn-sm btn-dark-green" onclick=""><i class="fa fa-file-excel"></i>&nbsp;classrooms</a>
-                                <a href="@{Exports.byActivities(schoolEventProposal.id)}" class="btn btn-sm btn-dark-green" onclick=""><i class="fa fa-file-excel"></i>&nbsp;activities</a>
-                            </div>
-                        </div>
-                    </li>
-                #{/list}
-            </ul>
+                <tr>
+                    <td>${schoolEventProposal.name}</td>
+                    <td>${schoolEventProposal.creationDate?.format('dd.MM.yyyy HH:mm')}</td>
+                    <td>${schoolEventProposal.groups.size()}</td>
+                    <td>
+                        #{a @controllers.GroupsDispatchs.edit(schoolEventProposal.id)}<i class="fa fa-folder-open"></i>#{/a}
 
+                        <a href="#" data-toggle="modal" data-target="#myModal"
+                           data-id="${schoolEventProposal.id}"
+                           data-name="${schoolEventProposal.name}"
+                        ><i class="fa fa-trash"></i></a>
+
+                    </td>
+                </tr>
+                #{/list}
+
+                </tbody>
+            </table>
         #{/else}
             <p>Click #{a @init()}here#{/a} to create a new group dispatch proposal</p>
         </div>
@@ -44,12 +55,47 @@
 
 </div>
 
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-content">
 
-<script>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h2>Delete proposal <span class="title">TITLE</span> </h2>
+
+                    <hr/>
+
+                    #{form @GroupsDispatchs.delete(), method:'POST'}
+                        <input type="hidden" class="schoolEventProposal" name="id" value="">
+
+                        <button type="submit" class="btn btn-sm btn-danger" ><i class="fa fa-trash"></i> Delete</button>
+
+                    #{/form}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
     $(function () {
-        // $('#dispatchButton').click(function () {
-        //     $('#dispatchForm').submit()
-        // })
-    });
-
+        $('#myModal').on('show.bs.modal', function (e) {
+            var relatedTarget = $(e.relatedTarget);
+            $('input.schoolEventProposal').val(relatedTarget.data('id'));
+            $('#myModal span.title').text(relatedTarget.data('name'));
+        })
+    })
 </script>
+
