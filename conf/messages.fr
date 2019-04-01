@@ -1,7 +1,7 @@
 # You can specialize this file for each language.
 # For example, for French create a messages.fr file
 #
-export.title.classroom_for_proposal=Export de la classe pour la r\u00E9partition %s
+exports.title.classroom_for_proposal=Export de la classe pour la r\u00E9partition %s
 main.activities.list=Liste des activit\u00E9s
 main.admin=Admin
 main.admin.reset=R\u00E9initialiser

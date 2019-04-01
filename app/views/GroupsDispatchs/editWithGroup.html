@@ -18,12 +18,12 @@
         </div>
         <div class="col-sm">
             <div class="text-right">
-                <span>Exports</span>&nbsp;
+                <span>&{'dispatchs.label.exports'}</span>&nbsp;
                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                     <a href="@{Exports.byClassroom(proposal.id)}" class="btn btn-dark-green" onclick=""><i
-                            class="fa fa-file-excel"></i>&nbsp;by classrooms</a>
+                            class="fa fa-file-excel"></i>&nbsp;&{'dispatchs.label.exports_classrooms'}</a>
                     <a href="@{Exports.byActivities(proposal.id)}" class="btn btn-dark-green" onclick=""><i
-                            class="fa fa-file-excel"></i>&nbsp;by activities</a>
+                            class="fa fa-file-excel"></i>&nbsp;&{'dispatchs.label.exports_activities'}</a>
                 </div>
             </div>
         </div>
@@ -48,14 +48,14 @@
             <br/>
             <div class="tab-content">
 
-                <h3>Activities </h3>
+                <h3>&{'dispatchs.title.activities'}</h3>
                 <table class="table table-sm table-striped ">
                     <thead>
                     <tr>
-                        <th scope="col">Activity</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Firstname</th>
-                        <th scope="col">Classroom</th>
+                        <th scope="col">&{'dispatchs.th.activity'}</th>
+                        <th scope="col">&{'dispatchs.th.name'}</th>
+                        <th scope="col">&{'dispatchs.th.firstname'}</th>
+                        <th scope="col">&{'dispatchs.th.classroom'}</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -105,7 +105,7 @@
                 <div class="modal-content">
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Actions</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">&{'dispatchs.title.modal_action'}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -132,10 +132,10 @@
 
                         <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                             <button type="submit" class="btn btn-sm btn-blue-grey" name="way" value="-1"><i
-                                    class="fa fa-left-arr"></i> Previous Group
+                                    class="fa fa-left-arr"></i>&{'dispatchs.title.modal_action.previous_group'}
                             </button>
                             <button type="submit" class="btn btn-sm btn-blue-grey" name="way" value="1"><i
-                                    class="fa fa-right-arr"></i>Next Group
+                                    class="fa fa-right-arr"></i>&{'dispatchs.title.modal_action.next_group'}
                             </button>
                         </div>
 
@@ -143,7 +143,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">&{'dispatchs.title.modal_action.close'}</button>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,6 @@
         $(function () {
             $('#myModal').on('show.bs.modal', function (e) {
                 var relatedTarget = $(e.relatedTarget);
-                console.log("show", relatedTarget.data('id'));
                 $('input.schoolEventGroupStudentAssignment').val(relatedTarget.data('id'));
                 $('#choice1').val(relatedTarget.data('choice1'));
                 $('#choice1 span').text(relatedTarget.data('choice1-name'));
@@ -167,12 +166,5 @@
                 $('#choice4 span').text(relatedTarget.data('choice4-name'));
                 $('#myModal .studentTitle').text(relatedTarget.data('student'));
             })
-            // $('#myModal').modal({});
-            // $('tr.labels').click(function (ev) {
-            //     var id = $(this).data('id');
-            //     $('tr.actions[data-id!="' + id + '"]').hide();
-            //     $('tr.actions[data-id="' + id + '"]')
-            //             .toggle();
-            // })
         })
     </script>

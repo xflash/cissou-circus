@@ -9,7 +9,7 @@
         <div class="col-sm">
 
             <nav class="nav">
-                <a class="nav-link" href="@{controllers.GroupsDispatchs.edit(schoolEventProposal.id)}">&leftarrow; Back to proposal</a>
+                <a class="nav-link" href="@{controllers.GroupsDispatchs.edit(schoolEventProposal.id)}">&leftarrow; &{'dispatchs.link.moveStudentGroup.back'}</a>
             </nav>
 
         #{form @confirmMoveStudentNextGroup()}
@@ -18,16 +18,16 @@
             <input type="hidden" name="newSchoolEventGroupId" value="${newSchoolEventGroup.id}">
 
             <fieldset>
-                <legend>Some siblings will be separated with this action</legend>
+                <legend>&{'dispatchs.legend.moveStudentGroup.siblings'}</legend>
 
-                <h1>Brotherhood ${student.name}</h1>
+                <h1>&{'dispatchs.title.moveStudentGroup.brotherhood'} ${student.name}</h1>
 
-                <h3>Moving ${student.firstname} to this group will "break" the brotherhood ${student.name}</h3>
-                <p>Do you confirm this action ?</p>
-                <button type="submit" name="chosenChoice" value="moveConfirmed" class="btn btn-warning">Confirm</button>
+                <h3>&{'dispatchs.title.moveStudentGroup.studentMove', student.firstname, student.name}</h3>
+                <p>&{'dispatchs.label.moveStudentGroup.studentMove.confirm'}</p>
+                <button type="submit" name="chosenChoice" value="moveConfirmed" class="btn btn-warning">&{'dispatchs.button.moveStudentGroup.studentMove.confirm'}</button>
 
                 <hr/>
-                <p>Or would you want to move also all it siblings in this group ?</p>
+                <p>&{'dispatchs.label.moveStudentGroup.siblings.confirm'}</p>
                 <ul>
                     <li>
                         <label><input type="checkbox" disabled checked> ${student.firstname} ${student.name} - ${schoolEventGroupStudentAssignment.schoolEventGroupActivity.schoolEventActivity.name} </label>
@@ -41,7 +41,7 @@
                     </li>
                 #{/list}
                 </ul>
-                <button type="submit" name="chosenChoice" value="moveAllFamily" class="btn btn-primary">Move all siblings</button>
+                <button type="submit" name="chosenChoice" value="moveAllFamily" class="btn btn-primary">&{'dispatchs.button.moveStudentGroup.studentMoveAll.confirm'}</button>
 
             </fieldset>
 

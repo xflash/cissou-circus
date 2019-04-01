@@ -1,21 +1,11 @@
 #{extends 'main.html' /}
 #{set title:'Groups' /}
 
-
-
-*{<div class="jumbotron">}*
-    *{<div class="container">}*
-        *{<h1>Group preparation</h1>}*
-        *{<p>Here you may prepare what classrooms are concerned for the wanted groups</p>}*
-    *{</div>}*
-*{</div>}*
-
-
 <div class="container">
 #{if !classrooms}
     <div class="row">
         <div class="col-sm">
-            <h5>No classrooms yet available</h5>
+            <h5>&{'dispatchs.title.init.no_classrooms'}</h5>
         </div>
     </div>
 #{/}
@@ -25,20 +15,20 @@
         <div class="row">
         <div class="col-sm">
             <div class="form-group">
-                <label for="proposalName">Proposal name</label>
+                <label for="proposalName">&{'dispatchs.label.init.proposal_name'}</label>
                 <input type="text" class="form-control" id="proposalName" name="proposalName" placeholder="Name" value="${proposalName}">
-                <small id="proposalNameHelp" class="form-text text-muted">This will help you to identify this proposal</small>
+                <small id="proposalNameHelp" class="form-text text-muted">&{'dispatchs.helper.init.proposal_name'}</small>
             </div>
 
 
-            <h3>Select the school event</h3>
-            <label for="schoolEventSelect">School events</label>
+            <h3>&{'dispatchs.title.init.school_event'}</h3>
+            <label for="schoolEventSelect">&{'dispatchs.label.init.school_events'}</label>
             <select id="schoolEventSelect" class="custom-select" name="schoolEventId">
                 #{if schoolEvents.size()==1}
                     <option value="${schoolEvents[0].id}" selected>${schoolEvents[0].name}</option>
                 #{/if}
                 #{else }
-                    <option value="" >Select</option>
+                    <option value="" >&{'dispatchs.label.init.select'}</option>
                     #{list schoolEvents, as:'schoolEvent'}
                         <option value="${schoolEvent.id}">${schoolEvent.name}</option>
                     #{/list}
@@ -50,7 +40,7 @@
     <div class="row">
         <div class="col-sm">
 
-                <h3>Select which classrooms are involved</h3>
+                <h3>&{'dispatchs.title.init.involved_classrooms'}</h3>
 
                 <ul class="list-group">
                     #{list items:classrooms, as:'classroom'}
@@ -71,44 +61,44 @@
         </div>
         <div class="col-sm">
             <fieldset>
-                <h3>How many groups should be created</h3>
+                <h3>&{'dispatchs.title.init.group_number'}</h3>
 
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="customRadioInline1" name="groupNumber" class="custom-control-input" value="1">
-                    <label class="custom-control-label" for="customRadioInline1">1 group</label>
+                    <label class="custom-control-label" for="customRadioInline1">&{'dispatchs.title.init.one_group'}</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="customRadioInline2" name="groupNumber" class="custom-control-input" value="2" checked>
-                    <label class="custom-control-label" for="customRadioInline2">2 groups</label>
+                    <label class="custom-control-label" for="customRadioInline2">&{'dispatchs.title.init.two_groups'}</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="customRadioInline3" name="groupNumber" class="custom-control-input" value="3">
-                    <label class="custom-control-label" for="customRadioInline3">3 groups</label>
+                    <label class="custom-control-label" for="customRadioInline3">&{'dispatchs.title.init.three_groups'}</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="customRadioInline4" name="groupNumber" class="custom-control-input" value="4">
-                    <label class="custom-control-label" for="customRadioInline4">4 groups</label>
+                    <label class="custom-control-label" for="customRadioInline4">&{'dispatchs.title.init.four_groups'}</label>
                 </div>
             </fieldset>
             <br/>
             <fieldset>
-                <h3>Should siblings kept together</h3>
+                <h3>&{'dispatchs.title.init.siblings_together'}</h3>
                 <div class="custom-control custom-checkbox">
                     <input class="custom-control-input" type="checkbox" name="siblingKept" id="siblingKeptRadio1" value="true" checked>
-                    <label class="custom-control-label" for="siblingKeptRadio1">Siblings will be kept together</label>
+                    <label class="custom-control-label" for="siblingKeptRadio1">&{'dispatchs.label.init.siblings_together'}</label>
                 </div>
             </fieldset>
             <br/>
             <fieldset>
-                <h3>How many students in a given activity</h3>
+                <h3>&{'dispatchs.title.init.students_number'}</h3>
                 <div class="form-group">
-                    <label for="formControlRange">Select a maximum number of students (1-25) : <span class="badge badge-primary badge-pill" id="rangeVal">20</span></label>
+                    <label for="formControlRange">&{'dispatchs.label.init.students_number'} : <span class="badge badge-primary badge-pill" id="rangeVal">20</span></label>
                     <input type="range" class="custom-range" min="1" max="25" value="20" id="formControlRange" name="maximumStudents">
                 </div>
             </fieldset>
             <br/>
             <fieldset>
-                <button type="submit" class="btn btn-primary  btn-lg">Dispatch students</button>
+                <button type="submit" class="btn btn-primary  btn-lg">&{'dispatchs.button.init.dispatch'}</button>
             </fieldset>
         </div>
     </div>
@@ -121,9 +111,6 @@
         $('.custom-range').on('change',function (e) {
             $('#rangeVal').text($(this).val())
         })
-        // $('#dispatchButton').click(function () {
-        //     $('#dispatchForm').submit()
-        // })
     });
 
 </script>

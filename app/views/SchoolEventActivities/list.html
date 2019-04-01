@@ -1,19 +1,10 @@
 #{extends 'main.html' /}
 #{set title:'Activities' /}
 
-
-
-*{<div class="jumbotron">}*
-    *{<div class="container">}*
-        *{<h1>Activities list</h1>}*
-        *{<p>Allow to show all activities present and operate some oprations on multiple of them</p>}*
-    *{</div>}*
-*{</div>}*
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Listing activities in school event ${schoolEvent.name}</h2>
+            <h2>&{'activities.title.list.activities.list_for_event', schoolEvent.name}</h2>
         </div>
     </div>
     <div class="row">
@@ -25,12 +16,12 @@
             <input type="hidden" name="schoolEventId" value="${schoolEvent.id}">
 
                 <fieldset>
-                    <legend>Actions</legend>
+                    <legend>&{'activities.legend.list.activities.actions'}</legend>
 
                     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                         <div class="btn-group mr-2" role="group" aria-label="First group">
-                            <button type="submit" name="batchAction" value="merge" class="btn btn-info">Merge</button>
-                            <button type="submit" name="batchAction" value="deletion" class="btn btn-warning">Delete</button>
+                            <button type="submit" name="batchAction" value="merge" class="btn btn-info">&{'activities.legend.list.activities.merge'}</button>
+                            <button type="submit" name="batchAction" value="deletion" class="btn btn-warning">&{'activities.legend.list.activities.delete'}</button>
                         </div>
                     </div>
 

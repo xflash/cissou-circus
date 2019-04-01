@@ -1,45 +1,33 @@
 #{extends 'main.html' /}
 #{set title:'Activities' /}
 
-
-
-*{<div class="jumbotron">}*
-    *{<div class="container">}*
-        *{<h1>Activity ${schoolEventActivity.name}</h1>}*
-        *{<p>Allow to show what choices have been by whom on a given activity</p>}*
-    *{</div>}*
-*{</div>}*
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
-        <h2>Activity "${schoolEventActivity.name}"</h2>
+        <h2>&{'activities.title.detail.activitiy',schoolEventActivity.name}"</h2>
 
             <nav class="nav">
-                <a class="nav-link" href="@{SchoolEventActivities.list(schoolEventActivity.schoolEvent.id)}">&leftarrow; Back to list</a>
-            *{<a class="nav-link" href="#">Link</a>}*
-            *{<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>}*
+                <a class="nav-link" href="@{SchoolEventActivities.list(schoolEventActivity.schoolEvent.id)}">&leftarrow; &{'activities.link.detail.back_to_list'}</a>
             </nav>
             <ul class="nav nav-tabs" id="groupsTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="choice1-tab" data-toggle="tab" href="#choice1" role="tab"
-                       aria-controls="choice1" aria-selected="true">Choice 1</a>
+                       aria-controls="choice1" aria-selected="true">&{'activities.link.detail.choice_1'}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="choice2-tab" data-toggle="tab" href="#choice2" role="tab"
                        aria-controls="choice2"
-                       aria-selected="false">Choice 2</a>
+                       aria-selected="false">&{'activities.link.detail.choice_2'}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="choice3-tab" data-toggle="tab" href="#choice3" role="tab"
                        aria-controls="choice3"
-                       aria-selected="false">Choice 3</a>
+                       aria-selected="false">&{'activities.link.detail.choice_3'}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="choice4-tab" data-toggle="tab" href="#choice4" role="tab"
                        aria-controls="choice4"
-                       aria-selected="false">Choice 4</a>
+                       aria-selected="false">&{'activities.link.detail.choice_4'}</a>
                 </li>
             </ul>
 

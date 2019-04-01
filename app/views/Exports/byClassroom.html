@@ -6,13 +6,13 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>&{'export.title.classroom_for_proposal', proposal.name}</h2>
+            <h2>&{'exports.title.classroom_for_proposal', proposal.name}</h2>
 
 
         #{form @Exports.bySelectedClassroom(), id:'dispatchForm', method:'GET'}
             <input type="hidden" name="proposalId" value="${proposal.id}">
             <div class="form-group">
-                <label for="classroomSelect">Select a classroom</label>
+                <label for="classroomSelect">&{'exports.label.select_classroom'}</label>
                 <select id="classroomSelect" name="classroomId" class="form-control form-control-sm">
                     #{list classrooms, as:'classroom'}
                         <option value="${classroom.id}">${classroom.name}</option>
@@ -21,7 +21,7 @@
             </div>
             <hr/>
             <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;Export
+                <button type="submit" class="btn btn-sm btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;&{'exports.button.export'}
                 </button>
             </div>
         #{/form}
@@ -34,9 +34,6 @@
 
 <script>
     $(function () {
-        // $('#dispatchButton').click(function () {
-        //     $('#dispatchForm').submit()
-        // })
     });
 
 </script>

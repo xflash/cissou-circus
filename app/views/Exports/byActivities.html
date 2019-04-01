@@ -1,18 +1,14 @@
 #{extends 'main.html' /}
 #{set title:'Exports' /}
 
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
-            <h2>Activity export for proposal ${proposal.name}</h2>
-
-
+            <h2>&{'exports.title.activity_export', proposal.name}</h2>
         #{form @Exports.bySelectedActivity(), id:'dispatchForm', method:'GET'}
             <input type="hidden" name="proposalId" value="${proposal.id}">
             <div class="form-group">
-                <label for="activitiySelect">Select a classroom</label>
+                <label for="activitiySelect">&{'exports.label.select_activity'}</label>
                 <select id="activitiySelect" name="activityId" class="form-control form-control-sm">
                     #{list activities, as:'activity'}
                         <option value="${activity.id}">${activity.name}</option>
@@ -21,22 +17,15 @@
             </div>
             <hr/>
             <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;Export
+                <button type="submit" class="btn btn-sm btn-dark-green"><i class="fa fa-file-excel"></i>&nbsp;&{'exports.button.export'}
                 </button>
             </div>
         #{/form}
-
         </div>
     </div>
-
 </div>
-
 
 <script>
     $(function () {
-        // $('#dispatchButton').click(function () {
-        //     $('#dispatchForm').submit()
-        // })
     });
-
 </script>
