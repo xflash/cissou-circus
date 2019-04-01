@@ -27,6 +27,10 @@ public class SchoolEventProposal extends Model {
         creationDate = new Date();
     }
 
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
     public static SchoolEventProposal loadById(long id) {
         return findById(id);
     }
