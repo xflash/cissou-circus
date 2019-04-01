@@ -39,13 +39,25 @@ public class Exports extends Controller {
     public static void bySelectedClassroom(long proposalId, long classroomId) {
         Logger.info("Export byClassroom for proposal %d and selected classroom %d", proposalId, classroomId);
 
-        Set<ClassroomProposalActivities> activities =
-                ClassroomProposalActivities.wrap(SchoolEventGroupStudentAssignment.listByClassRoomAndProposal(proposalId, classroomId));
-
         SchoolEventProposal proposal = SchoolEventProposal.findById(proposalId);
         if (proposal == null) badRequest("No proposal ID: " + proposalId);
         Classroom classroom = Classroom.findById(classroomId);
         if (proposal == null) badRequest("No classroom ID: " + classroomId);
+
+
+        Set<Student> absents = new TreeSet<>(Comparator.comparing(o -> o.name));
+
+        List<SchoolEventGroupStudentAssignment> studentAssignments = SchoolEventGroupStudentAssignment.listByClassRoomAndProposal(proposalId, classroomId);
+        Set<ClassroomProposalActivities> activities =
+                ClassroomProposalActivities.wrap(studentAssignments);
+
+        for (Student student : classroom.students) {
+            absents.add(student);
+            for (SchoolEventGroupStudentAssignment studentAssignment : studentAssignments) {
+                absents.remove(studentAssignment.studentChoices.student);
+            }
+        }
+
 
         Date date = new Date();
         String __EXCEL_FILE_NAME__ = "bySelectedClassroom.xlsx";
@@ -53,7 +65,7 @@ public class Exports extends Controller {
 //        renderArgs.put(RenderExcel.RA_ASYNC, true);
         renderArgs.put(RenderExcel.RA_FILENAME, String.format("%s-Classroom-export-proposal-%s.xlsx", classroom.name, proposal.name));
         request.format = "xlsx";
-        render(__EXCEL_FILE_NAME__, classroom, proposal, activities, date);
+        render(__EXCEL_FILE_NAME__, classroom, proposal, activities, date, absents);
     }
 
     public static void byActivities(long proposalId) {

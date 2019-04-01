@@ -3,6 +3,7 @@ package models;
 import play.db.jpa.Model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +21,11 @@ public class Classroom extends Model {
     @Enumerated(EnumType.STRING)
     public ClassRoomKind kind;
 
+
+    @OneToMany(mappedBy = "classroom")
+    @OrderBy("name")
+    public List<Student> students;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,9 +40,6 @@ public class Classroom extends Model {
     public int hashCode() {
         return Objects.hash(super.hashCode(), name, kind);
     }
-
-    @OneToMany(mappedBy = "classroom")
-    List<Student> students;
 
     public static Classroom createClassroom(String classe, ClassRoomKind kind) {
         Classroom classroom;
