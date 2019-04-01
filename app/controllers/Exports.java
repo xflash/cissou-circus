@@ -2,20 +2,13 @@ package controllers;
 
 import models.*;
 import models.wrapper.ClassroomProposalActivities;
-import net.sf.jxls.transformer.XLSTransformer;
-import org.apache.poi.ss.usermodel.Workbook;
 import play.Logger;
-import play.db.jpa.JPABase;
-import play.exceptions.UnexpectedException;
 import play.i18n.Lang;
 import play.modules.excel.RenderExcel;
 import play.mvc.Controller;
 import play.mvc.With;
 
-import java.io.InputStream;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  *
@@ -67,6 +60,8 @@ public class Exports extends Controller {
         request.format = "xlsx";
         render(__EXCEL_FILE_NAME__, classroom, proposal, activities, date, absents);
     }
+
+
 
     public static void byActivities(long proposalId) {
 

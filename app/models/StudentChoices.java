@@ -172,4 +172,12 @@ public class StudentChoices extends Model {
     public SchoolEventActivity getChoice4() {
         return choice4;
     }
+
+    public boolean isAbsentFriday() {
+        return absentFriday;
+    }
+
+    public boolean isAbsentSaturday() {
+        return absentSaturday;
+    }
 }
