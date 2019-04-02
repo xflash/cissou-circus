@@ -5,50 +5,96 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
+        #{ifErrors}
 
+            <div class="card">
+            <div class="card-body">
+
+                <h2>Some errors are present</h2>
+                <ul>
+            #{errors}
+                <li class="error text-danger">${error}</li>
+            #{/errors}
+                </ul>
+                </div>
+                </div>
+
+        #{/ifErrors}
+
+            <nav class="nav">
+                <a class="nav-link"
+                   href="@{controllers.SchoolEventStudentChoices.listInClassroom(schoolEventId, studentChoices.student.classroom.kind.name(), studentChoices.student.classroom.id)}">&leftarrow; &{'dispatchs.link.moveStudentGroup.back'}</a>
+            </nav>
             <h1>Edit choices of ${studentChoices.student.firstname} ${studentChoices.student.name}</h1>
-            #{form @controllers.SchoolEventStudentChoices.save()}
+        #{form @controllers.SchoolEventStudentChoices.save()}
             <input type="hidden" name="studentChoicesId" value="${studentChoices.id}">
             <input type="hidden" name="schoolEventId" value="${schoolEventId}">
 
-                <fieldset>
-                    <legend>Choice1</legend>
-                    <label for="choice1">Choice 1</label>
-                    <select id="choice1" name="choice1Id">
-                        #{list activities,as:'activity'}
-                        <option value="${activity.id}" ${studentChoices.choice1?.id==activity.id?'selected':''}>${activity.name}</option>
-                        #{/list}
-                    </select>
-                    <label for="choice2">Choice 2</label>
-                    <select id="choice2" name="choice2Id">
-                        #{list activities,as:'activity'}
-                        <option value="${activity.id}" ${studentChoices.choice2?.id==activity.id?'selected':''}>${activity.name}</option>
-                        #{/list}
-                    </select>
-                    <label for="choice3">Choice 3</label>
-                    <select id="choice3" name="choice3Id">
-                        #{list activities,as:'activity'}
-                        <option value="${activity.id}" ${studentChoices.choice3?.id==activity.id?'selected':''}>${activity.name}</option>
-                        #{/list}
-                    </select>
-                    <label for="choice4">Choice 4</label>
-                    <select id="choice4" name="choice4Id">
-                        #{list activities,as:'activity'}
-                        <option value="${activity.id}" ${studentChoices.choice4?.id==activity.id?'selected':''}>${activity.name}</option>
-                        #{/list}
-                    </select>
-                </fieldset>
+            <fieldset>
+                <legend>Activities choices</legend>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="choice1">Choice 1</label>
+                            <select id="choice1" name="choice1Id" class="form-control">
+                                #{list activities,as:'activity'}
+                                    <option value="${activity.id}" ${studentChoices.choice1?.id==activity.id?'selected':''}>${activity.name}</option>
+                                #{/list}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="choice2">Choice 2</label>
+                            <select id="choice2" name="choice2Id" class="form-control">
+                                #{list activities,as:'activity'}
+                                    <option value="${activity.id}" ${studentChoices.choice2?.id==activity.id?'selected':''}>${activity.name}</option>
+                                #{/list}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="choice3">Choice 3</label>
+                            <select id="choice3" name="choice3Id" class="form-control">
+                                #{list activities,as:'activity'}
+                                    <option value="${activity.id}" ${studentChoices.choice3?.id==activity.id?'selected':''}>${activity.name}</option>
+                                #{/list}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="choice4">Choice 4</label>
+                            <select id="choice4" name="choice4Id" class="form-control">
+                                #{list activities,as:'activity'}
+                                    <option value="${activity.id}" ${studentChoices.choice4?.id==activity.id?'selected':''}>${activity.name}</option>
+                                #{/list}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
             <fieldset>
                 <legend>Absences</legend>
-                <label>Absence <input type="checkbox" name="absence" ${studentChoices.absent?'checked':''}></label>
-                <label>Absence Friday <input type="checkbox" name="absence" ${studentChoices.absentFriday?'checked':''}></label>
-                <label>Absence Saturday <input type="checkbox" name="absence" ${studentChoices.absentSaturday?'checked':''}></label>
+                <div class="form-check">
+                    <input class="form-check-input" id="absence" type="checkbox" name="absence" ${studentChoices.absent?'checked':''}>
+                    <label class="form-check-label" for="absence">Absence</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="absentFriday" type="checkbox" name="absentFriday" ${studentChoices.absentFriday?'checked':''}>
+                    <label class="form-check-label" for="absentFriday">Absence Friday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="absentSaturday" type="checkbox" name="absentSaturday" ${studentChoices.absentSaturday?'checked':''}>
+                    <label class="form-check-label" for="absentSaturday">Absence Saturday</label>
+                </div>
             </fieldset>
-
+            <hr/>
             <fieldset>
-                <button type="submit">Save</button>
+                <button class="btn btn-info" type="submit">Save</button>
             </fieldset>
-            #{/form}
+        #{/form}
         </div>
     </div>
 </div>
