@@ -74,8 +74,9 @@
                                                 <th style="width: 2%" scope="col">Abs.</th>
                                                 <th style="width: 15%" scope="col">Choice 1</th>
                                                 <th style="width: 15%" scope="col">Choice 2</th>
-                                                    <th  style="width: 15%" scope="col">Choice 3</th>
-                                                    <th  style="width: 15%" scope="col">Choice 4</th>
+                                                <th  style="width: 15%" scope="col">Choice 3</th>
+                                                <th  style="width: 15%" scope="col">Choice 4</th>
+                                                <th></th>
                                             </tr>
                                             </thead>
 
@@ -93,6 +94,7 @@
                                                         <td>${studentChoice.choice2?.name}</td>
                                                         <td>${studentChoice.choice3?.name}</td>
                                                         <td>${studentChoice.choice4?.name}</td>
+                                                        <td>#{a @controllers.SchoolEventStudentChoices.edit(schoolEvent.id, studentChoice.id)}edit#{/a}</td>
                                                     </tr>
                                                 #{/list}
 

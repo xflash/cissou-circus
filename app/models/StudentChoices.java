@@ -28,14 +28,16 @@ public class StudentChoices extends Model {
     @ManyToOne
     SchoolEvent schoolEvent;
     private boolean orangeSheet;
-    private boolean absentFriday;
-    private boolean absentSaturday;
-    private boolean absent;
+    public boolean absentFriday;
+    public boolean absentSaturday;
+    public boolean absent;
 
     public StudentChoices(Student student, SchoolEvent schoolEvent) {
         this.student = student;
         this.schoolEvent = schoolEvent;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -135,7 +137,22 @@ public class StudentChoices extends Model {
         return siblings;
     }
 
+    public static List<StudentChoices> listAllStudentsChoicesInClassroom(SchoolEvent schoolEvent, Long classroomid) {
+        return find(
+                "select sc " +
+                        "from StudentChoices as sc " +
+                        "inner join sc.schoolEvent as se " +
+                        "inner join sc.student as s " +
+                        "inner join s.classroom as cr " +
+                        "where 1=1 " +
+                        "and se.id in :schoolEvent " +
+                        "and cr.id = :classroomid " +
+                        "order by s.name")
+                .bind("schoolEvent", schoolEvent.id)
+                .bind("classroomid", classroomid)
+                .fetch();
 
+    }
     public static List<StudentChoices> listStudentsChoicesInClassrooms(SchoolEvent schoolEvent, List<Long> classrooms) {
         return find(
                 "select sc " +

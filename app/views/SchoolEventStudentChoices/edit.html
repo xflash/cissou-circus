@@ -1,0 +1,54 @@
+#{extends 'main.html' /}
+#{set title:'StudentEventChoices' /}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+
+            <h1>Edit choices of ${studentChoices.student.firstname} ${studentChoices.student.name}</h1>
+            #{form @controllers.SchoolEventStudentChoices.save()}
+            <input type="hidden" name="studentChoicesId" value="${studentChoices.id}">
+            <input type="hidden" name="schoolEventId" value="${schoolEventId}">
+
+                <fieldset>
+                    <legend>Choice1</legend>
+                    <label for="choice1">Choice 1</label>
+                    <select id="choice1" name="choice1Id">
+                        #{list activities,as:'activity'}
+                        <option value="${activity.id}" ${studentChoices.choice1?.id==activity.id?'selected':''}>${activity.name}</option>
+                        #{/list}
+                    </select>
+                    <label for="choice2">Choice 2</label>
+                    <select id="choice2" name="choice2Id">
+                        #{list activities,as:'activity'}
+                        <option value="${activity.id}" ${studentChoices.choice2?.id==activity.id?'selected':''}>${activity.name}</option>
+                        #{/list}
+                    </select>
+                    <label for="choice3">Choice 3</label>
+                    <select id="choice3" name="choice3Id">
+                        #{list activities,as:'activity'}
+                        <option value="${activity.id}" ${studentChoices.choice3?.id==activity.id?'selected':''}>${activity.name}</option>
+                        #{/list}
+                    </select>
+                    <label for="choice4">Choice 4</label>
+                    <select id="choice4" name="choice4Id">
+                        #{list activities,as:'activity'}
+                        <option value="${activity.id}" ${studentChoices.choice4?.id==activity.id?'selected':''}>${activity.name}</option>
+                        #{/list}
+                    </select>
+                </fieldset>
+            <fieldset>
+                <legend>Absences</legend>
+                <label>Absence <input type="checkbox" name="absence" ${studentChoices.absent?'checked':''}></label>
+                <label>Absence Friday <input type="checkbox" name="absence" ${studentChoices.absentFriday?'checked':''}></label>
+                <label>Absence Saturday <input type="checkbox" name="absence" ${studentChoices.absentSaturday?'checked':''}></label>
+            </fieldset>
+
+            <fieldset>
+                <button type="submit">Save</button>
+            </fieldset>
+            #{/form}
+        </div>
+    </div>
+</div>
