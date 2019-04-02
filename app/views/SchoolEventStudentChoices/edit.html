@@ -5,21 +5,6 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-        #{ifErrors}
-
-            <div class="card">
-            <div class="card-body">
-
-                <h2>Some errors are present</h2>
-                <ul>
-            #{errors}
-                <li class="error text-danger">${error}</li>
-            #{/errors}
-                </ul>
-                </div>
-                </div>
-
-        #{/ifErrors}
 
             <nav class="nav">
                 <a class="nav-link"
@@ -34,9 +19,10 @@
                 <legend>Presence</legend>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="absence" id="absenceRadioPresence" value="false" >
+                    <input class="form-check-input" type="radio" name="absence" id="absenceRadioPresence" value="false" ${!studentChoices.absent?'checked':''}>
                     <label class="form-check-label" for="absenceRadioPresence">Present</label>
                 </div>
+
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="absence" id="absenceRadioAbsence" value="true" ${studentChoices.absent?'checked':''} >
                     <label class="form-check-label" for="absenceRadioAbsence">Absent</label>

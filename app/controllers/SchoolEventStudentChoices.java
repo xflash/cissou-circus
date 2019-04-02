@@ -74,7 +74,7 @@ public class SchoolEventStudentChoices extends Controller {
         render(schoolEventId, studentChoices, activities);
     }
 
-    public static void save(long schoolEventId, long studentChoicesId, long choice1Id, long choice2Id, long choice3Id, long choice4Id, boolean absentFriday, boolean absentSaturday, Boolean absence) {
+    public static void save(long schoolEventId, long studentChoicesId, long choice1Id, long choice2Id, long choice3Id, long choice4Id, boolean absentFriday, boolean absentSaturday, boolean absence) {
 
         StudentChoices studentChoices = StudentChoices.findById(studentChoicesId);
         if (studentChoices == null) badRequest("StudentChoices id " + studentChoicesId);
@@ -90,10 +90,6 @@ public class SchoolEventStudentChoices extends Controller {
 
         SchoolEventActivity choice4 = SchoolEventActivity.findById(choice4Id);
         if (choice4 == null) badRequest("SchoolEventActivity id " + choice4Id);
-
-        if(absence==null) {
-            Validation.addError("absence", "Presence should be indicated");
-        }
 
         if (absentFriday && absentSaturday) {
             absentFriday = false;
