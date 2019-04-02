@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  */
 public class SchoolEventStudentChoices extends Controller {
 
@@ -73,7 +74,7 @@ public class SchoolEventStudentChoices extends Controller {
         render(schoolEventId, studentChoices, activities);
     }
 
-    public static void save(long schoolEventId, long studentChoicesId, long choice1Id, long choice2Id, long choice3Id, long choice4Id, boolean absentFriday, boolean absentSaturday, boolean absent) {
+    public static void save(long schoolEventId, long studentChoicesId, long choice1Id, long choice2Id, long choice3Id, long choice4Id, boolean absentFriday, boolean absentSaturday, Boolean absence) {
 
         StudentChoices studentChoices = StudentChoices.findById(studentChoicesId);
         if (studentChoices == null) badRequest("StudentChoices id " + studentChoicesId);
@@ -90,39 +91,52 @@ public class SchoolEventStudentChoices extends Controller {
         SchoolEventActivity choice4 = SchoolEventActivity.findById(choice4Id);
         if (choice4 == null) badRequest("SchoolEventActivity id " + choice4Id);
 
-
-        if (choice1.equals(choice2)) Validation.addError("choice1Id", "Choice 1 should be different of choice 3");
-        if (choice1.equals(choice3)) Validation.addError("choice1Id", "Choice 1 should be different of choice 3");
-        if (choice1.equals(choice4)) Validation.addError("choice1Id", "Choice 1 should be different of choice 4");
-
-        if (choice2.equals(choice1)) Validation.addError("choice2Id", "Choice 2 should be different of choice 1");
-        if (choice2.equals(choice3)) Validation.addError("choice2Id", "Choice 2 should be different of choice 3");
-        if (choice2.equals(choice4)) Validation.addError("choice2Id", "Choice 2 should be different of choice 4");
-
-        if (choice3.equals(choice1)) Validation.addError("choice3Id", "Choice 3 should be different of choice 1");
-        if (choice3.equals(choice2)) Validation.addError("choice3Id", "Choice 3 should be different of choice 2");
-        if (choice3.equals(choice4)) Validation.addError("choice3Id", "Choice 3 should be different of choice 4");
-
-        if (choice4.equals(choice1)) Validation.addError("choice4Id", "Choice 4 should be different of choice 1");
-        if (choice4.equals(choice2)) Validation.addError("choice4Id", "Choice 4 should be different of choice 2");
-        if (choice4.equals(choice3)) Validation.addError("choice4Id", "Choice 4 should be different of choice 3");
-
-        if(validation.hasErrors()) {
-            params.flash(); // add http parameters to the flash scope
-            validation.keep(); // keep the errors for the next request
-            edit(schoolEventId, studentChoicesId);
+        if(absence==null) {
+            Validation.addError("absence", "Presence should be indicated");
         }
-        studentChoices.choice1 = choice1;
-        studentChoices.choice2 = choice2;
-        studentChoices.choice3 = choice3;
-        studentChoices.choice4 = choice4;
 
         if (absentFriday && absentSaturday) {
             absentFriday = false;
             absentSaturday = false;
-            absent = true;
+            absence = true;
         }
-        studentChoices.absent = absent;
+
+        if (validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            validation.keep(); // keep the errors for the next request
+            edit(schoolEventId, studentChoicesId);
+        }
+
+        if (!absence) {
+            if (choice1.equals(choice2)) Validation.addError("choice1Id", "Choice 1 should be different of choice 3");
+            if (choice1.equals(choice3)) Validation.addError("choice1Id", "Choice 1 should be different of choice 3");
+            if (choice1.equals(choice4)) Validation.addError("choice1Id", "Choice 1 should be different of choice 4");
+
+            if (choice2.equals(choice1)) Validation.addError("choice2Id", "Choice 2 should be different of choice 1");
+            if (choice2.equals(choice3)) Validation.addError("choice2Id", "Choice 2 should be different of choice 3");
+            if (choice2.equals(choice4)) Validation.addError("choice2Id", "Choice 2 should be different of choice 4");
+
+            if (choice3.equals(choice1)) Validation.addError("choice3Id", "Choice 3 should be different of choice 1");
+            if (choice3.equals(choice2)) Validation.addError("choice3Id", "Choice 3 should be different of choice 2");
+            if (choice3.equals(choice4)) Validation.addError("choice3Id", "Choice 3 should be different of choice 4");
+
+            if (choice4.equals(choice1)) Validation.addError("choice4Id", "Choice 4 should be different of choice 1");
+            if (choice4.equals(choice2)) Validation.addError("choice4Id", "Choice 4 should be different of choice 2");
+            if (choice4.equals(choice3)) Validation.addError("choice4Id", "Choice 4 should be different of choice 3");
+
+            if (validation.hasErrors()) {
+                params.flash(); // add http parameters to the flash scope
+                validation.keep(); // keep the errors for the next request
+                edit(schoolEventId, studentChoicesId);
+            }
+            studentChoices.choice1 = choice1;
+            studentChoices.choice2 = choice2;
+            studentChoices.choice3 = choice3;
+            studentChoices.choice4 = choice4;
+        }
+
+
+        studentChoices.absent = absence;
         studentChoices.absentFriday = absentFriday;
         studentChoices.absentSaturday = absentSaturday;
 

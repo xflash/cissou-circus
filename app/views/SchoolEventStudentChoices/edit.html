@@ -31,6 +31,29 @@
             <input type="hidden" name="schoolEventId" value="${schoolEventId}">
 
             <fieldset>
+                <legend>Presence</legend>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="absence" id="absenceRadioPresence" value="false" >
+                    <label class="form-check-label" for="absenceRadioPresence">Present</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="absence" id="absenceRadioAbsence" value="true" ${studentChoices.absent?'checked':''} >
+                    <label class="form-check-label" for="absenceRadioAbsence">Absent</label>
+                </div>
+            </fieldset>
+
+            <fieldset class="if-present">
+                <div class="form-check">
+                    <input class="form-check-input" id="absentFriday" type="checkbox" name="absentFriday" ${studentChoices.absentFriday?'checked':''}>
+                    <label class="form-check-label" for="absentFriday">Absence Friday</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="absentSaturday" type="checkbox" name="absentSaturday" ${studentChoices.absentSaturday?'checked':''}>
+                    <label class="form-check-label" for="absentSaturday">Absence Saturday</label>
+                </div>
+            </fieldset>
+            <fieldset class="if-present">
                 <legend>Activities choices</legend>
                 <div class="row">
                     <div class="col-sm-4">
@@ -75,21 +98,6 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
-                <legend>Absences</legend>
-                <div class="form-check">
-                    <input class="form-check-input" id="absence" type="checkbox" name="absence" ${studentChoices.absent?'checked':''}>
-                    <label class="form-check-label" for="absence">Absence</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="absentFriday" type="checkbox" name="absentFriday" ${studentChoices.absentFriday?'checked':''}>
-                    <label class="form-check-label" for="absentFriday">Absence Friday</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="absentSaturday" type="checkbox" name="absentSaturday" ${studentChoices.absentSaturday?'checked':''}>
-                    <label class="form-check-label" for="absentSaturday">Absence Saturday</label>
-                </div>
-            </fieldset>
             <hr/>
             <fieldset>
                 <button class="btn btn-info" type="submit">Save</button>
@@ -98,3 +106,33 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $('input[type="radio"][name="absence"]').change(function (e) {
+            var val = $(this).val();
+
+            $('fieldset.if-present input[type="checkbox"]').prop('disabled', !val);
+            $('fieldset.if-present select').prop('disabled', !val);
+
+
+            // if(val) {
+            //     $('fieldset.if-present input[type="checkbox"]').attr('disabled', true);
+            //     $('fieldset.if-present select').attr('disabled', true);
+            // } else {
+            //     $('fieldset.if-present input[type="checkbox"]').removeAttr('disabled');
+            //     $('fieldset.if-present select').removeAttr('disabled');
+            // }
+            console.log(val);
+        });
+        // $('#absenceRadioPresence').click(function (e) {
+        //     console.log($(this).val());
+        // });
+        // $('#absenceRadioAbsence').click(function (e) {
+        //     console.log($(this).val());
+        // })
+    });
+</script>

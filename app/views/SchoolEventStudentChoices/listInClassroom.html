@@ -5,6 +5,10 @@
     .tab-content {
         padding-top: 1.5em;
     }
+    .table tr.action {
+        cursor: pointer;
+    }
+
 </style>
 
 <div class="container">
@@ -38,7 +42,7 @@
 
                         <h2>Classroom ${classroom.name}</h2>
 
-                        <table class="table table-striped table-bordered table-sm">
+                        <table class="table table-striped table-borderless table-hover table-sm">
 
                             <thead>
                             <tr>
@@ -52,14 +56,16 @@
                                 <th style="width: 15%" scope="col">Choice 2</th>
                                 <th style="width: 15%" scope="col">Choice 3</th>
                                 <th style="width: 15%" scope="col">Choice 4</th>
-                                <th></th>
+                                *{<th></th>}*
                             </tr>
                             </thead>
 
                             <tbody>
 
                             #{list items:studentChoices, as:'studentChoice'}
-                            <tr class="">
+                            <tr class="action" data-schoolEvent="${schoolEvent.id}"
+                                data-link="@{controllers.SchoolEventStudentChoices.edit(schoolEvent.id, studentChoice.id)}"
+                                data-studentChoice="${studentChoice.id}">
                                 <td>${studentChoice.student.name}</td>
                                 <td>${studentChoice.student.firstname}</td>
                                 <td class="text-center">${studentChoice.orangeSheet?'X':''}</td>
@@ -70,8 +76,8 @@
                                 <td>${studentChoice.choice2?.name}</td>
                                 <td>${studentChoice.choice3?.name}</td>
                                 <td>${studentChoice.choice4?.name}</td>
-                                <td>#{a @controllers.SchoolEventStudentChoices.edit(schoolEvent.id, studentChoice.id)}
-                                    edit#{/a}</td>
+                                *{<td>#{a @controllers.SchoolEventStudentChoices.edit(schoolEvent.id, studentChoice.id)}}*
+                                    *{edit#{/a}</td>}*
                             </tr>
                             #{/list}
 
@@ -89,6 +95,9 @@
 
 <script>
     $(document).ready(function () {
-
+        $('.table tr.action').click(function (e) {
+            window.location.href=$(this).data('link');
+            // console.log($(this).data('link'))
+        })
     });
 </script>
