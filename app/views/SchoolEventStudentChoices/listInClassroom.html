@@ -5,10 +5,6 @@
     .tab-content {
         padding-top: 1.5em;
     }
-    .table tr.action {
-        cursor: pointer;
-    }
-
 </style>
 
 <div class="container">
@@ -91,8 +87,5 @@
 
 <script>
     $(document).ready(function () {
-        $('.table tr.action').click(function (e) {
-            window.location.href=$(this).data('link');
-        });
     });
 </script>

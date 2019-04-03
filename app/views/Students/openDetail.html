@@ -2,21 +2,14 @@
 #{set title:'Student' /}
 
 
-
-
-*{<div class="jumbotron">}*
-*{<div class="container">}*
-*{<h1 >Student show</h1>}*
-*{<p>Allow to show a single student</p>}*
-*{</div>}*
-*{</div>}*
-
 <div class="container">
     <div class="row">
         <div class="col-sm">
+            <nav class="nav">
+                <a class="nav-link" href="${backUrl}">&leftarrow; Back</a>
+            </nav>
+
             <h2>Student ${student.name} ${student.firstname}</h2>
-
-
             <dl>
                 <dt>Firstname</dt>
                 <dd>${student.firstname}</dd>

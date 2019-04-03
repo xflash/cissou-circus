@@ -20,10 +20,10 @@
                 <tbody>
 
                     #{list items:classrooms, as:'classroom'}
-                    <tr>
-                        <th scope="row">
-                            <a href="@{Classrooms.openDetail(classroom.id)}">${classroom.name}</a>
-                        </th>
+                    <tr class="action"
+                        data-link="@{Classrooms.openDetail(classroom.id)}"
+                        >
+                        <th scope="row">${classroom.name}</th>
                         <td>${classroom.kind}</td>
                         <td>${classroom.nb}</td>
                     </tr>
@@ -45,10 +45,6 @@
 
 <script>
     $(document).ready(function () {
-        // $('#classroomsTable').DataTable({
-        //     "paging": true
-        // });
-        // $('.dataTables_length').addClass('bs-select');
     });
 </script>
 

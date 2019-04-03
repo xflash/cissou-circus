@@ -3,6 +3,7 @@
 #{set withClassroom:_withClassroom /}
 #{set withId:_withId /}
 #{set tableId:_tableId /}
+#{set backUrl:_backUrl/}
 
 
 <div class="container">
@@ -27,11 +28,11 @@
                 <tbody>
 
                 #{list items:students, as:'student'}
-                <tr class="">
+                    <tr class="action"
+                        data-link="@{Students.openDetail(student.id, backUrl)}"
+                    >
                     #{if withId}
-                        <th scope="row">
-                            <a href="@{Students.openDetail(student.id)}">${student.identifiant}</a>
-                        </th>
+                        <th scope="row">${student.identifiant}</th>
                     #{/if}
                     <td>${student.name}</td>
                     <td>${student.firstname}</td>

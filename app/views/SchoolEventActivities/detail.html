@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm">
-        <h2>&{'activities.title.detail.activitiy',schoolEventActivity.name}"</h2>
+        <h2>&{'activities.title.detail.activitiy',schoolEventActivity.name}</h2>
 
             <nav class="nav">
                 <a class="nav-link" href="@{SchoolEventActivities.list(schoolEventActivity.schoolEvent.id)}">&leftarrow; &{'activities.link.detail.back_to_list'}</a>
@@ -34,16 +34,16 @@
 <br>
             <div class="tab-content">
                 <div class="tab-pane active" id="choice1" role="tabpanel" aria-labelledby="choice1-tab">
-                #{users students:choice1Students, withClassroom:true/}
+                #{users students:choice1Students, withClassroom:true, backUrl:@controllers.SchoolEventActivities.detail(schoolEventActivity.id)/}
                 </div>
                 <div class="tab-pane " id="choice2" role="tabpanel" aria-labelledby="choice2-tab">
-                #{users students:choice2Students, withClassroom:true/}
+                #{users students:choice2Students, withClassroom:true, backUrl:@controllers.SchoolEventActivities.detail(schoolEventActivity.id)/}
                 </div>
                 <div class="tab-pane " id="choice3" role="tabpanel" aria-labelledby="choice3-tab">
-                #{users students:choice3Students, withClassroom:true/}
+                #{users students:choice3Students, withClassroom:true, backUrl:@controllers.SchoolEventActivities.detail(schoolEventActivity.id)/}
                 </div>
                 <div class="tab-pane " id="choice4" role="tabpanel" aria-labelledby="choice4-tab">
-                #{users students:choice4Students, withClassroom:true/}
+                #{users students:choice4Students, withClassroom:true, backUrl:@controllers.SchoolEventActivities.detail(schoolEventActivity.id)/}
                 </div>
             </div>
         </div>

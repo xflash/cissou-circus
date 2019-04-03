@@ -13,7 +13,7 @@
                 <dd>${students.size()}</dd>
             </dl>
 
-        #{users students:students, withId:true, tableId:'studentsTable'/}
+        #{users students:students, withId:true, tableId:'studentsTable', backUrl:@Classrooms.openDetail(classroom.id)/}
 
         </div>
     </div>

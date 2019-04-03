@@ -20,6 +20,11 @@
     <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/jquery-3.3.1.min.js'}"
             charset="${_response_encoding}"></script>
 
+    <style type="text/css">
+        table.table tr.action {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -128,6 +133,14 @@
 <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/addons/datatables.js'}"
         charset="${_response_encoding}"></script>
 #{get 'moreScripts' /}
+
+<script>
+    $(document).ready(function () {
+        $('.table tr.action').click(function (e) {
+            window.location.href=$(this).data('link');
+        });
+    });
+</script>
 
 </body>
 </html>

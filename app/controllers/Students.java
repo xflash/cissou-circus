@@ -11,8 +11,8 @@ import java.util.*;
  */
 public class Students extends Controller {
 
-    public static void openDetail(long id) {
+    public static void openDetail(long id, String backUrl) {
         Student student = Student.findById(id);
-        render(student);
+        render(student, backUrl);
     }
 }
