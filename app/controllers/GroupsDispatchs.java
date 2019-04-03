@@ -8,6 +8,7 @@ import play.db.jpa.JPABase;
 import play.jobs.Job;
 import play.libs.F;
 import play.mvc.Controller;
+import play.mvc.With;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,6 +19,7 @@ import static java.util.Arrays.stream;
 /**
  *
  */
+@With(Tracker.class)
 public class GroupsDispatchs extends Controller {
 
 

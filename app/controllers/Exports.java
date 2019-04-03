@@ -13,7 +13,7 @@ import java.util.*;
 /**
  *
  */
-@With(ExcelControllerHelper.class)
+@With({ExcelControllerHelper.class, Tracker.class})
 public class Exports extends Controller {
 
 

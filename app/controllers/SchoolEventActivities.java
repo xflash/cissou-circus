@@ -5,6 +5,7 @@ import models.wrapper.ActivityKindSummary;
 import play.Logger;
 import play.db.jpa.JPABase;
 import play.mvc.Controller;
+import play.mvc.With;
 import sun.rmi.runtime.Log;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 
 /**
  */
+@With(Tracker.class)
 public class SchoolEventActivities extends Controller {
 
     public static void root() {

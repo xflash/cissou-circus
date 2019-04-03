@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import play.Logger;
 import play.db.jpa.Model;
 import play.mvc.Controller;
+import play.mvc.With;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@With(Tracker.class)
 public class Application extends Controller {
 
     // Create a DataFormatter to format and get each cell's value as String
