@@ -140,6 +140,7 @@ public class SchoolEventStudentChoices extends Controller {
 
         studentChoices.save();
 
-        listInSchoolEvent(schoolEventId);
+        Classroom classroom = studentChoices.student.classroom;
+        listInClassroom(schoolEventId, classroom.kind, classroom.id);
     }
 }
