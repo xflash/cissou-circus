@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Cissou-Circus #{get 'title' /}</title>
+    <meta charset="${_response_encoding}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+#{get 'moreStyles' /}
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="@{'/public/mdb-4.7.4/css/bootstrap.min.css'}" rel="stylesheet">
+    <link href="@{'/public/mdb-4.7.4/css/mdb.min.css'}" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+
+
+    <script type="text/javascript" src="@{'/public/mdb-4.7.4/js/jquery-3.3.1.min.js'}"
+            charset="${_response_encoding}"></script>
+
+    <style type="text/css">
+        table.table tr.action {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+#{doLayout /}
+
+<footer class="container text-right">
+    <p>-=xF=-</p>
+</footer>
+
+
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/popper.min.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/bootstrap.min.js'}"
+        charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/mdb.js'}" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/mdb-4.7.4/js/addons/datatables.js'}"
+        charset="${_response_encoding}"></script>
+#{get 'moreScripts' /}
+
+<script>
+    $(document).ready(function () {
+        $('.table tr.action').click(function (e) {
+            window.location.href=$(this).data('link');
+        });
+    });
+</script>
+
+</body>
+</html>

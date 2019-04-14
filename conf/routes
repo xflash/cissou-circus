@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                                           Application.index
+GET     /admin                                           Trackers.list
 GET     /exports/byClassroom/{<[0-9]+>proposalId}   Exports.byClassroom
 GET     /exports/byActivities/{<[0-9]+>proposalId}   Exports.byActivities
 

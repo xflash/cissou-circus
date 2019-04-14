@@ -1,0 +1,44 @@
+#{extends 'admin.html' /}
+#{set title:'Trackers' /}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        #{if !trackedSessions}
+            <h5>No trackedSessions</h5>
+        #{/}
+        #{else }
+            <h1>Tracked session</h1>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Host</th>
+                    <th scope="col">Remote adress</th>
+                    <th scope="col">Creation Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                    #{list trackedSessions, as:'trackedSession'}
+                    <tr class="action"
+                        data-link="@{Trackers.open(trackedSession.id)}">
+                        <td>${trackedSession.id}</td>
+                        <td>${trackedSession.host}</td>
+                        <td>${trackedSession.remoteAddress}</td>
+                        <td>${trackedSession.creationDate?.format('dd.MM.yyyy HH:mm')}</td>
+                    </tr>
+                    #{/list}
+
+                </tbody>
+            </table>
+        #{/else}
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+    })
+</script>
+

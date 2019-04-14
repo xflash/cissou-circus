@@ -5,6 +5,7 @@ import play.db.jpa.Model;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author rcoqueugniot
@@ -24,5 +25,11 @@ public class TrackedAction extends Model {
         this.action = action;
         this.date = date;
         this.querystring = querystring;
+    }
+
+    public static List<TrackedAction> findAllByTrackedSession(Long id) {
+        return find("select ta from TrackedAction ta where ta.trackedSession.id = :id")
+                .bind("id", id)
+                .fetch();
     }
 }

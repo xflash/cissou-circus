@@ -1,0 +1,49 @@
+#{extends 'admin.html' /}
+#{set title:'Trackers' /}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+
+            <h2>Tracked session ${trackedSession.id}</h2>
+
+            <h3>Detail</h3>
+            <dl>
+                <dt>Host</dt>
+                <dd>${trackedSession.host}</dd>
+                <dt>Remot address</dt>
+                <dd>${trackedSession.remoteAddress}</dd>
+            </dl>
+
+            <h3>Actions</h3>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Query string</th>
+                </tr>
+                </thead>
+                <tbody>
+                #{list trackedActions, as:'trackedAction'}
+                <tr>
+                    <td>${trackedAction.id}</td>
+                    <td>${trackedAction.action}</td>
+                    <td>${trackedAction.date?.format('dd.MM.yyyy HH:mm')}</td>
+                    <td>${trackedAction.querystring}</td>
+                </tr>
+                #{/list}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+    })
+</script>
+
