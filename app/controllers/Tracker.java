@@ -18,13 +18,20 @@ import java.util.Map;
  */
 public class Tracker extends Controller {
 
+    private static final String TRACKER = "TRACKER";
+
     @Before
     public static void checkTrackingId() {
-        if (!session.contains("TRACKER")) {
+        String s = session.get(TRACKER);
+        if (s==null) {
             Logger.info("Creating new session");
-            TrackedSession trackedSession = new TrackedSession(request.host, request.remoteAddress);
-            trackedSession.save();
-            session.put("TRACKER", trackedSession.id);
+            session.put(TRACKER, ((TrackedSession)new TrackedSession(request.host, request.remoteAddress).save()).id);
+        } else {
+            TrackedSession existingSession = TrackedSession.findById(Long.valueOf(s));
+            if(existingSession==null) {
+                Logger.info("Recreating session");
+                session.put(TRACKER, ((TrackedSession)new TrackedSession(request.host, request.remoteAddress).save()).id);
+            }
         }
     }
 
