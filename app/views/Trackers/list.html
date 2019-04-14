@@ -16,6 +16,7 @@
                     <th scope="col">Host</th>
                     <th scope="col">Remote adress</th>
                     <th scope="col">Creation Date</th>
+                    <th scope="col">Last action Date</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@
                         <td>${trackedSession.host}</td>
                         <td>${trackedSession.remoteAddress}</td>
                         <td>${trackedSession.creationDate?.format('dd.MM.yyyy HH:mm')}</td>
+                        <td>${models.TrackedAction.findLastActionByTrackedSession(trackedSession.id)?.date.format('dd.MM.yyyy HH:mm')}</td>
                     </tr>
                     #{/list}
 

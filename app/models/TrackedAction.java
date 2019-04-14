@@ -27,8 +27,13 @@ public class TrackedAction extends Model {
         this.querystring = querystring;
     }
 
+    public static TrackedAction findLastActionByTrackedSession(Long id) {
+        return find("select ta from TrackedAction ta where ta.trackedSession.id = :id order by ta.date desc")
+                .bind("id", id)
+                .first();
+    }
     public static List<TrackedAction> findAllByTrackedSession(Long id) {
-        return find("select ta from TrackedAction ta where ta.trackedSession.id = :id")
+        return find("select ta from TrackedAction ta where ta.trackedSession.id = :id order by ta.date desc")
                 .bind("id", id)
                 .fetch();
     }
